@@ -1,0 +1,371 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Anathema';
+  src: url('/src/assets/Anathema.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'copyduck';
+  src: url('/src/assets/Copyduck.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'campana';
+  src: url('/src/assets/CampanaScript.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'blacksword';
+  src: url('/src/assets/Blacksword.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'quick';
+  src: url('/src/assets/Quickcounters.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.div {
+  border: 2px solid red;
+}
+
+.text-gradient1 {
+  background: linear-gradient(to right, #191970, #1768a3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient2 {
+  background: linear-gradient(to right, #0b27e3, #73dcf1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* btn1 style */
+
+.btn1 {
+  background: linear-gradient(to bottom right, #60a5fa, #1e3a8a);
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.btn1:hover {
+  font-size: 1.4rem;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 10px 20px;
+  cursor: pointer;
+}
+
+/* btn2 style */
+
+
+.btn2 {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+  font-size: 1.1rem;
+  background: linear-gradient(to bottom right, #eff390, #ed973b);
+  font-weight: 500;
+  position: relative;
+  padding: 0.3rem 0.6rem;
+  border: 2px solid rgba(249, 250, 251, 1);
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.btn2:hover {
+  color: rgba(249, 250, 251, 1);
+}
+
+.btn2::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0.7s ease;
+  left: -100%;
+  top: 0;
+  border-radius: 9999px;
+  background-color: rgb(84, 11, 168);
+  z-index: -10;
+  transform: scale(1);
+}
+
+.btn2:hover::before {
+  left: 0;
+  transform: scale(1.5);
+}
+
+.btn2 svg {
+  width: 2rem;
+  height: 2rem;
+  transform: rotate(45deg);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  border: 1px solid rgba(55, 65, 81, 1);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  color: rgba(249, 250, 251, 1);
+  background-color: rgba(249, 250, 251, 1);
+}
+
+.btn2:hover svg {
+  transform: rotate(90deg);
+  background-color: rgba(249, 250, 251, 1);
+  border: none;
+}
+
+.btn2 svg path {
+  fill: rgba(31, 41, 55, 1);
+}
+
+.btn2:hover svg path {
+  fill: rgba(31, 41, 55, 1);
+}
+
+
+/* Loader */
+.loader {
+  width: 50.8px;
+  height: 50.8px;
+  color: #473ea5;
+  position: relative;
+  background: radial-gradient(11.2px, currentColor 94%, #0000);
+}
+
+.loader:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(10.08px at bottom right, #0000 94%, currentColor) top left,
+    radial-gradient(10.08px at bottom left, #0000 94%, currentColor) top right,
+    radial-gradient(10.08px at top right, #0000 94%, currentColor) bottom left,
+    radial-gradient(10.08px at top left, #0000 94%, currentColor) bottom right;
+  background-size: 25.4px 25.4px;
+  background-repeat: no-repeat;
+  animation: loader 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+}
+
+@keyframes loader {
+  33% {
+    inset: -11.2px;
+    transform: rotate(0deg);
+  }
+
+  66% {
+    inset: -11.2px;
+    transform: rotate(90deg);
+  }
+
+  100% {
+    inset: 0;
+    transform: rotate(90deg);
+  }
+}
+
+.profileDiv {
+  /* background-image: url('https://images.pexels.com/photos/7577943/pexels-photo-7577943.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Custom container for calendar */
+
+.calendarDiv {
+  background-image: url('https://images.pexels.com/photos/1558691/pexels-photo-1558691.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Container */
+.calendar-container {
+  max-width: 500px;
+  margin-left: 55%;
+  margin-top: 7%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #f7f9fc, #e4edf8);
+  overflow: hidden;
+}
+
+/* Header */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+}
+
+.nav-btn {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  color: #4a90e2;
+  font-size: 18px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background-color: #d1e4f9;
+}
+
+/* Month Display */
+.month-display {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Grid */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  padding: 10px;
+}
+
+/* Day Header */
+.day-header {
+  font-weight: bold;
+  color: #4a4a4a;
+  padding: 5px;
+}
+
+/* Day Cell */
+.day-cell {
+  padding: 15px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  color: #333;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.day-cell:hover {
+  background-color: #f0f8ff;
+  transform: scale(1.1);
+}
+
+.blank {
+  background: none;
+  border: none;
+  cursor: default;
+}
+
+.current-day {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #388e3c;
+  border-radius: 50%;
+}
+
+/* Highlight event days */
+.event-day {
+  background-color: #ffd700;
+  color: #333;
+  font-weight: bold;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.event-day:hover {
+  background-color: #ffeb3b;
+  transform: scale(1.1);
+}
+
+/* Tooltip styling */
+.tooltip {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+@layer utilities {
+  .animate-blink {
+    animation: blink 2s step-start infinite;
+  }
+
+  @keyframes blink {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    10% {
+      opacity: 0.9;
+    }
+
+    20% {
+      opacity: 0.6;
+    }
+
+    30% {
+      opacity: 0.4;
+    }
+
+    40% {
+      opacity: 0.1;
+    }
+
+    50% {
+      opacity: 0;
+    }
+
+    60% {
+      opacity: 0.1;
+    }
+
+    70% {
+      opacity: 0.4;
+    }
+
+    80% {
+      opacity: 0.6;
+    }
+
+    90% {
+      opacity: 0.9;
+    }
+  }
+}
