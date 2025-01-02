@@ -38,7 +38,7 @@ export default function Footer({ menuItems1 }) {
           </ul>
         </div>
         
-        {/* Our Team */}
+        {/* Developed By */}
         <div className="flex flex-col items-center text-center">
           <h3 className="text-lg font-semibold mb-4">Developed by</h3>
           <ul className="space-y-2">
