@@ -42,7 +42,7 @@ export default function Footer({ menuItems1 }) {
         <div className="flex flex-col items-center text-center">
           <h3 className="text-lg font-semibold mb-4">Developed by</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Keya Tarafdar</a></li>
+            <li><a href="https://keya-sigma.vercel.app/" target='_blank' className="text-gray-300 hover:text-blue-400 transition-colors">Keya Tarafdar</a></li>
           </ul>
         </div>
         
