@@ -7,7 +7,7 @@ import axios from "axios";
 export const fetchCompanyDetails = async () => {
   try {
     let response = await axios.get("http://localhost:8000/fetchcompanydetails");
-    return response.data;
+    return response;
   } catch (err) {
     console.log(err.message);
   }

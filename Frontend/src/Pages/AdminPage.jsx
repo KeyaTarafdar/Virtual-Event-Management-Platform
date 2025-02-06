@@ -170,10 +170,6 @@ function AdminPage() {
                       {venue.address}
                     </p>
                     <p className="text-md text-gray-600">
-                      <span className="font-medium">Booking Price:</span>{" "}
-                      {venue.bookingPrice} Rs.
-                    </p>
-                    <p className="text-md text-gray-600">
                       <span className="font-medium">Multiday Event:</span>{" "}
                       {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
                     </p>

@@ -114,7 +114,7 @@ function VenueUserPage() {
               />
             </label>
 
-            <div className="h-8 text-2xl font-serif font-extrabold">{venue ? venue.name : null}</div>
+            <div className="h-8 text-2xl font-serif font-extrabold">{venue ? venue.name.split(" ")[0] : null}</div>
             <div className="h-8 flex items-center justify-center">
               {venue && (
                 <>

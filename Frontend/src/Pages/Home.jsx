@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import Slider from "../Components/Slider";
 import Navbar from "../Components/Navbar";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import Slider from "../Components/Slider";
 import Company_card from "../Components/Company_card";
 import Upcoming_event from "../Components/UpcomingEvents";
+import FreqtQuestion from "../Components/FreqtQuestion";
+import Gallery_Card from "../Components/Gallery_card";
+import Event_card from "../Components/Event_card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarCheck,
@@ -12,9 +15,6 @@ import {
   faGlobe,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import FreqtQuestion from "../Components/FreqtQuestion";
-import Gallery_Card from "../Components/Gallery_card";
-import Event_card from "../Components/Event_card";
 import { useNavigate } from "react-router-dom";
 import {
   AiFillHome,
@@ -49,6 +49,7 @@ export default function Home() {
     navigate("/signup");
   };
 
+  const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
   const [company, setCompany] = useState({});
 
@@ -58,9 +59,24 @@ export default function Home() {
     });
 
     fetchCompanyDetails().then((response) => {
-      setCompany(response);
+      if (response.status === 200) {
+        setCompany(response.data);
+        setfetchingCompleted(true);
+      } else {
+        alert(response.data);
+      }
     });
   }, []);
+
+  if (!fetchingCompleted) {
+    return (
+      <>
+        <div className="h-screen w-full flex items-center justify-center">
+          Loading...
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -82,8 +98,8 @@ export default function Home() {
         <Event_card />
       </div>
 
-      {/* Features 1--------------------------------------------------------- */}
       <div id="features" className="justify-center items-center flex-col flex">
+        {/* Features 1--------------------------------------------------------- */}
         <div className="flex flex-col text-center sm:flex sm:flex-col md:flex md:flex-col lg:flex lg:flex-col xl:flex xl:flex-row 2xl:flex 2xl:flex-row px-10 py-14 xl:py-24 items-center h-auto">
           <div className="grid grid-col-2 w-auto text-2xl sm:text-3xl md:text-4xl font-bold px-10 pb-8 animate-assembleText">
             Manage, promote, and track your event— all in one platform
@@ -146,9 +162,7 @@ export default function Home() {
                 Discover Our Key Features
               </h2>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-[25px] lg:pt-5 md:pt-1">
-                Explore the unique features that set us apart from the others.
-                Our platform is designed to cater your every need, ensuring a
-                seamless and successful event experience.
+                Explore the unique features that set us apart from the others. Our platform is designed to cater your every need, ensuring a seamless and successful event experience.
               </p>
 
               <div className="md:absolute 2xl:ml-[-17rem] xl:ml-[-10rem] lg:ml-[-10rem] md:ml-[-8rem] 2xl:mt-[25%] xl:mt-[20%] lg:mt-[21%] md:mt-[30%] sm:m-auto">

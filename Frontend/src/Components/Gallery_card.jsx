@@ -102,8 +102,8 @@ export default function Gallery_Card() {
               Meet our clients from all over the world!
             </div>
           </div>
-          {/* End gallery header */}
 
+          {/* End gallery header */}
           <div className="max-w-[1500px] h-auto w-full m-auto py-20 px-2 sm:px-4 relative group">
             <div className="slider flex overflow-hidden items-center justify-center gap-4">
               {slides

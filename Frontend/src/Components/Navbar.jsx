@@ -25,14 +25,13 @@ export default function Navbar({ menuItems }) {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
+
   const [hamburgerMenuClicked, setHamburgerMenuClicked] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [isClosingDropdown, setIsClosingDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [searchBarClicked, setSearchBarClicked] = useState(false);
-  const [isSearchDropdown, setIsSearchDropdown] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(null);
 
   const [isMdOrLarger, setIsMdOrLarger] = useState(false);
@@ -53,20 +52,6 @@ export default function Navbar({ menuItems }) {
     if (admin) navigate("/adminpanel");
   };
 
-  const searchClick = () => {
-    if (searchBarClicked) {
-      setIsSearchDropdown(true);
-      setTimeout(() => {
-        setSearchBarClicked(false);
-        setIsSearchDropdown(false);
-      }, 900);
-    } else {
-      setSearchBarClicked(true);
-    }
-    setDropDownOpen(false);
-    setHamburgerMenuClicked(false);
-  };
-
   const hambergerClick = () => {
     if (hamburgerMenuClicked) {
       setIsClosing(true);
@@ -78,7 +63,6 @@ export default function Navbar({ menuItems }) {
       setHamburgerMenuClicked(true);
     }
     setDropDownOpen(false);
-    setSearchBarClicked(false);
   };
 
   const dropDown = () => {
@@ -92,60 +76,15 @@ export default function Navbar({ menuItems }) {
       setDropDownOpen(true);
     }
     setHamburgerMenuClicked(false);
-    setSearchBarClicked(false);
-  };
-
-  function handleEnter(e) {
-    if (e.keyCode == 13) {
-      alert("search clicked!");
-    }
-  }
-
-  const handleScroll = () => {
-    const scrollTop = window.scrollY;
-    const direction = scrollTop > 100 ? "down" : "up";
-    if (scrollDirection !== direction) {
-      setScrollDirection(direction);
-      if (direction === "down") {
-        setIsSearchDropdown(true);
-        setTimeout(() => {
-          setSearchBarClicked(false);
-          setIsSearchDropdown(false);
-        }, 900);
-      }
-    }
   };
 
   const [company, setCompany] = useState({});
 
   useEffect(() => {
     fetchCompanyDetails().then((response) => {
-      setCompany(response);
+      setCompany(response.data);
     });
-
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMdOrLarger(true);
-        setHamburgerMenuClicked(false);
-      } else {
-        setIsMdOrLarger(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollDirection]);
 
   const handelLogout = () => {
     setLoading(true);
@@ -189,28 +128,6 @@ export default function Navbar({ menuItems }) {
   return (
     <>
       <div className="w-full h-16">
-        {/* Search-Bar Dropdown */}
-        {/* {(searchBarClicked || isSearchDropdown) && (
-          <div
-            className={`pt-[7rem] pb-[3rem] bg-zinc-200 relative top-13 w-full h-24 flex justify-center items-center shadow-xl ${
-              isSearchDropdown ? "animate-slideUp" : "animate-slideBelow"
-            } lg:flex hidden`}
-          >
-            <input
-              className={`outline-none text-xl h-16 text-zinc-600 font-serif ring-1 ring-zinc-400 focus:ring-2 duration-300 placeholder:text-zinc-600 placeholder:opacity-50 rounded-xl px-4 py-2 shadow-md focus:shadow-lg dark:shadow-md w-[70%] 2xl:w-[80%] xl:w-[60%] lg:w-[80%] ${
-                isSearchDropdown
-                  ? "animate-slideUp block"
-                  : "animate-slideBelow block"
-              }`}
-              autoComplete="off"
-              placeholder="Search here for product reviews, FAQs and More..."
-              name="text"
-              type="text"
-              onKeyDown={handleEnter}
-            />
-          </div>
-        )} */}
-
         {/* Navbar */}
         <nav
           id="header"
@@ -253,17 +170,7 @@ export default function Navbar({ menuItems }) {
 
           {/* User Section */}
           <div className="w-[50%] sm:w-[35%] md:w-[35%] lg:w-2/5 xl:w-[25%] 2xl:w-[20%] flex justify-end items-center space-x-4">
-            {/* Search Button */}
-            {/* <div className="hidden lg:flex xl:w-[35%] lg:w-[20%] md:w-full justify-center">
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                style={{ color: "#ffffff" }}
-                className="text-xl cursor-pointer"
-                onClick={searchClick}
-              />
-            </div> */}
-
-            {/* USER SECTION IN NAVBAR */}
+            {/* User Section in Navbar */}
             {user || venue || admin ? (
               <>
                 {/* User Section in Navbar */}
@@ -274,7 +181,13 @@ export default function Navbar({ menuItems }) {
                       className="text-lg cursor-pointer"
                     />
                     <span className="text-white font-bold hover:text-blue-100 hover:underline">
-                      {user ? user : venue ? venue : admin ? admin : null}
+                      {user
+                        ? user.split(" ")[0]
+                        : venue
+                        ? venue.split(" ")[0]
+                        : admin
+                        ? admin.split(" ")[0]
+                        : null}
                     </span>
 
                     {dropDownOpen ? (
@@ -297,7 +210,7 @@ export default function Navbar({ menuItems }) {
               </>
             ) : (
               <>
-                {/* LOGIN Button */}
+                {/* Login Button */}
                 <div className=" flex items-center justify-center px-[3px] sm:px-8 pr-16 md:pr-16 md:px-1 lg:pr-24 xl:px-2 2xl:px-1">
                   <div className=" w-full flex justify-center items-center">
                     <button

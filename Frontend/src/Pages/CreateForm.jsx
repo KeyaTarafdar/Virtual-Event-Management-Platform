@@ -160,6 +160,7 @@ const CreateForm = () => {
   const [venue_3_BookingShift, setvenue_3_BookingShift] = useState("");
 
   useEffect(() => {
+    setFormData({ ...formData, eventType });
     fetchAllVenues().then((response) => {
       setallVenues(response);
       setallVenuesCopy(response);
@@ -446,7 +447,7 @@ const CreateForm = () => {
                     setError("");
                     setFormData({
                       ...formData,
-                      headcount: value,
+                      headcount: e.target.value,
                     });
                   }}
                   required

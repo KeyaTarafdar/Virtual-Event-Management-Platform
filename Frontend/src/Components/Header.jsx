@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { findUser } from "../utils/utils";
 
 export default function Header() {
   const navigate = useNavigate();
-  const [searchBarClicked, setSearchBarClicked] = useState(false);
-  const [scrollDirection, setScrollDirection] = useState(null);
 
   const [user, setUser] = useState(null);
 
@@ -30,51 +26,9 @@ export default function Header() {
     navigate("/login");
   };
 
-  const searchClick = () => {
-    if (searchBarClicked) {
-      setIsSearchDropdown(true);
-      setTimeout(() => {
-        setSearchBarClicked(false);
-        setIsSearchDropdown(false);
-      }, 900);
-    } else {
-      setSearchBarClicked(true);
-    }
-    setDropDownOpen(false);
-    setHamburgerMenuClicked(false);
-  };
-
-  function handleEnter(e) {
-    if (e.keyCode == 13) {
-      alert("search clicked!");
-    }
-  }
-
-  const handleScroll = () => {
-    const scrollTop = window.scrollY;
-    const direction = scrollTop > 100 ? "down" : "up";
-    if (scrollDirection !== direction) {
-      setScrollDirection(direction);
-      if (direction === "down") {
-        //setIsSearchDropdown(true);
-        setTimeout(() => {
-          setSearchBarClicked(false);
-         // setIsSearchDropdown(false);
-        }, 900);
-      }
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollDirection]);
-
   return (
     <>
-      {/* ------------------------------------------------  HERO  PANEL */}
+      {/* Hero  panel---------------------------------------------------------------------------------------------------------------------------------- */}
       <div className="hero flex flex-col lg:flex-row lg:items-center lg:justify-between lg:h-[42rem] p-4 bg-gradient-to-b from-cyan-300 to-white  lg:bg-none lg:mb-[-4rem]">
         {/* hero-left */}
         <div className="lg:ml-12 hero-left lg:w-[55rem] lg:mt-0 mt-[5rem] pl-4 lg:pl-6 flex flex-col items-center lg:items-start lg:text-left">
@@ -135,7 +89,6 @@ export default function Header() {
             >
               <button
                 onClick={handleLogInClick}
-                //onClick={<Event_card/>}
                 className="flex btn1 justify-center items-center h-full w-full p-4 rounded-full -mt-4 lg:mt-0"
               >
                 Show Events
@@ -164,24 +117,6 @@ export default function Header() {
             alt="Hero"
             className="w-[600px] h-[400px] 2xl:w-[630px] xl:w-[600px] lg:w-[500px] 2xl:h-[500px] xl:h-[400px] lg:h-[350px] object-cover"
           />
-        </div>
-
-        {/* search div for md and sm screen------------------------- */}
-        <div className="w-full max-w-lg relative m-auto mt-[2rem] flex flex-col lg:hidden h-16 md:h-16 sm:h-16 xs:h-16">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search for product reviews, FAQs and More..."
-              className="w-full h-full p-4 rounded-full text-sm sm:text-md text-zinc-700 font-mono focus:outline-none md:p-3 sm:p-3 xs:p-3 shadow-2xl border-2 border-black "
-            />
-            <button className="absolute right-[2px] top-1/2 transform -translate-y-1/2 bg-slate-900 rounded-full w-[4rem] h-[2.67rem]">
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                style={{ color: "#ffffff" }}
-                className="text-xl  md:text-lg sm:text-base xs:text-sm"
-              />
-            </button>
-          </div>
         </div>
       </div>
     </>

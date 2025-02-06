@@ -52,9 +52,9 @@ app.post("/createcompany", async (req, res) => {
 app.get("/fetchcompanydetails", async (req, res) => {
   try {
     let company = await companyModel.find();
-    res.send(company[0]);
+    res.status(200).send(company[0]);
   } catch (err) {
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 });
 
