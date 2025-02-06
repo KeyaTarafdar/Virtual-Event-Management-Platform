@@ -24,7 +24,7 @@ import {
   AiOutlineQuestionCircle,
   AiFillEdit,
 } from "react-icons/ai";
-import { fetchLastCreatedEvent } from "../utils/utils";
+import { fetchLastCreatedEvent, fetchCompanyDetails } from "../utils/utils";
 
 const headerMenuItems = [
   { label: "Services", href: "services" },
@@ -50,9 +50,15 @@ export default function Home() {
   };
 
   const [lastEvent, setlastEvent] = useState({});
+  const [company, setCompany] = useState({});
+
   useEffect(() => {
     fetchLastCreatedEvent().then((resonse) => {
       setlastEvent(resonse);
+    });
+
+    fetchCompanyDetails().then((response) => {
+      setCompany(response);
     });
   }, []);
 
@@ -93,7 +99,7 @@ export default function Home() {
                   fontFamily: '"quick"',
                 }}
               >
-                Eventek{" "}
+                {company.companyName}{" "}
               </strong>
             </i>
             , you can effortlessly plan, execute, and evaluate your event's
@@ -106,14 +112,20 @@ export default function Home() {
         {/* UPCOMING EVENTS ------------------------------------------------------------ */}
         <div id="upcoming" className="w-[85%]">
           <Upcoming_event
-            eventId={lastEvent? lastEvent._id:null}
-            name={lastEvent? lastEvent.eventName:null}
-            des={lastEvent? lastEvent.description:null}
-            date={lastEvent? lastEvent.date:null}
-            time={lastEvent? lastEvent.time:null}
-            platform={lastEvent? lastEvent.platform:null}
-            venue={lastEvent? lastEvent.city:null}
-            poster={lastEvent? (lastEvent.posterImage ? lastEvent.posterImage.url : null):null}
+            eventId={lastEvent ? lastEvent._id : null}
+            name={lastEvent ? lastEvent.eventName : null}
+            des={lastEvent ? lastEvent.description : null}
+            date={lastEvent ? lastEvent.date : null}
+            time={lastEvent ? lastEvent.time : null}
+            platform={lastEvent ? lastEvent.platform : null}
+            venue={lastEvent ? lastEvent.city : null}
+            poster={
+              lastEvent
+                ? lastEvent.posterImage
+                  ? lastEvent.posterImage.url
+                  : null
+                : null
+            }
           />
         </div>
 

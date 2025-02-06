@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import VirtualCard from "../Components/VirtualCard";
 import { useNavigate } from "react-router-dom";
 import { fetchVirtualEvents } from "../utils/utils";
@@ -24,7 +24,7 @@ function VirtualEvent() {
         events.filter((event) => {
           const today = new Date();
           const currentDate = today.toISOString().split("T")[0];
-          const currentTime = today.toTimeString().split(" ")[0];
+          // const currentTime = today.toTimeString().split(" ")[0];
           const eventDate = new Date(event.date).toISOString().split("T")[0];
           const registrationLastDate = new Date(event.lastDateOfRegistration)
             .toISOString()
@@ -67,7 +67,7 @@ function VirtualEvent() {
               online community.
               <br />
               <br />
-              Whether you're looking to enhance your skills or broaden your
+              Whether you&apos;re looking to enhance your skills or broaden your
               connections, our events offer valuable insights and interactive
               experiences. Don’t miss out—participate in workshops, panels, and
               live sessions designed to help you grow personally and
@@ -122,6 +122,7 @@ function VirtualEvent() {
             {Array.isArray(virtualEvents) &&
               virtualEvents.map((item) => (
                 <VirtualCard
+                  key={item._id}
                   eventId={item._id}
                   name={item.eventName}
                   date={item.date}

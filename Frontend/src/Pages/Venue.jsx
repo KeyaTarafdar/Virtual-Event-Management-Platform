@@ -14,8 +14,20 @@ function Venue() {
   const headerMenuItems = [
     { label: "Home", to: "/" },
     { label: "About", to: "/" },
-    { label: "Venues", href: "venuecard" },
     { label: "Contact", href: "contact" },
+  ];
+
+  const venues = [
+    { id: 1, name: 'ITC Royal Bengal', location: 'Kolkata' },
+    { id: 2, name: 'The Grand Oberoi', location: 'Kolkata' },
+    { id: 3, name: 'JW Marriott', location: 'Kolkata' },
+    { id: 4, name: 'The Leela Palace', location: 'Bangalore' },
+    { id: 5, name: 'Taj West End', location: 'Bangalore' },
+    { id: 6, name: 'Conrad Pune', location: 'Pune' },
+    { id: 7, name: 'Shantai Hotel', location: 'Pune' },
+    { id: 8, name: 'Lemon Tree Hotel', location: 'Pune' },
+    { id: 9, name: 'NovotelHyderabad', location: 'Hyderabad' },
+    { id: 10, name: 'Amrutha Castle', location: 'Hyderabad' },
   ];
 
   return (
@@ -39,9 +51,23 @@ function Venue() {
         </div>
       </div>
 
+     { /* Venue Details */}
+
+     <div className="py-3 flex flex-col items-center justify-center pb-10">
+      <h1 className="text-lg md:text-2xl lg:text-3xl font-bold mb-6 text-center text-black pt-6 pb-2">
+        DETAILS OF THE VENUE!!
+        <div className="w-[100%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-4"></div>
+      </h1>
+
       <div className="h-auto px-8 rounded-[2rem] text-center mt-8 lg:mt-0 ml-12 mr-12">
-        <Venue_card />
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      {venues.map((Venue) => (
+            <Venue_card
+            key={Venue.id} name={Venue.name} location={Venue.location} />
+          ))}
       </div>
+      </div>
+    </div>  
       <div className="m-0 p-0" id="contact">
         <Footer menuItems1={footerMenuItems} />
       </div>

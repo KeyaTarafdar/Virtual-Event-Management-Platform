@@ -13,19 +13,19 @@ import {
   faMapMarkerAlt,
   faPlus,
   faTowerBroadcast,
-  faUsers
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { findUser } from "../utils/utils";
+import {
+  findUser,
+  fetchCompanyDetails,
+  uploadProfilePicture,
+} from "../utils/utils";
 
-const headerMenuItems = [
-  { label: "Home", to: "/" },
-  // { label: 'Features', href: 'features' }, // (for scrolling elements with id in same page)
-];
+const headerMenuItems = [{ label: "Home", to: "/" }];
 
 const CompanyPage = () => {
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -50,22 +50,49 @@ const CompanyPage = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const setFileToBase = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+        resolve(reader.result);
+      };
+    });
+  };
+  const [image, setImage] = useState();
+
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
+
     if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setSelectedImage(imageURL);
-      setUser((prevUser) => {
-        const updatedUser = { ...prevUser, image: imageURL };
-        localStorage.setItem("userImage", imageURL);
-        return updatedUser;
+      const maxSizeInKB = 30;
+
+      if (file.size > maxSizeInKB * 1024) {
+        alert(`File size should be less than ${maxSizeInKB} KB.`);
+        return;
+      }
+
+      const imageData = await setFileToBase(file);
+
+      uploadProfilePicture(imageData).then((response) => {
+        alert(response);
+        findUser().then((response) => {
+          setuserProfile(response);
+        });
       });
+
+    } else {
+      alert("Please Upload an Image");
+      return;
     }
   };
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
   };
+
+  const [company, setCompany] = useState({});
 
   useEffect(() => {
     if (menuVisible) {
@@ -74,6 +101,12 @@ const CompanyPage = () => {
       document.body.style.overflow = "";
     }
   }, [menuVisible]);
+
+  useEffect(() => {
+    fetchCompanyDetails().then((response) => {
+      setCompany(response);
+    });
+  }, []);
 
   const checkSlotConfirmation = (eventCreatedDate, slotConfirmedDate) => {
     const createdDate = new Date(eventCreatedDate);
@@ -141,14 +174,14 @@ const CompanyPage = () => {
         </div>
 
         <div
-          className={`fixed lg:z-10 z-40 top-16 left-0 bg-[#081647] text-white rounded-tr-2xl rounded-br-2xl shadow-2xl p-4 flex flex-col items-center transition-transform duration-300 transform ${
+          className={`fixed lg:z-10 z-40 top-16 left-0 bg-[#081647] text-white rounded-r-2xl rounded-br-2xl shadow-2xl p-4 flex flex-col items-center transition-transform duration-300 transform ${
             menuVisible ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0`}
+          } lg:translate-x-0 w-[18rem]`}
           style={{ height: "calc(100vh - 60px)" }}
         >
           <img
             src={
-              userProfile && userProfile.image ? userProfile.image.url : null
+              userProfile && userProfile.image ? userProfile.image.url : 'https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg'
             }
             alt="User Profile"
             className="rounded-full w-24 bg-gray-900 text-sm h-24 mb-4 shadow-lg border-[.4rem] border-indigo-400 sm:w-32 sm:h-32"
@@ -167,7 +200,7 @@ const CompanyPage = () => {
           <h2 className="text-md font-bold sm:text-lg">
             {userProfile ? userProfile.username : null}
           </h2>
-          <div className="w-32 h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-12"></div>
+          <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-12"></div>
 
           <div className="flex flex-col text-left space-y-4">
             <div className="flex items-center space-x-2">
@@ -187,7 +220,7 @@ const CompanyPage = () => {
 
           <div className="mt-auto w-[100%] flex flex-col text-xs items-center">
             <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-10 mb-4"></div>
-            &copy;Eventek2024.
+            &copy;{company.companyName}2024.
           </div>
         </div>
 
@@ -195,12 +228,12 @@ const CompanyPage = () => {
         <div
           className={` ${
             menuVisible ? "blur-sm lg:blur-none" : ""
-          } mt-8 mb-8 w-full  lg:w-5/6 ml-8 lg:ml-[14rem] mr-8 lgoverflow-y-auto space-y-4`}
+          } mt-8 mb-8 w-full lg:w-4/6 ml-8 lg:ml-[24rem] mr-8 lgoverflow-y-auto space-y-4`}
           style={{ height: "calc(100vh - 60px)" }}
         >
           <div className="mt-4 flex flex-row space-x-12 justify-center items-center mb-12">
             <h2
-              className="-ml-12 text-gradient2 text-3xl xds:text-3xl sm:text-5xl font-bold w-[80%]  "
+              className=" text-gradient2 text-3xl xds:text-3xl sm:text-5xl font-bold w-[80%]  "
               style={{ fontFamily: '"quick"' }}
             >
               Events &nbsp;Ground
@@ -208,7 +241,7 @@ const CompanyPage = () => {
 
             <button
               onClick={handleCreateEventClick}
-              className="text-sm xds:text-lg  sm:text-xl h-6 xds:h-8 sm:h-12  px-1 xds:px-2 sm:px-4 bg-indigo-600 hover:bg-indigo-500 text-white flex justify-center items-center font-bold rounded-md"
+              className="text-sm w-[12rem] xds:text-lg  sm:text-xl h-6 xds:h-8 sm:h-12  px-1 xds:px-2 sm:px-4 bg-indigo-600 hover:bg-indigo-500 text-white flex justify-center items-center font-bold rounded-md"
             >
               <FontAwesomeIcon
                 icon={faPlus}
@@ -217,6 +250,7 @@ const CompanyPage = () => {
               Create Event
             </button>
           </div>
+          
 
           <div className="flex mt-24 mr-12">
             <div
@@ -257,7 +291,7 @@ const CompanyPage = () => {
             <input
               type="text"
               placeholder="Search your events..."
-              className=" mb-4 px-3 py-1 w-[50%] border-4 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className=" mb-4 px-3 py-1 w-[50%] border-2 shadow-xl border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
 
             {/* Buttons */}
@@ -370,7 +404,6 @@ const CompanyPage = () => {
                       {event.eventType === "virtual" && <span>Virtual</span>}
                       {event.eventType === "hybrid" && <span>Hybrid</span>}
                     </div>
-                    
                   </div>
 
                   <div className="mt-3 flex justify-center items-center space-x-2 xds:space-x-8 sm:space-x-12 md:space-x-6 lg:space-x-8">

@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Default favicon -->
     <link id="favicon" rel="icon" type="image/png" href="https://w7.pngwing.com/pngs/11/1003/png-transparent-logo-meeting-photography-business-art-thumbnail.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eventek</title>
@@ -15,15 +14,13 @@
     <script>
       const originalTitle = document.title;
       const originalFavicon = document.querySelector("#favicon").href;
-      const heartFavicon = "https://cdn-icons-png.flaticon.com/512/833/833472.png"; // URL for the heart icon
+      const heartFavicon = "https://cdn-icons-png.flaticon.com/512/833/833472.png";
       
       document.addEventListener("visibilitychange", function() {
         if (document.hidden) {
-          // Change the title and favicon when tab is inactive
           document.title = "Come Back Soon!";
           document.querySelector("#favicon").setAttribute("href", heartFavicon);
         } else {
-          // Restore the original title and favicon when tab is active
           document.title = originalTitle;
           document.querySelector("#favicon").setAttribute("href", originalFavicon);
         }

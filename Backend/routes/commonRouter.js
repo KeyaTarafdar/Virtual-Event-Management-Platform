@@ -1,4 +1,3 @@
-// *commonRouter.js*
 const express = require("express");
 const router = express.Router();
 const commonIsLoggedIn = require("../middlewares/commonIsLoggedIn");

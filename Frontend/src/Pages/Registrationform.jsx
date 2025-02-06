@@ -20,7 +20,7 @@ const Registrationform = () => {
     scannerImage: "",
     payAmount: 0,
   });
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formdata.Pay && !paymentDone) {

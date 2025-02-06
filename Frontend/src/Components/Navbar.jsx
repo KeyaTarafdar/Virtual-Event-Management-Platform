@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLocation } from "react-router-dom";
 import {
   faBars,
   faXmark,
@@ -11,11 +12,19 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
-import { findUser, logoutUser, findVenue, findAdmin } from "../utils/utils";
+import {
+  findUser,
+  logoutUser,
+  findVenue,
+  findAdmin,
+  fetchCompanyDetails,
+} from "../utils/utils";
 import Loader from "./loader";
 
 export default function Navbar({ menuItems }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
   const [hamburgerMenuClicked, setHamburgerMenuClicked] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -38,7 +47,10 @@ export default function Navbar({ menuItems }) {
 
   const handleCompanyPageClick = () => {
     if (user) navigate("/companypage");
+
     if (venue) navigate("/venueuser");
+
+    if (admin) navigate("/adminpanel");
   };
 
   const searchClick = () => {
@@ -104,7 +116,13 @@ export default function Navbar({ menuItems }) {
     }
   };
 
+  const [company, setCompany] = useState({});
+
   useEffect(() => {
+    fetchCompanyDetails().then((response) => {
+      setCompany(response);
+    });
+
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsMdOrLarger(true);
@@ -133,17 +151,17 @@ export default function Navbar({ menuItems }) {
     setLoading(true);
     setTimeout(() => {
       logoutUser().then((response) => {
+        setLoading(false);
         if (response === "User Logout successfully") {
-          findUser().then((response) => {
-            response ? setUser(response.username.split(" ")[0]) : setUser(null);
-            setLoading(false);
-          });
+          if (location.pathname === "/") window.location.reload();
+          else navigate("/");
         } else if (response === "Venue Logout successfully") {
-          navigate("/");
+          if (location.pathname === "/") window.location.reload();
+          else navigate("/");
         } else if (response === "Admin Logout successfully") {
-          navigate("/");
+          if (location.pathname === "/") window.location.reload();
+          else navigate("/");
         } else {
-          setLoading(false);
           alert(response);
         }
       });
@@ -152,17 +170,17 @@ export default function Navbar({ menuItems }) {
 
   useEffect(() => {
     findUser().then((user) => {
-      if (user) {
+      if (user && user.username) {
         setUser(user.username.split(" ")[0]);
       }
     });
     findVenue().then((venue) => {
-      if (venue) {
+      if (venue && venue.name) {
         setVenue(venue.name);
       }
     });
     findAdmin().then((admin) => {
-      if (admin) {
+      if (admin && admin.username) {
         setAdmin(admin.username);
       }
     });
@@ -172,7 +190,7 @@ export default function Navbar({ menuItems }) {
     <>
       <div className="w-full h-16">
         {/* Search-Bar Dropdown */}
-        {(searchBarClicked || isSearchDropdown) && (
+        {/* {(searchBarClicked || isSearchDropdown) && (
           <div
             className={`pt-[7rem] pb-[3rem] bg-zinc-200 relative top-13 w-full h-24 flex justify-center items-center shadow-xl ${
               isSearchDropdown ? "animate-slideUp" : "animate-slideBelow"
@@ -191,7 +209,7 @@ export default function Navbar({ menuItems }) {
               onKeyDown={handleEnter}
             />
           </div>
-        )}
+        )} */}
 
         {/* Navbar */}
         <nav
@@ -203,7 +221,7 @@ export default function Navbar({ menuItems }) {
             className="text-gradient2 font-serif text-5xl w-[50%] sm:w-[20%] md:w-[20%] lg:w-[20%] xl:w-[20%] 2xl:w-[20%] lg:pl-5 xl:pl-8"
             style={{ fontFamily: '"quick"' }}
           >
-            Eventek
+            {company.companyName}
           </div>
 
           {/* Navbar Menu */}
@@ -236,14 +254,14 @@ export default function Navbar({ menuItems }) {
           {/* User Section */}
           <div className="w-[50%] sm:w-[35%] md:w-[35%] lg:w-2/5 xl:w-[25%] 2xl:w-[20%] flex justify-end items-center space-x-4">
             {/* Search Button */}
-            <div className="hidden lg:flex xl:w-[35%] lg:w-[20%] md:w-full justify-center">
+            {/* <div className="hidden lg:flex xl:w-[35%] lg:w-[20%] md:w-full justify-center">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
                 style={{ color: "#ffffff" }}
                 className="text-xl cursor-pointer"
                 onClick={searchClick}
               />
-            </div>
+            </div> */}
 
             {/* USER SECTION IN NAVBAR */}
             {user || venue || admin ? (
@@ -346,17 +364,21 @@ export default function Navbar({ menuItems }) {
         {/* User Dropdown */}
         {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
           <div
-            className={`border-4 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center h-[5.2rem] mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${
+            className={`border-2 z-50 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${
               isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
             }`}
             style={{ backgroundColor: "rgba(0, 0, 255, 0.6)" }}
           >
-            <div
-              onClick={handleCompanyPageClick}
-              className="w-full text-center pt-2 pb-2 hover:cursor-pointer hover:text-red-300 hover:font-bold"
-            >
-              My Account
-            </div>
+            {location.pathname !== "/venueuser" &&
+              location.pathname !== "/adminpanel" && (
+                <div
+                  onClick={handleCompanyPageClick}
+                  className="w-full text-center pt-2 pb-2 hover:cursor-pointer hover:text-red-300 hover:font-bold"
+                >
+                  Profile
+                </div>
+              )}
+
             <div
               onClick={handelLogout}
               className="w-full text-center pt-2 pb-2 hover:cursor-pointer hover:text-red-300 hover:font-bold"

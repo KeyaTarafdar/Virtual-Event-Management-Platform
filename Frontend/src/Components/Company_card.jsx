@@ -77,5 +77,3 @@ const companiesData = [
 export default function App() {
   return <CompanyGrid companies={companiesData} />;
 }
-
-

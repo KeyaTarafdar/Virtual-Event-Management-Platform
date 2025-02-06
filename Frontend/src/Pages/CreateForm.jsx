@@ -9,6 +9,7 @@ const CreateForm = () => {
   const [error, setError] = useState("");
   const [nameerror, setNameError] = useState("");
   const [dateerror, setDateError] = useState("");
+  const [enddateerror, setEndDateError] = useState("");
   const [speakerError, setSpeakerError] = useState("");
   const [timeerror, setTimeError] = useState("");
   const [regerror, setRegError] = useState("");
@@ -87,10 +88,30 @@ const CreateForm = () => {
     setFormData({ ...formData, [name]: files[0] });
   };
 
-  const handleEventTypeChange = (event) => {
-    const { name, value } = event.target;
+  const handleEventTypeChange = (e) => {
+    const { name, value } = e.target;
     if (value) {
-      setFormData({ ...formData, [name]: value });
+      setFormData({
+        ...formData,
+        [name]: value,
+        city: "",
+        platform: "",
+        venue1: {
+          ...formData.venue1,
+          id: null,
+          bookingshifts: null,
+        },
+        venue2: {
+          ...formData.venue2,
+          id: null,
+          bookingshifts: null,
+        },
+        venue3: {
+          ...formData.venue3,
+          id: null,
+          bookingshifts: null,
+        },
+      });
     } else {
       setFormData({ ...formData, [name]: eventType });
     }
@@ -104,13 +125,22 @@ const CreateForm = () => {
       setTimeout(async () => {
         setLoading(false);
         alert(result);
-        if (formData.eventType === "virtual") {
+        if (
+          formData.eventType === "virtual" &&
+          result === "Event created successfully!"
+        ) {
           navigate("/virtualevent");
         }
-        if (formData.eventType === "hybrid") {
+        if (
+          formData.eventType === "hybrid" &&
+          result === "Event created successfully!"
+        ) {
           navigate("/hybridevent");
         }
-        if (formData.eventType === "in_person") {
+        if (
+          formData.eventType === "in_person" &&
+          result === "Event created successfully!"
+        ) {
           navigate("/inpersonevent");
         }
       }, 3000);
@@ -125,7 +155,10 @@ const CreateForm = () => {
   const [venue_1, setvenue_1] = useState([]);
   const [venue_2, setvenue_2] = useState([]);
   const [venue_3, setvenue_3] = useState([]);
-  
+  const [venue_1_BookingShift, setvenue_1_BookingShift] = useState("");
+  const [venue_2_BookingShift, setvenue_2_BookingShift] = useState("");
+  const [venue_3_BookingShift, setvenue_3_BookingShift] = useState("");
+
   useEffect(() => {
     fetchAllVenues().then((response) => {
       setallVenues(response);
@@ -134,11 +167,7 @@ const CreateForm = () => {
   }, []);
 
   const openNewTab = () => {
-    window.open(
-      "http://localhost:5173/eventpage/6752099badee855cd533b8d2",
-      "_blank",
-      "noopener,noreferrer"
-    );
+    window.open("http://localhost:5173/venue", "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -166,17 +195,17 @@ const CreateForm = () => {
                     const regex = /^[A-Za-z][A-Za-z\s]{0,}$/; // Starts with letters, only spaces allowed, no special chars or digits.
                     const wordCount = value.trim().split(/\s+/).length;
 
-                    const errorMessage =
-                      !regex.test(value)
-                        ? "Event name must start with a letter and contain only alphabets and spaces."
-                        : wordCount > maxWords
-                          ? `Event name should not exceed ${maxWords} words.`
-                          : "";
+                    const errorMessage = !regex.test(value)
+                      ? "Event name must start with a letter and contain only alphabets and spaces."
+                      : wordCount > maxWords
+                      ? `Event name should not exceed ${maxWords} words.`
+                      : "";
                     setNameError(errorMessage);
                     setFormData({ ...formData, eventName: value });
                   }}
-                  className={`mt-1 block w-full p-2 border ${nameerror ? "border-red-500" : "border-gray-300"
-                    } rounded-md shadow-sm`}
+                  className={`mt-1 block w-full p-2 border ${
+                    nameerror ? "border-red-500" : "border-gray-300"
+                  } rounded-md shadow-sm`}
                   placeholder="Enter event name"
                   required
                 />
@@ -213,7 +242,7 @@ const CreateForm = () => {
                       return;
                     }
 
-                    setDateError(""); 
+                    setDateError("");
                     setFormData({ ...formData, eventDate: e.target.value });
 
                     // Filter venue based to date
@@ -343,7 +372,9 @@ const CreateForm = () => {
                     const maxTime = "21:00";
 
                     if (selectedTime < minTime || selectedTime > maxTime) {
-                      setTimeError("Event time must be between 9:00 AM and 9:00 PM.");
+                      setTimeError(
+                        "Event time must be between 9:00 AM and 9:00 PM."
+                      );
                     } else if (isToday && selectedTime < currentTime) {
                       setTimeError("Event time cannot be in the past.");
                     } else {
@@ -352,17 +383,15 @@ const CreateForm = () => {
 
                     setFormData({ ...formData, eventTime: selectedTime });
                   }}
-                  className={`mt-1 block w-full p-2 border ${timeerror ? "border-red-500" : "border-gray-300"
-                    } rounded-md shadow-sm`}
+                  className={`mt-1 block w-full p-2 border ${
+                    timeerror ? "border-red-500" : "border-gray-300"
+                  } rounded-md shadow-sm`}
                   required
                 />
                 {timeerror && (
                   <p className="text-red-500 text-sm mt-1">{timeerror}</p>
                 )}
               </div>
-
-
-
 
               {/* Speaker */}
               <div>
@@ -383,11 +412,15 @@ const CreateForm = () => {
                     }
                     // Check if the input is valid
                     else if (!nameRegex.test(value)) {
-                      setSpeakerError("Speaker's name can only contain alphabets and spaces.");
+                      setSpeakerError(
+                        "Speaker's name can only contain alphabets and spaces."
+                      );
                     }
                     // Check length
                     else if (value.length > 50) {
-                      setSpeakerError("Speaker's name cannot exceed 50 characters.");
+                      setSpeakerError(
+                        "Speaker's name cannot exceed 50 characters."
+                      );
                     }
                     // Clear error if valid
                     else {
@@ -397,14 +430,16 @@ const CreateForm = () => {
                     // Always update the state so the user can type
                     setFormData({ ...formData, speakerName: value });
                   }}
-                  className={`mt-1 block w-full p-2 border ${speakerError ? "border-red-500" : "border-gray-300"
-                    } rounded-md shadow-sm`}
+                  className={`mt-1 block w-full p-2 border ${
+                    speakerError ? "border-red-500" : "border-gray-300"
+                  } rounded-md shadow-sm`}
                   placeholder="Enter speaker's name"
                   required
                 />
-                {speakerError && <p className="text-red-500 text-sm mt-1">{speakerError}</p>}
+                {speakerError && (
+                  <p className="text-red-500 text-sm mt-1">{speakerError}</p>
+                )}
               </div>
-
 
               {/* Total HeadCount */}
               <div>
@@ -474,7 +509,17 @@ const CreateForm = () => {
                       setFormData({ ...formData, city: e.target.value });
                       setvenue_1(
                         allVenues
-                          .filter((venue) => venue.city === e.target.value)
+                          .filter(
+                            (venue) =>
+                              venue.city === e.target.value &&
+                              ((venue.bookingDates.includes(
+                                formData.eventDate
+                              ) &&
+                                venue.bookingShifts !== "F") ||
+                                !venue.bookingDates.includes(
+                                  formData.eventDate
+                                ))
+                          )
                           .map((venue) => venue)
                       );
 
@@ -514,17 +559,21 @@ const CreateForm = () => {
                         </label>
                         <select
                           onChange={(e) => {
+                            const selectedVenue = JSON.parse(e.target.value);
                             setFormData({
                               ...formData,
                               venue1: {
                                 ...formData.venue1,
-                                id: e.target.value,
+                                id: selectedVenue._id,
                               },
                             });
                             setVenue1(true);
+                            setvenue_1_BookingShift(
+                              selectedVenue.bookingShifts
+                            );
 
                             const filteredVenues = venue_1.filter(
-                              (venue) => venue._id !== e.target.value
+                              (venue) => venue._id !== selectedVenue._id
                             );
                             setvenue_2(filteredVenues);
                           }}
@@ -535,7 +584,7 @@ const CreateForm = () => {
                           </option>
                           {Array.isArray(venue_1) &&
                             venue_1.map((venue, index) => (
-                              <option key={index} value={venue._id}>
+                              <option key={index} value={JSON.stringify(venue)}>
                                 {venue.name}
                               </option>
                             ))}
@@ -543,19 +592,75 @@ const CreateForm = () => {
                       </div>
 
                       {/* Time Slot for Venue 1 */}
-                      {venue1 ? (
+                      {venue1 &&
+                      formData.venue1.id &&
+                      formData.venue1.id !== "no-venue" ? (
                         <div className="mt-4">
                           <p className="block text-sm font-medium text-gray-700">
-                            Select Preferred Time Slot
+                            Select Preferred Time Slot for Venue 1
                           </p>
+                          <div>
+                            <input
+                              type="radio"
+                              id="firstday1"
+                              name="timeslot1"
+                              value="1"
+                              disabled={venue_1_BookingShift === "1"}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue1: {
+                                    ...formData.venue1,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            First Half (7:00 AM - 10:00 AM)
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="secday1"
+                              name="timeslot1"
+                              value="2"
+                              disabled={venue_1_BookingShift === "2"}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue1: {
+                                    ...formData.venue1,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            Second Half (12:00 PM - 5:00 PM)
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="fullday1"
+                              name="timeslot1"
+                              value="F"
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue1: {
+                                    ...formData.venue1,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            Full Day (7:00 AM - 9:00 PM)
+                          </div>
                         </div>
                       ) : null}
 
                       {/* Venue 2 */}
                       <div className="mt-4">
-                        <label
-                          className="block text-sm font-medium text-gray-700"
-                        >
+                        <label className="block text-sm font-medium text-gray-700">
                           Venue 2 <span className="text-red-500">*</span>
                           <span
                             className="float-end hover:underline text-blue-800"
@@ -566,31 +671,37 @@ const CreateForm = () => {
                         </label>
                         <select
                           onChange={(e) => {
+                            const selectedVenue = JSON.parse(e.target.value);
                             setFormData({
                               ...formData,
                               venue2: {
                                 ...formData.venue2,
-                                id: e.target.value,
+                                id: selectedVenue._id,
                               },
                             });
                             setVenue2(true);
+                            setvenue_2_BookingShift(
+                              selectedVenue.bookingShifts
+                            );
+
                             const filteredVenues = venue_2.filter(
-                              (venue) => venue._id !== e.target.value
+                              (venue) => venue._id !== selectedVenue._id
                             );
                             setvenue_3(filteredVenues);
                           }}
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+                          defaultValue=""
                         >
                           <option value="" disabled selected>
                             Select Venue 2
                           </option>
                           {Array.isArray(venue_2) && venue_2.length === 0 ? (
-                            <option className="text-red-600">
+                            <option value="no-venue" className="text-red-600">
                               No more venue is available!
                             </option>
                           ) : (
                             venue_2.map((venue, index) => (
-                              <option key={index} value={venue._id}>
+                              <option key={index} value={JSON.stringify(venue)}>
                                 {venue.name}
                               </option>
                             ))
@@ -599,19 +710,75 @@ const CreateForm = () => {
                       </div>
 
                       {/* Time Slot for Venue 2 */}
-                      {venue2 ? (
+                      {venue2 &&
+                      formData.venue2.id &&
+                      formData.venue2.id !== "no-venue" ? (
                         <div className="mt-4">
                           <p className="block text-sm font-medium text-gray-700">
-                            Select Preferred Time Slot
+                            Select Preferred Time Slot for Venue 2
                           </p>
+                          <div>
+                            <input
+                              type="radio"
+                              id="firstday2"
+                              name="timeslot2"
+                              value="1"
+                              disabled={venue_2_BookingShift === "1"}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue2: {
+                                    ...formData.venue2,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            First Half (7:00 AM - 10:00 AM)
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="secday2"
+                              name="timeslot2"
+                              value="2"
+                              disabled={venue_2_BookingShift === "2"}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue2: {
+                                    ...formData.venue2,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            Second Half (12:00 PM - 5:00 PM)
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="fullday2"
+                              name="timeslot2"
+                              value="F"
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue2: {
+                                    ...formData.venue2,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            Full Day (7:00 AM - 9:00 PM)
+                          </div>
                         </div>
                       ) : null}
 
                       {/* Venue 3 */}
                       <div className="mt-4">
-                        <label
-                          className="block text-sm font-medium text-gray-700"
-                        >
+                        <label className="block text-sm font-medium text-gray-700">
                           Venue 3
                           <span
                             className="float-end hover:underline text-blue-800"
@@ -622,27 +789,31 @@ const CreateForm = () => {
                         </label>
                         <select
                           onChange={(e) => {
+                            const selectedVenue = JSON.parse(e.target.value);
                             setFormData({
                               ...formData,
                               venue3: {
                                 ...formData.venue3,
-                                id: e.target.value,
+                                id: selectedVenue._id,
                               },
                             });
                             setVenue3(true);
+                            setvenue_3_BookingShift(
+                              selectedVenue.bookingShifts
+                            );
                           }}
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
                         >
                           <option value="" disabled selected>
                             Select Venue 3
                           </option>
-                          {venue_3.length === 0 ? (
-                            <option className="text-red-600">
+                          {Array.isArray(venue_3) && venue_3.length === 0 ? (
+                            <option value="no-venue" className="text-red-600">
                               No more venue is available!
                             </option>
                           ) : (
                             venue_3.map((venue, index) => (
-                              <option key={index} value={venue._id}>
+                              <option key={index} value={JSON.stringify(venue)}>
                                 {venue.name}
                               </option>
                             ))
@@ -651,11 +822,69 @@ const CreateForm = () => {
                       </div>
 
                       {/* Time Slot for Venue 3 */}
-                      {venue3 ? (
+                      {venue3 &&
+                      formData.venue3.id &&
+                      formData.venue3.id !== "no-venue" ? (
                         <div className="mt-4">
                           <p className="block text-sm font-medium text-gray-700">
-                            Select Preferred Time Slot
+                            Select Preferred Time Slot for Venue 3
                           </p>
+                          <div>
+                            <input
+                              type="radio"
+                              id="firstday3"
+                              name="timeslot3"
+                              value="1"
+                              disabled={venue_3_BookingShift === "1"}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue3: {
+                                    ...formData.venue3,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            First Half (7:00 AM - 10:00 AM)
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="secday3"
+                              name="timeslot3"
+                              value="2"
+                              disabled={venue_3_BookingShift === "2"}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue3: {
+                                    ...formData.venue3,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            Second Half (12:00 PM - 5:00 PM)
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="fullday3"
+                              name="timeslot3"
+                              value="F"
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  venue3: {
+                                    ...formData.venue3,
+                                    timeslot: e.target.value,
+                                  },
+                                });
+                              }}
+                            />
+                            Full Day (7:00 AM - 9:00 PM)
+                          </div>
                         </div>
                       ) : null}
                     </>
@@ -757,11 +986,9 @@ const CreateForm = () => {
                       {/* Venue Dropdown */}
                       {venueDropdown && formData.city && (
                         <>
-                          {/* Venue 2 */}
+                          {/* Venue 1 */}
                           <div className="mt-4">
-                            <label
-                              className="block text-sm font-medium text-gray-700"
-                            >
+                            <label className="block text-sm font-medium text-gray-700">
                               Venue 1 <span className="text-red-500">*</span>
                               <span
                                 className="float-end hover:underline text-blue-800"
@@ -780,6 +1007,7 @@ const CreateForm = () => {
                                   },
                                 });
                                 setVenue1(true);
+
                                 const filteredVenues = venue_1.filter(
                                   (venue) => venue._id !== e.target.value
                                 );
@@ -800,19 +1028,45 @@ const CreateForm = () => {
                           </div>
 
                           {/* Time Slot for Venue 1 */}
-                          {venue1 ? (
+                          {venue1 &&
+                          formData.venue1.id &&
+                          formData.venue1.id !== "no-venue" ? (
                             <div className="mt-4">
                               <p className="block text-sm font-medium text-gray-700">
-                                Select Preferred Time Slot
+                                Select Preferred Time Slot for Venue 1
                               </p>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="firstday1"
+                                  name="timeslot1"
+                                  disabled={venue_1_BookingShift === "1"}
+                                />
+                                First Half (7:00 AM - 10:00 AM)
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="secday1"
+                                  name="timeslot1"
+                                  disabled={venue_1_BookingShift === "2"}
+                                />
+                                Second Half (12:00 PM - 5:00 PM)
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="fullday1"
+                                  name="timeslot1"
+                                />
+                                Full Day (7:00 AM - 9:00 PM)
+                              </div>
                             </div>
                           ) : null}
 
                           {/* Venue 2 */}
                           <div className="mt-4">
-                            <label
-                              className="block text-sm font-medium text-gray-700"
-                            >
+                            <label className="block text-sm font-medium text-gray-700">
                               Venue 2 <span className="text-red-500">*</span>
                               <span
                                 className="float-end hover:underline text-blue-800"
@@ -838,33 +1092,65 @@ const CreateForm = () => {
                               }}
                               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
                             >
-                              <option value="" disabled>
+                              <option value="" disabled selected>
                                 Select Venue 2
                               </option>
-                              {/* {venue_1.map(
-                                (venue) => (
-                                  <option key={venue}>
-                                    {venue}
+                              {Array.isArray(venue_2) &&
+                              venue_2.length === 0 ? (
+                                <option
+                                  value="no-venue"
+                                  className="text-red-600"
+                                >
+                                  No more venue is available!
+                                </option>
+                              ) : (
+                                venue_2.map((venue, index) => (
+                                  <option key={index} value={venue._id}>
+                                    {venue.name}
                                   </option>
-                                )
-                              )} */}
+                                ))
+                              )}
                             </select>
                           </div>
 
                           {/* Time Slot for Venue 2 */}
-                          {venue2 ? (
+                          {venue2 &&
+                          formData.venue2.id &&
+                          formData.venue2.id !== "no-venue" ? (
                             <div className="mt-4">
                               <p className="block text-sm font-medium text-gray-700">
-                                Select Preferred Time Slot
+                                Select Preferred Time Slot for Venue 2
                               </p>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="firstday2"
+                                  name="timeslot2"
+                                />
+                                First Half (7:00 AM - 10:00 AM)
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="secday2"
+                                  name="timeslot2"
+                                />
+                                Second Half (12:00 PM - 5:00 PM)
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="fullday2"
+                                  name="timeslot2"
+                                />
+                                Full Day (7:00 AM - 9:00 PM)
+                              </div>
                             </div>
                           ) : null}
 
                           {/* Venue 3 */}
                           <div className="mt-4">
-                            <label
-                              className="block text-sm font-medium text-gray-700"
-                            >
+                            <label className="block text-sm font-medium text-gray-700">
                               Venue 3
                               <span
                                 className="float-end hover:underline text-blue-800"
@@ -873,7 +1159,6 @@ const CreateForm = () => {
                                 View Details
                               </span>
                             </label>
-
                             <select
                               onChange={(e) => {
                                 setFormData({
@@ -887,11 +1172,15 @@ const CreateForm = () => {
                               }}
                               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
                             >
-                              <option value="" disabled>
+                              <option value="" disabled selected>
                                 Select Venue 3
                               </option>
-                              {venue_3.length === 0 ? (
-                                <option className="text-red-600">
+                              {Array.isArray(venue_3) &&
+                              venue_3.length === 0 ? (
+                                <option
+                                  value="no-venue"
+                                  className="text-red-600"
+                                >
                                   No more venue is available!
                                 </option>
                               ) : (
@@ -905,11 +1194,37 @@ const CreateForm = () => {
                           </div>
 
                           {/* Time Slot for Venue 3 */}
-                          {venue3 ? (
+                          {venue3 &&
+                          formData.venue3.id &&
+                          formData.venue3.id !== "no-venue" ? (
                             <div className="mt-4">
                               <p className="block text-sm font-medium text-gray-700">
-                                Select Preferred Time Slot
+                                Select Preferred Time Slot for Venue 3
                               </p>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="firstday3"
+                                  name="timeslot3"
+                                />
+                                First Half (7:00 AM - 10:00 AM)
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="secday3"
+                                  name="timeslot3"
+                                />
+                                Second Half (12:00 PM - 5:00 PM)
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  id="fullday3"
+                                  name="timeslot3"
+                                />
+                                Full Day (7:00 AM - 9:00 PM)
+                              </div>
                             </div>
                           ) : null}
                         </>
@@ -927,17 +1242,16 @@ const CreateForm = () => {
                 </label>
                 <select
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                  value={formData.isPublic}
-                  onChange={(e) => {
-                    if (e.target.value === "Private")
-                      setFormData({
-                        ...formData,
-                        isPublic: false,
-                      });
-                  }}
+                  value={formData.isPublic ? "public" : "private"}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      isPublic: e.target.value === "public",
+                    })
+                  }
                   required
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select your preferable transparency type
                   </option>
                   <option value="public">Public</option>
@@ -984,10 +1298,12 @@ const CreateForm = () => {
                         type="number"
                         name="paidAmountPerPerson"
                         value={formData.paidAmountPerPerson}
-                        onChange={setFormData({
-                          ...formData,
-                          paidAmountPerPerson: e.target.value,
-                        })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            paidAmountPerPerson: e.target.value,
+                          })
+                        }
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
                         placeholder="Enter amount per person"
                       />
@@ -1123,13 +1439,15 @@ const CreateForm = () => {
                 <label className="block text-sm font-medium text-gray-700">
                   Poster (in JPG/JPEG/PNG format){" "}
                   <span className="text-red-500">*</span>
-                  <h5 className="text-red-500">**Image should be in 3:2 size format</h5>
+                  <h5 className="text-red-500">
+                    **Image should be in JPG, JPEG, or PNG format
+                  </h5>
                 </label>
                 <input
                   type="file"
                   name="posterImage"
                   accept=".jpg,.jpeg,.png"
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files[0];
 
                     if (!file) {
@@ -1137,52 +1455,49 @@ const CreateForm = () => {
                       return;
                     }
 
-                    const validFormats = ["image/jpeg", "image/jpg", "image/png"];
-                    if (!validFormats.includes(file.type)) {
-                      setPosterError("File must be in JPG, JPEG, or PNG format.");
+                    // File size validation
+                    const maxSizeInKB = 30;
+                    if (file.size > maxSizeInKB * 1024) {
+                      setPosterError(
+                        `File size should be less than ${maxSizeInKB} KB.`
+                      );
                       return;
                     }
 
-                    const image = new Image();
-                    image.onload = () => {
-                      const aspectRatio = image.width / image.height;
-                      if (aspectRatio.toFixed(2) !== (3 / 2).toFixed(2)) {
-                        setPosterError("Image must be in a 3:2 aspect ratio.");
-                        return;
-                      }
-                      setPosterError(""); // Clear error if valid
-                      setFormData((prev) => ({ ...prev, posterImage: file })); // Save file in formData
-                    };
+                    // File format validation
+                    const validFormats = [
+                      "image/jpeg",
+                      "image/jpg",
+                      "image/png",
+                    ];
+                    if (!validFormats.includes(file.type)) {
+                      setPosterError(
+                        "File must be in JPG, JPEG, or PNG format."
+                      );
+                      return;
+                    }
 
-                    image.onerror = () => {
-                      setPosterError("Invalid image file.");
-                    };
+                    // Clear any previous errors
+                    setPosterError("");
 
-                    image.src = URL.createObjectURL(file);
+                    // Convert to base64 and save
+                    try {
+                      const imageData = await setFileToBase(file);
+                      setFormData((prev) => ({
+                        ...prev,
+                        posterImage: imageData,
+                      }));
+                    } catch {
+                      setPosterError("Failed to process the image file.");
+                    }
                   }}
                   className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
                   required
                 />
-                {posterError && <p className="text-red-500 text-sm mt-1">{posterError}</p>}
+                {posterError && (
+                  <p className="text-red-500 text-sm mt-1">{posterError}</p>
+                )}
               </div>
-
-              {/* Payment
-              <div className="w-[90%] flex justify-center items-center flex-col">
-                <div className=" mt-8 flex justify-center items-center bg-indigo-200 p-6 rounded-xl shadow-md">
-                  <h3 className="text-lg font-bold text-red-500">
-                    Total Bill: ₹{payableAmount}
-                  </h3>
-                  <div
-                    className="mt-2 ml-8 bg-indigo-600 text-white p-2 rounded-md hover:bg-green-600 cursor-pointer"
-                    onClick={handlePayment}
-                  >
-                    Pay Now
-                  </div>
-                </div>
-                <div className="flex justify-center items-center text-gray-400">
-                  **No hidden cost will be included further
-                </div>
-              </div> */}
 
               {/* Submit Button */}
               <div className="mt-8 text-center">
@@ -1190,6 +1505,7 @@ const CreateForm = () => {
                   type="submit"
                   className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition duration-300"
                   disabled={!!error} // Disable button if there's an error
+                  onClick={handleSubmit}
                 >
                   Create Event
                 </button>

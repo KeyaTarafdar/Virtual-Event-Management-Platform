@@ -14,7 +14,7 @@ export default function Header() {
 
   useEffect(() => {
     findUser().then((response) => {
-      setUser(response ? response.username.split(" ")[0] : null);
+      setUser(response.username ? response.username.split(" ")[0] : null);
     });
   }, []);
 
@@ -56,10 +56,10 @@ export default function Header() {
     if (scrollDirection !== direction) {
       setScrollDirection(direction);
       if (direction === "down") {
-        setIsSearchDropdown(true);
+        //setIsSearchDropdown(true);
         setTimeout(() => {
           setSearchBarClicked(false);
-          setIsSearchDropdown(false);
+         // setIsSearchDropdown(false);
         }, 900);
       }
     }

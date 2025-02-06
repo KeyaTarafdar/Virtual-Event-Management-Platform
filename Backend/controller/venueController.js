@@ -12,12 +12,12 @@ module.exports.signUp = async (req, res) => {
   try {
     let {
       venueName,
+      owner,
       email,
       contact,
       city,
       fullAddress,
       maxCapacity,
-      bookingPrice,
       canOrganizeMultidayEvent,
     } = req.body.formData;
 
@@ -28,7 +28,6 @@ module.exports.signUp = async (req, res) => {
       contact &&
       fullAddress &&
       maxCapacity &&
-      bookingPrice &&
       (canOrganizeMultidayEvent || !canOrganizeMultidayEvent)
     ) {
       const existingVenue = await venueModel.findOne({ email });
@@ -54,13 +53,13 @@ module.exports.signUp = async (req, res) => {
       }
       let venue = await venueModel.create({
         name: venueName,
+        ownerName: owner,
         email,
         temporaryPassword: password,
         contact,
         address: fullAddress,
         city,
         maxCapacity,
-        bookingPrice,
         canOrganizeMultidayEvent,
       });
 
@@ -78,15 +77,51 @@ module.exports.signUp = async (req, res) => {
   }
 };
 
+// Upload venue Profile Picture
+module.exports.uploadVenueProfilePicture = async (req, res) => {
+  try {
+    const image = req.body.image;
+    const oldImage = req.venue.profilepicture
+      ? req.venue.profilepicture.public_id
+      : null;
+
+    const result = await cloudinary.uploader.upload(image, {
+      folder: "eventManagement_venueProfilePicture",
+      width: 300,
+      crop: "scale",
+    });
+
+    await venueModel.updateOne(
+      { email: req.venue.email },
+      {
+        $set: {
+          profilepicture: {
+            public_id: result.public_id,
+            url: result.secure_url,
+          },
+        },
+      }
+    );
+
+    if (oldImage) {
+      await cloudinary.uploader.destroy(oldImage);
+    }
+    res.send("File uploaded successfully");
+  } catch (err) {
+    console.log(err.message);
+    res.send("Internal Server Error");
+  }
+};
+
 // Login
 module.exports.loginVenue = async (req, res) => {
   try {
     let token = req.cookies.token;
+
     if (token) {
       res.send("You are already logged in.");
     } else {
       let { email, password } = req.body;
-
       if (email && password) {
         let venue = await venueModel.findOne({ email });
 
@@ -101,10 +136,9 @@ module.exports.loginVenue = async (req, res) => {
                   sameSite: "Lax",
                   path: "/",
                 });
-
-                res.send("Login successfully");
+                return res.send("Login successfully");
               } else {
-                res.send("Wrong Password");
+                return res.send("Wrong Password");
               }
             });
           } else if (venue.temporaryPassword == password) {
@@ -116,9 +150,9 @@ module.exports.loginVenue = async (req, res) => {
               path: "/",
             });
 
-            res.send("Login successfully");
+            return res.send("Login successfully");
           } else {
-            res.send("Wrong Password");
+            return res.send("Wrong Password");
           }
         } else {
           return res.send("Email or Password is wrong");
@@ -128,6 +162,7 @@ module.exports.loginVenue = async (req, res) => {
       }
     }
   } catch (err) {
+    console.log(err.message);
     return res.send(err.message);
   }
 };
@@ -143,6 +178,7 @@ module.exports.logoutVenue = async (req, res) => {
     });
     res.send("Logout successfully");
   } catch (err) {
+    console.log(err.message);
     res.send("Internal Server Error");
   }
 };
@@ -173,9 +209,151 @@ module.exports.updatePasswordFirstTime = async (req, res) => {
 module.exports.fetchVenueUser = async (req, res) => {
   try {
     let venue = req.venue;
+    await venue.populate([
+      {
+        path: "bookingRequests.id",
+        model: "event",
+        populate: { path: "ownerId" },
+      },
+      { path: "bookedEvents" },
+    ]);
+
     res.send(venue);
   } catch (err) {
     console.log(err.message);
     res.send("Internal Server Error");
+  }
+};
+
+// Update Hall Name
+module.exports.updateHallName = async (req, res) => {
+  try {
+    let { newHallName } = req.body;
+    let venue = req.venue;
+
+    await venueModel.updateOne(
+      { email: venue.email },
+      { $set: { name: newHallName } }
+    );
+    res.send("Hallname updated");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Hall City
+module.exports.updateHallCity = async (req, res) => {
+  try {
+    let { newHallCity } = req.body;
+    let venue = req.venue;
+
+    await venueModel.updateOne(
+      { email: venue.email },
+      { $set: { city: newHallCity } }
+    );
+    res.send("Hall City updated");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Hall Email
+module.exports.updateHallEmail = async (req, res) => {
+  try {
+    let { newHallEmail } = req.body;
+    let venue = req.venue;
+
+    venueModel
+      .updateOne({ email: venue.email }, { $set: { email: newHallEmail } })
+      .then((response) => {
+        res.cookie("token", "", {
+          httpOnly: true,
+          secure: false,
+          sameSite: "Lax",
+          path: "/",
+        });
+
+        let updatedVenue = { ...venue, email: newHallEmail };  
+        let token = generateToken(updatedVenue);
+
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "Lax",
+          path: "/",
+        });
+
+        res.send("Hall Email updated");
+      })
+      .catch((err) => {
+        res.send(err.message);
+      });
+  } catch (err) {
+    console.log(err.message)
+    res.send(err.message);
+  }
+};
+
+// Update Hall Contact
+module.exports.updateHallContact = async (req, res) => {
+  try {
+    let { newHallPhone } = req.body;
+    let venue = req.venue;
+
+    await venueModel.updateOne(
+      { email: venue.email },
+      { $set: { contact: newHallPhone } }
+    );
+    res.send("Hall contact updated");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Hall Address
+module.exports.updateHallAddress = async (req, res) => {
+  try {
+    let { newHallAddress } = req.body;
+    let venue = req.venue;
+
+    await venueModel.updateOne(
+      { email: venue.email },
+      { $set: { address: newHallAddress } }
+    );
+    res.send("Hall address updated");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Hall Capacity
+module.exports.updateHallCapacity = async (req, res) => {
+  try {
+    let { newHallCapacity } = req.body;
+    let venue = req.venue;
+
+    await venueModel.updateOne(
+      { email: venue.email },
+      { $set: { maxCapacity: newHallCapacity } }
+    );
+    res.send("Hall capacity updated");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Hall Multiday
+module.exports.updateHallMultiday = async (req, res) => {
+  try {
+    let { newHallCapacity } = req.body;
+    let venue = req.venue;
+
+    await venueModel.updateOne(
+      { email: venue.email },
+      { $set: { canOrganizeMultidayEvent: newHallCapacity } }
+    );
+    res.send("Hall Multiday Fecility updated");
+  } catch (err) {
+    res.send(err.message);
   }
 };

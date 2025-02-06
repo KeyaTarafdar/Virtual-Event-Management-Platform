@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, loginVenue, loginAdmin } from "../utils/utils";
 import Loader from "../Components/loader";
@@ -37,35 +37,79 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
       setLoading(true);
-      setTimeout(() => {
-        loginUser(formData.email, formData.password).then((response) => {
-          if (response === "Login successfully") {
-            navigate("/");
-          } else {
-            loginVenue(formData.email, formData.password).then((response) => {
-              if (response === "Login successfully") {
-                navigate("/venueuser");
-              } else {
-                loginAdmin(formData.email, formData.password).then(
-                  (response) => {
-                    if (response === "Login successfully") {
-                      navigate("/adminpanel");
-                    } else {
-                      alert(response);
-                    }
-                  }
-                );
-              }
-            });
-          }
-        });
+      const withTimeout = (promise, timeout = 4000) => {
+        return Promise.race([
+          promise,
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve(
+                  "Error during login: Request timed out after 4 seconds"
+                ),
+              timeout
+            )
+          ),
+        ]);
+      };
+
+      try {
+        const userResponse = await withTimeout(
+          loginUser(formData.email, formData.password),
+          4000
+        );
+        if (userResponse && userResponse === "Login successfully") {
+          setLoading(false);
+          navigate("/");
+          return;
+        }
+
+        const venueResponse = await withTimeout(
+          loginVenue(formData.email, formData.password)
+        );
+        if (venueResponse === "Login successfully") {
+          setLoading(false);
+          navigate("/venueuser");
+          return;
+        }
+
+        const adminResponse = await withTimeout(
+          loginAdmin(formData.email, formData.password)
+        );
+        if (adminResponse === "Login successfully") {
+          setLoading(false);
+          navigate("/adminpanel");
+          return;
+        }
+        if (
+          userResponse ===
+            "Error during login: Request timed out after 4 seconds" ||
+          venueResponse ===
+            "Error during login: Request timed out after 4 seconds" ||
+          adminResponse ===
+            "Error during login: Request timed out after 4 seconds"
+        ) {
+          window.location.reload(true);
+          alert("Some error has occured! Please try again");
+          return;
+        }
         setLoading(false);
-      }, 3000);
+        if (
+          venueResponse === "You are already logged in." ||
+          userResponse === "You are already logged in." ||
+          adminResponse === "You are already logged in."
+        ) {
+          alert("You are already logged in");
+          return;
+        }
+        alert("Email or Password is wrong");
+      } catch (err) {
+        console.error("Error during API calls:", err.message);
+      }
     }
   };
 
@@ -173,7 +217,7 @@ const Login = () => {
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <button
                 type="button"
                 onClick={handleSignupClick}

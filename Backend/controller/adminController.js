@@ -1,6 +1,7 @@
 const adminModel = require("../models/adminModel");
 const venueModel = require("../models/venueModel");
 const userModel = require("../models/userModel");
+const eventModel = require("../models/EventModel");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const cloudinary = require("../utils/cloudinary");
@@ -59,9 +60,9 @@ module.exports.loginAdmin = async (req, res) => {
                 sameSite: "Lax",
                 path: "/",
               });
-              res.send("Login successfully");
+              return res.send("Login successfully");
             } else {
-              res.send("Wrong Password");
+              return res.send("Wrong Password");
             }
           });
         } else {
@@ -73,7 +74,7 @@ module.exports.loginAdmin = async (req, res) => {
     }
   } catch (err) {
     console.log(err.message);
-    return res.send(err.message);
+    res.send(err.message);
   }
 };
 
@@ -88,6 +89,43 @@ module.exports.logoutAdmin = async (req, res) => {
     });
     res.send("Logout successfully");
   } catch (err) {
+    console.log(err.message);
+    res.send("Internal Server Error");
+  }
+};
+
+// Upload Profile Picture
+module.exports.uploadProfilePicture = async (req, res) => {
+  try {
+    const image = req.body.image;
+    const oldImage = req.admin.image.public_id;
+
+    const result = await cloudinary.uploader.upload(image, {
+      folder: "eventManagement_adminProfilePicture",
+      width: 128, 
+      height: 128, 
+      crop: "fill", 
+      gravity: "face",
+    });    
+
+    await adminModel.updateOne(
+      { email: req.admin.email },
+      {
+        $set: {
+          image: {
+            public_id: result.public_id,
+            url: result.secure_url,
+          },
+        },
+      }
+    );
+
+    if (oldImage) {
+      await cloudinary.uploader.destroy(oldImage);
+    }
+    res.send("File uploaded successfully");
+  } catch (err) {
+    console.log(err.message);
     res.send("Internal Server Error");
   }
 };
@@ -214,6 +252,16 @@ module.exports.rejectVenue = async (req, res) => {
     });
 
     res.send("Venue is rejected");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch All Venue
+module.exports.fetchAllVenue = async (req, res) => {
+  try {
+    let events = await eventModel.find();
+    res.send(events);
   } catch (err) {
     res.send(err.message);
   }

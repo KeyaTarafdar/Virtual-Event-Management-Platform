@@ -3,6 +3,16 @@ import axios from "axios";
 
 // COMMON FUNCTIONS -----------------------------------------------------------------------------------------------------
 
+// Fetch Company Details
+export const fetchCompanyDetails = async () => {
+  try {
+    let response = await axios.get("http://localhost:8000/fetchcompanydetails");
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // Logout
 export const logoutUser = async () => {
   try {
@@ -59,6 +69,22 @@ export const loginUser = async (email, password) => {
   }
 };
 
+// Upload Profile Picture
+export const uploadProfilePicture = async (imageData) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/users/uploadprofilepicture",
+      { image: imageData },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // Change Password Request
 export const changePasswordRequest = async (email) => {
   try {
@@ -104,7 +130,7 @@ export const findUser = async () => {
     let response = await axios.get("http://localhost:8000/users/getuser", {
       withCredentials: true,
     });
-    if (response.data.username) {
+    if (response.data) {
       return response.data;
     } else {
       return null;
@@ -201,7 +227,7 @@ export const fetchSingleEvent = async (eventId) => {
   }
 };
 
-// Fetch a Single Event
+// Fetch Last Created Event
 export const fetchLastCreatedEvent = async () => {
   try {
     let response = await axios.get(
@@ -264,9 +290,26 @@ export const loginVenue = async (email, password) => {
 // Find Venue
 export const findVenue = async () => {
   try {
+    // alert("bdc")
     let response = await axios.get(
       "http://localhost:8000/venue/fetchvenueuser",
       { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Upload venue Profile Picture
+export const uploadVenueProfilePicture = async (imageData) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/uploadvenueprofilepicture",
+      { image: imageData },
+      {
+        withCredentials: true,
+      }
     );
     return response.data;
   } catch (err) {
@@ -283,6 +326,104 @@ export const registerVenue = async (formData) => {
       { withCredentials: true }
     );
 
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue Name
+export const updateVenueName = async (newHallName) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehallname",
+      { newHallName },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue City
+export const updateVenueCity = async (newHallCity) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehallcity",
+      { newHallCity },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue Email
+export const updateVenueEmail = async (newHallEmail) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehallemail",
+      { newHallEmail },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue Phone
+export const updateVenuePhone = async (newHallPhone) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehallphone",
+      { newHallPhone },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue Address
+export const updateVenueAddress = async (newHallAddress) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehalladdress",
+      { newHallAddress },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue MaxCapacity
+export const updateVenueCapacity = async (newHallCapacity) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehallcapacity",
+      { newHallCapacity },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue Multiday
+export const updateVenueMultidayEvent = async (newHallMultiday) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/venue/updatehallmultiday",
+      { newHallMultiday },
+      { withCredentials: true }
+    );
     return response.data;
   } catch (err) {
     console.log(err.message);
@@ -317,6 +458,22 @@ export const findAdmin = async () => {
   }
 };
 
+// Upload Profile Picture
+export const uploadProfilePictureAdmin = async (imageData) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/admins/uploadprofilepicture",
+      { image: imageData },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // Accept a Venue
 export const acceptVenue = async (venueId) => {
   try {
@@ -324,6 +481,35 @@ export const acceptVenue = async (venueId) => {
       "http://localhost:8000/admins/acceptvenue",
       { venueId },
       { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Reject a Venue
+export const rejectVenue = async (venueId, reason) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/admins/rejectvenue",
+      { venueId, reason },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch All Venue
+export const fetchAllEvents = async () => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/admins/fetchallvenue",
+      {
+        withCredentials: true,
+      }
     );
     return response.data;
   } catch (err) {

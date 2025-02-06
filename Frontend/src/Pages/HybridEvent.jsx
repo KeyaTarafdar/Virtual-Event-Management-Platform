@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import VirtualCard from "../Components/VirtualCard";
 import { useNavigate } from "react-router-dom";
 import { fetchHybridEvents } from "../utils/utils";
@@ -25,7 +25,7 @@ function HybridEvent() {
         events.filter((event) => {
           const today = new Date();
           const currentDate = today.toISOString().split("T")[0];
-          const currentTime = today.toTimeString().split(" ")[0];
+         //const currentTime = today.toTimeString().split(" ")[0];
           const eventDate = new Date(event.date).toISOString().split("T")[0];
           const registrationLastDate = new Date(event.lastDateOfRegistration)
             .toISOString()
@@ -63,7 +63,7 @@ function HybridEvent() {
             <p className="text-slate-500 lg:text-xl mt-4 lg:mt-6 text-center lg:text-left font-serif w-[66%] pl-16">
               Join us for our hybrid events that combine the best of in-person
               and virtual experiences. Engage with industry experts and fellow
-              participants from anywhere, whether you're at the venue or joining
+              participants from anywhere, whether you&apos;re at the venue or joining
               remotely.
               <br />
               <br /> Enjoy interactive sessions, valuable discussions, and ample
@@ -71,7 +71,7 @@ function HybridEvent() {
               innovations across the globe. Embrace the flexibility of hybrid
               events and be part of the future of gatherings!
             </p>
-            <div className="  w-[30%] ml-auto flex justify-end pr-13">
+            <div className="w-[30%] ml-auto flex justify-end pr-15">
               <img
                 className="h-72 w-96"
                 src="https://media.istockphoto.com/id/1306175866/vector/video-conference-theme.jpg?s=612x612&w=0&k=20&c=vtlB4uJdl3Cut5bx9BZRl5bJsBhhxJ9ivTUPgtB49NY="
@@ -119,6 +119,7 @@ function HybridEvent() {
             {Array.isArray(hybridEvents) &&
               hybridEvents.map((item) => (
                 <VirtualCard
+                  key={item._id}
                   eventId={item._id}
                   name={item.eventName}
                   date={item.date}

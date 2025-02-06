@@ -8,8 +8,6 @@ const cloudinary = require("../utils/cloudinary");
 require("dotenv").config();
 const NodeCache = require("node-cache");
 const nodemailer = require("nodemailer");
-// const axios = require("axios");
-
 const nodeCache = new NodeCache();
 
 // Register User
@@ -22,39 +20,25 @@ module.exports.signUp = async (req, res) => {
       if (existingUser) {
         return res.send("User already exists. Please Login.");
       }
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-      // const apiUrl = `https://api.zerobounce.net/v2/validate?api_key=${
-      //   process.env.ZEROBONUS_API_KEY
-      // }&email=${encodeURIComponent(email)}`;
+      let newUser = await userModel.create({
+        email,
+        password: hashedPassword,
+        username: userName,
+        contact: contactNumber,
+      });
 
-      // const response = await axios.get(apiUrl);
+      let token = generateToken(newUser);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Lax",
+      });
 
-      // if (response.data.status === "valid") {
-        const salt = await bcrypt.genSalt(12);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        let newUser = await userModel.create({
-          email,
-          password: hashedPassword,
-          username: userName,
-          contact: contactNumber,
-        });
-
-        let token = generateToken(newUser);
-        res.cookie("token", token, {
-          httpOnly: true,
-          secure: false,
-          sameSite: "Lax",
-        });
-
-        res.send("User created successfully");
-       //} else {
-      //   res.send(
-      //     "Email Address does not exists!! Please enter a valid Email Address."
-      //   );
-      // }
-    } 
-     else {
+      res.send("User created successfully");
+    } else {
       res.send("All fields are required and you must agree to the terms.");
     }
   } catch (err) {
@@ -90,9 +74,9 @@ module.exports.loginUser = async (req, res) => {
               });
               nodeCache.set("user", JSON.stringify(user));
 
-              res.send("Login successfully");
+              return res.send("Login successfully");
             } else {
-              res.send("Wrong Password");
+              return res.send("Wrong Password");
             }
           });
         } else {
@@ -103,7 +87,8 @@ module.exports.loginUser = async (req, res) => {
       }
     }
   } catch (err) {
-    return res.send(err.message);
+    console.log(err.message);
+    res.send(err.message);
   }
 };
 
@@ -118,6 +103,7 @@ module.exports.logoutUser = async (req, res) => {
     });
     res.send("Logout successfully");
   } catch (err) {
+    console.log(err.message);
     res.send("Internal Server Error");
   }
 };
@@ -125,17 +111,12 @@ module.exports.logoutUser = async (req, res) => {
 // Get Single User
 module.exports.getUser = async (req, res) => {
   try {
-    if (nodeCache.has("user")) {
-      res.send(JSON.parse(nodeCache.get("user")));
-    } else {
-      let user = req.user;
+    let user = req.user;
 
-      await user.populate({
-        path: "createdEvents appliedEvents",
-      });
-
-      res.send(user);
-    }
+    await user.populate({
+      path: "createdEvents appliedEvents",
+    });
+    res.send(user);
   } catch (err) {
     console.log(err.message);
     res.send("Internal Server Error");
@@ -237,10 +218,6 @@ module.exports.createEvent = async (req, res) => {
       venue3,
     } = req.body.formData;
 
-    if (isPaid && scannerImage === null) {
-      return res.send("No Scanner Image uploaded.");
-    }
-
     let scannerResult = null;
     if (scannerImage) {
       scannerResult = await cloudinary.uploader.upload(scannerImage, {
@@ -294,16 +271,30 @@ module.exports.createEvent = async (req, res) => {
       { $push: { createdEvents: event._id } }
     );
 
-    const venueIds = [venue1.id, venue2.id, venue3.id];
+    const venueUpdates = [
+      { id: venue1.id, timeslot: venue1.timeslot },
+      { id: venue2.id, timeslot: venue2.timeslot },
+      { id: venue3.id, timeslot: venue3.timeslot },
+    ];
+    
+    for (const venue of venueUpdates) {
+      await venueModel.updateOne(
+        { _id: venue.id }, 
+        {
+          $push: {
+            bookingRequests: {
+              id: event._id, 
+              timeslot: venue.timeslot, 
+            },
+          },
+        }
+      );
+    }
 
-    await venueModel.updateMany(
-      { _id: { $in: venueIds } },
-      { $push: { bookingRequests: event._id } }
-    );
-
-    res.send("Event created successfully!");
+    return res.send("Event created successfully!");
   } catch (error) {
-    res.send(error.message);
+    console.log(error.message);
+    return res.send(error.message);
   }
 };
 
@@ -457,7 +448,6 @@ module.exports.checkUserIsRegisteredInEventOrNot = async (req, res) => {
 module.exports.fetchAllVenue = async (req, res) => {
   try {
     const venues = await venueModel.find();
-    // const venues = await venueModel.find({ isCompleteProfile: true });
     res.send(venues);
   } catch (err) {
     console.log(err.message);

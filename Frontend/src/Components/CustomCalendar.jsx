@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 const events = [
-  { date: "2024-12-02T00:00:00.000+00:00", time: "10:00" },
-  { date: "2024-12-03T00:00:00.000+00:00", time: "14:00" },
-  { date: "2024-12-04T00:00:00.000+00:00", time: "18:00" },
-  { date: "2024-12-05T00:00:00.000+00:00", time: "11:00" },
+  { date: "2025-01-25T00:00:00.000+00:00", time: "19:00" },
+  { date: "2025-01-26T00:00:00.000+00:00", time: "11:00" },
+  { date: "2025-01-27T00:00:00.000+00:00", time: "16:30" },
+  { date: "2025-01-28T00:00:00.000+00:00", time: "11:00" },
 ];
 
 const CustomCalendar = () => {
@@ -62,7 +62,7 @@ const CustomCalendar = () => {
   const formatTime = (time) => {
     const [hours, minutes] = time.split(':');
     const period = +hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = +hours % 12 || 12; // Convert 0 to 12 for midnight
+    const formattedHours = +hours % 12 || 12; 
     return `${formattedHours}:${minutes} ${period}`;
   };
 

@@ -1,4 +1,3 @@
-// *venue-model.js*
 const mongoose = require("mongoose");
 
 const venueSchema = new mongoose.Schema({
@@ -7,19 +6,23 @@ const venueSchema = new mongoose.Schema({
   temporaryPassword: String,
   password: String,
   contact: String,
+  ownerName: String,
 
   address: String,
   city: String,
 
   maxCapacity: Number,
-  bookingPrice: Number,
-  canOrganizeMultidayEvent:Boolean,
-  
+  canOrganizeMultidayEvent: Boolean,
+
+  time_1stHalf: [String],
+  bookingPrice_1stHalf: Number,
+  time_2ndHalf: [String],
+  bookingPrice_2ndHalf: Number,
+  time_fullDay: [String],
+  bookingPrice_fullDay: Number,
+
   openingtime: String,
   closingtime: String,
-  noOfSlot: Number,
-  timeDivisionOfSlot: [String],
-  priceOfSlots: [Number],
 
   acceptedByAdmin: { type: Boolean, default: false },
 
@@ -36,13 +39,29 @@ const venueSchema = new mongoose.Schema({
     },
   ],
 
+  profilepicture: {
+    public_id: {
+      type: String,
+      required: false,
+    },
+    url: {
+      type: String,
+      required: false,
+    },
+  },
+
   completePercentage: {
     type: Number,
     default: 37,
   },
 
   bookedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "event" }],
-  bookingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "event" }],
+  bookingRequests: [
+    {
+      id: { type: mongoose.Schema.Types.ObjectId, ref: "Event" }, 
+      timeslot: { type: String },
+    },
+  ],
 
   bookingDates: {
     type: [Date],

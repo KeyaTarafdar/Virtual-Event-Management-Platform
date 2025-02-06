@@ -96,6 +96,7 @@ function EventPage() {
     });
   }, []);
 
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -135,17 +136,24 @@ function EventPage() {
             ))}
 
             {registered ? (
-              <button className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500">
-                Registered
-              </button>
-            ) : (
-              <button
-                className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
-                onClick={() => navigate(`/registrationform/${eventId}`)}
-              >
-                Register Now
-              </button>
-            )}
+  <button className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500">
+    Registered
+  </button>
+) : (
+  <button
+    className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
+    onClick={() => {
+      if (user) {
+        navigate(`/registrationform/${eventId}`);
+      } else {
+        navigate("/login");
+      }
+    }}
+  >
+    Register Now
+  </button>
+)}
+
           </div>
         </div>
 
