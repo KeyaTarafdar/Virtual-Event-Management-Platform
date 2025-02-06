@@ -362,12 +362,9 @@ const CreateForm = () => {
                     const currentDate = new Date();
                     const currentTime = currentDate.toTimeString().slice(0, 5);
 
-                    // Get the event date (ensure `formData.eventDate` exists)
                     const isToday =
                       formData.eventDate ===
                       currentDate.toISOString().split("T")[0];
-
-                    // Validate time range (e.g., between 09:00 and 21:00)
                     const minTime = "09:00";
                     const maxTime = "21:00";
 
@@ -406,28 +403,20 @@ const CreateForm = () => {
                     const value = e.target.value;
                     const nameRegex = /^[a-zA-Z\s]*$/;
 
-                    // Check for empty input
                     if (value.trim() === "") {
                       setSpeakerError("Speaker's name cannot be empty.");
-                    }
-                    // Check if the input is valid
-                    else if (!nameRegex.test(value)) {
+                    } else if (!nameRegex.test(value)) {
                       setSpeakerError(
                         "Speaker's name can only contain alphabets and spaces."
                       );
-                    }
-                    // Check length
-                    else if (value.length > 50) {
+                    } else if (value.length > 50) {
                       setSpeakerError(
                         "Speaker's name cannot exceed 50 characters."
                       );
-                    }
-                    // Clear error if valid
-                    else {
+                    } else {
                       setSpeakerError("");
                     }
 
-                    // Always update the state so the user can type
                     setFormData({ ...formData, speakerName: value });
                   }}
                   className={`mt-1 block w-full p-2 border ${
@@ -462,7 +451,6 @@ const CreateForm = () => {
                   }}
                   required
                 />
-                {/* Show error message */}
                 {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
               </div>
 
@@ -1352,8 +1340,6 @@ const CreateForm = () => {
                     const wordCount = inputText
                       .split(/\s+/)
                       .filter((word) => word).length;
-
-                    // Validation on blur
                     if (wordCount > 100) {
                       setDescError("Description cannot exceed 100 words.");
                     } else if (wordCount < 10) {
@@ -1361,7 +1347,7 @@ const CreateForm = () => {
                         "Description must be at least 10 words long."
                       );
                     } else {
-                      setDescError(""); // Clear error if valid
+                      setDescError("");
                     }
                   }}
                   placeholder="Enter event description in 100 words"
@@ -1386,8 +1372,6 @@ const CreateForm = () => {
                     const registrationDate = new Date(e.target.value);
                     const today = new Date();
                     const eventDate = new Date(formData.eventDate);
-
-                    // Ensure today is compared without time
                     today.setHours(0, 0, 0, 0);
 
                     if (registrationDate < today) {
@@ -1405,8 +1389,6 @@ const CreateForm = () => {
                       setFormData({ ...formData, registrationEndDate: "" });
                       return;
                     }
-
-                    // Clear error and update valid input
                     setRegError("");
                     setFormData({
                       ...formData,
@@ -1476,11 +1458,8 @@ const CreateForm = () => {
                       );
                       return;
                     }
-
-                    // Clear any previous errors
                     setPosterError("");
 
-                    // Convert to base64 and save
                     try {
                       const imageData = await setFileToBase(file);
                       setFormData((prev) => ({
@@ -1504,7 +1483,7 @@ const CreateForm = () => {
                 <button
                   type="submit"
                   className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition duration-300"
-                  disabled={!!error} // Disable button if there's an error
+                  disabled={!!error}
                   onClick={handleSubmit}
                 >
                   Create Event
@@ -1530,7 +1509,6 @@ const CreateForm = () => {
               >
                 <source
                   src="https://videos.pexels.com/video-files/3202042/3202042-hd_1920_1080_25fps.mp4"
-                  //src="https://media.istockphoto.com/id/1363141305/video/creative-people-brainstorming-about-start-up-project-and-collaboration.mp4?s=mp4-640x640-is&k=20&c=u7oTfPpSR8d91vqjtGNMfNnkwDVbzOtkD8-sNc697sA="
                   type="video/mp4"
                 />
               </video>

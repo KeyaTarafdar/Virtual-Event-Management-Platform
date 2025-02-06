@@ -114,7 +114,7 @@ const Signup = () => {
             Sign up
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* COMPANY NAME */}
+            {/* Company Name */}
             <div className="relative z-0 w-full mb-4 group">
               <input
                 type="text"
@@ -141,7 +141,7 @@ const Signup = () => {
               )}
             </div>
 
-            {/* EMAIL */}
+            {/* Email*/}
             <div className="relative z-0 w-full mb-4 sm:mb-6 group">
               <input
                 type="email"
@@ -165,7 +165,7 @@ const Signup = () => {
               )}
             </div>
 
-            {/* CONTACT NUMBER */}
+            {/* Contact number */}
             <div className="relative z-0 w-full mb-4 sm:mb-6 group">
               <input
                 type="text"
@@ -190,7 +190,7 @@ const Signup = () => {
               )}
             </div>
 
-            {/* PASSWORD */}
+            {/* Password */}
             <div className="relative z-0 w-full mb-4 sm:mb-6 group">
               <input
                 type="password"
@@ -213,7 +213,7 @@ const Signup = () => {
               )}
             </div>
 
-            {/* CONFIRM PASSWORD */}
+            {/* Confirm Password */}
             <div className="relative z-0 w-full mb-4 pb-4 sm:mb-6 group">
               <input
                 type="password"
@@ -238,7 +238,7 @@ const Signup = () => {
               )}
             </div>
 
-            {/* CHECKBOX */}
+            {/* Checkbox */}
             <div className="flex items-start pb-4 sm:pb-6">
               <input
                 type="checkbox"
@@ -259,7 +259,7 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* SIGN IN BUTTON */}
+            {/* Sign in Button */}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"
@@ -268,7 +268,7 @@ const Signup = () => {
             </button>
           </form>
 
-          {/* OR CONTINUE WITH */}
+          {/* Or Continue With */}
           <div className="flex items-center justify-between mt-6">
             <hr className="border-b w-1/5 lg:w-1/4" />
             <p className="text-xs text-center text-gray-500 uppercase">
@@ -277,7 +277,7 @@ const Signup = () => {
             <hr className="border-b w-1/5 lg:w-1/4" />
           </div>
 
-          {/* GOOGLE AND FACEBOOK BUTTONS */}
+          {/* Google & Facebook Buttons */}
           <div className="flex justify-center space-x-4 mt-6">
             <button
               type="button"
@@ -293,7 +293,7 @@ const Signup = () => {
             </button>
           </div>
 
-          {/* ALREADY HAVE AN ACCOUNT LINK */}
+          {/* Already have an account */}
           <div className="text-center mt-4 mb-2">
             <p className="text-gray-600">
               Already have an account?{" "}

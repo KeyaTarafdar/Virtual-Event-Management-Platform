@@ -81,7 +81,6 @@ const CompanyPage = () => {
           setuserProfile(response);
         });
       });
-
     } else {
       alert("Please Upload an Image");
       return;
@@ -181,7 +180,9 @@ const CompanyPage = () => {
         >
           <img
             src={
-              userProfile && userProfile.image ? userProfile.image.url : 'https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg'
+              userProfile && userProfile.image
+                ? userProfile.image.url
+                : "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
             }
             alt="User Profile"
             className="rounded-full w-24 bg-gray-900 text-sm h-24 mb-4 shadow-lg border-[.4rem] border-indigo-400 sm:w-32 sm:h-32"
@@ -250,7 +251,6 @@ const CompanyPage = () => {
               Create Event
             </button>
           </div>
-          
 
           <div className="flex mt-24 mr-12">
             <div

@@ -52,7 +52,6 @@ function Venue() {
       </div>
 
      { /* Venue Details */}
-
      <div className="py-3 flex flex-col items-center justify-center pb-10">
       <h1 className="text-lg md:text-2xl lg:text-3xl font-bold mb-6 text-center text-black pt-6 pb-2">
         DETAILS OF THE VENUE!!

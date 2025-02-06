@@ -24,7 +24,6 @@ function VirtualEvent() {
         events.filter((event) => {
           const today = new Date();
           const currentDate = today.toISOString().split("T")[0];
-          // const currentTime = today.toTimeString().split(" ")[0];
           const eventDate = new Date(event.date).toISOString().split("T")[0];
           const registrationLastDate = new Date(event.lastDateOfRegistration)
             .toISOString()

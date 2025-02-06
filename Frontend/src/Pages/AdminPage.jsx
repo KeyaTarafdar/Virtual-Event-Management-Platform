@@ -12,7 +12,11 @@ import {
   uploadProfilePictureAdmin,
   rejectVenue,
 } from "../utils/utils";
-import {faCalendarCheck,faGlobe,faUsers} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarCheck,
+  faGlobe,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
@@ -81,16 +85,16 @@ function AdminPage() {
     const input = document.querySelector(`#${type}Input`).value;
     if (input) {
       console.log(
-        `Searching for ${input} by ${type === "venueName" ? "Venue Name" : "Venue Address"
+        `Searching for ${input} by ${
+          type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
-      // Add actual filter logic here...
 
-      // Clear the input after the search
-      document.querySelector(`#${type}Input`).value = ""; // This will clear the input field
+      document.querySelector(`#${type}Input`).value = ""; 
     } else {
       alert(
-        `Please enter a ${type === "venueName" ? "Venue Name" : "Venue Address"
+        `Please enter a ${
+          type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
     }
@@ -103,8 +107,6 @@ function AdminPage() {
 
   const [fields, setFields] = useState({
     companyName: "Eventek Inc.",
-    // establishedYear: "2024",
-    // companyOwner: "Rabindranath Tagore",
     mainOfficeCity: "Kolkata",
     mainOfficeAddress: "8/41, Sahid Nagar",
     mainOfficePincode: "700078",
@@ -260,8 +262,9 @@ function AdminPage() {
                       eventImage={event.posterImage.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
-                          }`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
+                              event.city
+                            }`
                           : null
                       }
                       platform={
@@ -300,8 +303,9 @@ function AdminPage() {
                       eventImage={event.posterImage.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
-                          }`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
+                              event.city
+                            }`
                           : null
                       }
                       platform={
@@ -468,136 +472,141 @@ function AdminPage() {
       case "Home":
         return (
           <>
-          <div className="bg-white">
-            <div
-              className="p-5  pl-4 shadow-inner bg-gradient-to-r from-blue-200 to-indigo-500 h-48  "
-              style={{
-                clipPath:
-                  "polygon(100% 0%, 0% 0% , 0% 65%, 1% 64.95%, 2% 64.8%, 3% 64.6%, 4% 64.3%, 5% 63.9%, 6% 63.45%, 7% 62.9%, 8% 62.25%, 9% 61.55%, 10% 60.8%, 11% 59.95%, 12% 59.05%, 13% 58.1%, 14% 57.1%, 15% 56.05%, 16% 55%, 17% 53.9%, 18% 52.8%, 19% 51.65%, 20% 50.5%, 21% 49.35%, 22% 48.2%, 23% 47.05%, 24% 45.9%, 25% 44.8%, 26% 43.75%, 27% 42.75%, 28% 41.75%, 29% 40.8%, 30% 39.9%, 31% 39.1%, 32% 38.35%, 33% 37.65%, 34% 37.05%, 35% 36.5%, 36% 36.05%, 37% 35.65%, 38% 35.35%, 39% 35.15%, 40% 35.05%, 41% 35%, 42% 35.05%, 43% 35.2%, 44% 35.45%, 45% 35.75%, 46% 36.15%, 47% 36.65%, 48% 37.2%, 49% 37.85%, 50% 38.55%, 51% 39.35%, 52% 40.2%, 53% 41.1%, 54% 42.05%, 55% 43.05%, 56% 44.1%, 57% 45.15%, 58% 46.3%, 59% 47.4%, 60% 48.55%, 61% 49.7%, 62% 50.85%, 63% 52%, 64% 53.15%, 65% 54.25%, 66% 55.35%, 67% 56.4%, 68% 57.45%, 69% 58.4%, 70% 59.35%, 71% 60.2%, 72% 61.05%, 73% 61.8%, 74% 62.45%, 75% 63.05%, 76% 63.6%, 77% 64.05%, 78% 64.4%, 79% 64.7%, 80% 64.85%, 81% 65%, 82% 65%, 83% 64.9%, 84% 64.75%, 85% 64.5%, 86% 64.2%, 87% 63.75%, 88% 63.25%, 89% 62.7%, 90% 62.05%, 91% 61.3%, 92% 60.5%, 93% 59.65%, 94% 58.75%, 95% 57.8%, 96% 56.8%, 97% 55.75%, 98% 54.65%, 99% 53.55%, 100% 52.4%)",
-              }}
-            >
-              <h1
-                className="text-5xl ml-6 font-serif text-gradient2 font-bold tracking-wide flex items-center"
-                style={{ fontFamily: '"quick"', wordSpacing: "0.2em" }}
+            <div className="bg-white">
+              <div
+                className="p-5  pl-4 shadow-inner bg-gradient-to-r from-blue-200 to-indigo-500 h-48  "
+                style={{
+                  clipPath:
+                    "polygon(100% 0%, 0% 0% , 0% 65%, 1% 64.95%, 2% 64.8%, 3% 64.6%, 4% 64.3%, 5% 63.9%, 6% 63.45%, 7% 62.9%, 8% 62.25%, 9% 61.55%, 10% 60.8%, 11% 59.95%, 12% 59.05%, 13% 58.1%, 14% 57.1%, 15% 56.05%, 16% 55%, 17% 53.9%, 18% 52.8%, 19% 51.65%, 20% 50.5%, 21% 49.35%, 22% 48.2%, 23% 47.05%, 24% 45.9%, 25% 44.8%, 26% 43.75%, 27% 42.75%, 28% 41.75%, 29% 40.8%, 30% 39.9%, 31% 39.1%, 32% 38.35%, 33% 37.65%, 34% 37.05%, 35% 36.5%, 36% 36.05%, 37% 35.65%, 38% 35.35%, 39% 35.15%, 40% 35.05%, 41% 35%, 42% 35.05%, 43% 35.2%, 44% 35.45%, 45% 35.75%, 46% 36.15%, 47% 36.65%, 48% 37.2%, 49% 37.85%, 50% 38.55%, 51% 39.35%, 52% 40.2%, 53% 41.1%, 54% 42.05%, 55% 43.05%, 56% 44.1%, 57% 45.15%, 58% 46.3%, 59% 47.4%, 60% 48.55%, 61% 49.7%, 62% 50.85%, 63% 52%, 64% 53.15%, 65% 54.25%, 66% 55.35%, 67% 56.4%, 68% 57.45%, 69% 58.4%, 70% 59.35%, 71% 60.2%, 72% 61.05%, 73% 61.8%, 74% 62.45%, 75% 63.05%, 76% 63.6%, 77% 64.05%, 78% 64.4%, 79% 64.7%, 80% 64.85%, 81% 65%, 82% 65%, 83% 64.9%, 84% 64.75%, 85% 64.5%, 86% 64.2%, 87% 63.75%, 88% 63.25%, 89% 62.7%, 90% 62.05%, 91% 61.3%, 92% 60.5%, 93% 59.65%, 94% 58.75%, 95% 57.8%, 96% 56.8%, 97% 55.75%, 98% 54.65%, 99% 53.55%, 100% 52.4%)",
+                }}
               >
-                {/* <GrUserAdmin className="mr-6 text-blue-700" />*/}
-                Welcome Admin...
-              </h1>
-            </div>
+                <h1
+                  className="text-5xl ml-6 font-serif text-gradient2 font-bold tracking-wide flex items-center"
+                  style={{ fontFamily: '"quick"', wordSpacing: "0.2em" }}
+                >
+                  Welcome Admin...
+                </h1>
+              </div>
 
-            <div className="max-w-6xl mx-auto p-5 bg-yellow-100 shadow-2xl border-2 border-yellow-500 rounded-lg mt-[-8rem]">
-              <h2 className="text-center text-2xl font-serif font-bold mb-5 mt-5">
-                Company Information
-              </h2>
-              <div className="flex flex-col md:flex-row gap-8">
-                <div className="flex-1 p-4 bg-white shadow-2xl border-2 border-gray-400 rounded-md mt-[2rem]">
-                  {/* Company Details Section */}
-                  <h3 className="text-lg text-center font-serif font-semibold">
+              <div className="max-w-6xl mx-auto p-5 bg-yellow-100 shadow-2xl border-2 border-yellow-500 rounded-lg mt-[-8rem]">
+                <h2 className="text-center text-2xl font-serif font-bold mb-5 mt-5">
+                  Company Information
+                </h2>
+                <div className="flex flex-col md:flex-row gap-8">
+                  <div className="flex-1 p-4 bg-white shadow-2xl border-2 border-gray-400 rounded-md mt-[2rem]">
+                    {/* Company Details Section */}
+                    <h3 className="text-lg text-center font-serif font-semibold">
                       Company Details
-                  </h3>
-                  <div className="space-y-[2.5rem] pl-8 pr-8 mt-6">
-                    {Object.entries(fields).map(([key, value]) => (
-                      <div
-                        key={key}
-                        className="flex items-center justify-between border-4 p-3 bg-gray-200 rounded-lg shadow-lg"
-                      >
-                        {editMode[key] ? (
-                          <input
-                            type="text"
-                            value={value}
-                            onChange={(e) => handleFieldChange(e, key)}
-                            className="flex-1 p-1 border border-gray-300 rounded-md"
-                          />
-                        ) : (
-                          <p className="text-base">
-                            <span className="font-medium">
-                              {key
-                                .replace(/([A-Z])/g, " $1")
-                                .replace(/^./, (str) => str.toUpperCase())}{" "}
-                              :{" "}
-                            </span>
-                            {value}
-                          </p>
-                        )}
-                        <button
-                          onClick={() => handleEditToggle(key)}
-                          className="ml-4 text-xl text-blue-500"
+                    </h3>
+                    <div className="space-y-[2.5rem] pl-8 pr-8 mt-6">
+                      {Object.entries(fields).map(([key, value]) => (
+                        <div
+                          key={key}
+                          className="flex items-center justify-between border-4 p-3 bg-gray-200 rounded-lg shadow-lg"
                         >
                           {editMode[key] ? (
-                            <AiOutlineSave />
+                            <input
+                              type="text"
+                              value={value}
+                              onChange={(e) => handleFieldChange(e, key)}
+                              className="flex-1 p-1 border border-gray-300 rounded-md"
+                            />
                           ) : (
-                            <AiOutlineEdit />
+                            <p className="text-base">
+                              <span className="font-medium">
+                                {key
+                                  .replace(/([A-Z])/g, " $1")
+                                  .replace(/^./, (str) =>
+                                    str.toUpperCase()
+                                  )}{" "}
+                                :{" "}
+                              </span>
+                              {value}
+                            </p>
                           )}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Company Analytics */}
-                <div className="flex-1 ">
-                <h2 className="text-center text-xl font-serif font-bold mt-8 ">
-                  Company Analytics
-                </h2>
-                <div className="flex-1 mt-4 flex flex-col items-center gap-4 ">
-                  <div className="bg-white w-[100%] p-4 flex flex-col items-center rounded-lg shadow-xl border-2 border-gray-400">
-                    <div className="flex gap-4 w-[95%] h-36">
-                      {/* Red box */}
-                      <div className="bg-red-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                          <FontAwesomeIcon icon={faCalendarCheck} style={{ color: "#000000" }} />
-                          <div className=" text-2xl font-bold flex ">
-                            100,000+
-                          </div>
-                          <div className="text-md">Events</div>
-                      </div>
-                      {/* Yellow box */}
-                      <div className="bg-yellow-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                          <FontAwesomeIcon icon={faCalendarCheck} style={{ color: "#000000" }} />
-                          <div className="text-2xl font-bold">
-                            50,000+
-                          </div>
-                          <div className="text-md">Event Planner</div>
-                      </div>
-                    </div>
-                    <div className="flex gap-4 w-[95%] h-36">
-                       {/* GREEN   BOX */}
-                       <div className="bg-green-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                          <FontAwesomeIcon icon={faGlobe} style={{ color: "#000000" }} />
-                          <div className="text-2xl font-bold">
-                            100+
-                          </div>
-                          <div className="text-md">Countries</div>
-                      </div>
-                      {/* Blue  Box */}
-                      <div className="bg-blue-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                          <FontAwesomeIcon icon={faUsers} style={{ color: "#000000" }} />
-                          <div className=" text-2xl font-bold">
-                            100k+
-                          </div>
-                          <div className="text-md">Attendees</div>
-                      </div>
+                          <button
+                            onClick={() => handleEditToggle(key)}
+                            className="ml-4 text-xl text-blue-500"
+                          >
+                            {editMode[key] ? (
+                              <AiOutlineSave />
+                            ) : (
+                              <AiOutlineEdit />
+                            )}
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="flex gap-4 bg-white w-[98%] rounded-lg shadow-xl border-2 border-gray-400 mt-12">
-                    <img
-                      src="https://r-charts.com/en/part-whole/donut-chart_files/figure-html/donut-chart-hole-fill.png"
-                      alt="Image 1"
-                      className="w-[45%] rounded-md"
-                    />
-                    <img
-                      src="https://www.nobledesktop.com/images/tableaucolorfig8.png"
-                      alt="Image 2"
-                      className="w-[45%] rounded-md"
-                    />
-                  </div>
-                </div>
-                </div>
+                  {/* Company Analytics */}
+                  <div className="flex-1 ">
+                    <h2 className="text-center text-xl font-serif font-bold mt-8 ">
+                      Company Analytics
+                    </h2>
+                    <div className="flex-1 mt-4 flex flex-col items-center gap-4 ">
+                      <div className="bg-white w-[100%] p-4 flex flex-col items-center rounded-lg shadow-xl border-2 border-gray-400">
+                        <div className="flex gap-4 w-[95%] h-36">
+                          {/* Red box */}
+                          <div className="bg-red-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
+                            <FontAwesomeIcon
+                              icon={faCalendarCheck}
+                              style={{ color: "#000000" }}
+                            />
+                            <div className=" text-2xl font-bold flex ">
+                              100,000+
+                            </div>
+                            <div className="text-md">Events</div>
+                          </div>
+                          {/* Yellow box */}
+                          <div className="bg-yellow-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
+                            <FontAwesomeIcon
+                              icon={faCalendarCheck}
+                              style={{ color: "#000000" }}
+                            />
+                            <div className="text-2xl font-bold">50,000+</div>
+                            <div className="text-md">Event Planner</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-4 w-[95%] h-36">
+                          {/* GREEN   BOX */}
+                          <div className="bg-green-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
+                            <FontAwesomeIcon
+                              icon={faGlobe}
+                              style={{ color: "#000000" }}
+                            />
+                            <div className="text-2xl font-bold">100+</div>
+                            <div className="text-md">Countries</div>
+                          </div>
+                          {/* Blue  Box */}
+                          <div className="bg-blue-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
+                            <FontAwesomeIcon
+                              icon={faUsers}
+                              style={{ color: "#000000" }}
+                            />
+                            <div className=" text-2xl font-bold">100k+</div>
+                            <div className="text-md">Attendees</div>
+                          </div>
+                        </div>
+                      </div>
 
+                      <div className="flex gap-4 bg-white w-[98%] rounded-lg shadow-xl border-2 border-gray-400 mt-12">
+                        <img
+                          src="https://r-charts.com/en/part-whole/donut-chart_files/figure-html/donut-chart-hole-fill.png"
+                          alt="Image 1"
+                          className="w-[45%] rounded-md"
+                        />
+                        <img
+                          src="https://www.nobledesktop.com/images/tableaucolorfig8.png"
+                          alt="Image 2"
+                          className="w-[45%] rounded-md"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          {/* </div> */}
           </>
         );
     }
@@ -659,36 +668,41 @@ function AdminPage() {
 
             <ul className="space-y-4 p-2 flex flex-col items-center">
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Home" ? "bg-gray-600" : ""
-                  }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${
+                  activeMenu === "Home" ? "bg-gray-600" : ""
+                }`}
                 onClick={() => setActiveMenu("Home")}
               >
                 Home
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Requests" ? "bg-gray-600" : ""
-                  }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${
+                  activeMenu === "Venue Requests" ? "bg-gray-600" : ""
+                }`}
                 onClick={() => setActiveMenu("Venue Requests")}
               >
                 Requested Venue
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
-                  }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${
+                  activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
+                }`}
                 onClick={() => setActiveMenu("Upcoming Events")}
               >
                 Upcoming Events
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Past Events" ? "bg-gray-600" : ""
-                  }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${
+                  activeMenu === "Past Events" ? "bg-gray-600" : ""
+                }`}
                 onClick={() => setActiveMenu("Past Events")}
               >
                 Past Events
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Details" ? "bg-gray-600" : ""
-                  }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${
+                  activeMenu === "Venue Details" ? "bg-gray-600" : ""
+                }`}
                 onClick={() => setActiveMenu("Venue Details")}
               >
                 Venue Details
@@ -699,7 +713,8 @@ function AdminPage() {
               &copy;Eventek2024.
             </div>
           </div>
-          {/* main content */}
+
+          {/* Main content */}
           <div className="w-[100%] ml-[13rem] overflow-y-auto">
             {renderComponent()}
           </div>

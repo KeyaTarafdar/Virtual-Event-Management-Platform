@@ -96,7 +96,6 @@ function EventPage() {
     });
   }, []);
 
-
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -113,8 +112,6 @@ function EventPage() {
   return (
     <>
       <div className="flex flex-col items-center pt-10">
-        {/* Header Section */}
-
         <Navbar menuItems={headerMenuItems} />
 
         {/* Event Header with Image */}
@@ -136,24 +133,23 @@ function EventPage() {
             ))}
 
             {registered ? (
-  <button className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500">
-    Registered
-  </button>
-) : (
-  <button
-    className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
-    onClick={() => {
-      if (user) {
-        navigate(`/registrationform/${eventId}`);
-      } else {
-        navigate("/login");
-      }
-    }}
-  >
-    Register Now
-  </button>
-)}
-
+              <button className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500">
+                Registered
+              </button>
+            ) : (
+              <button
+                className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
+                onClick={() => {
+                  if (user) {
+                    navigate(`/registrationform/${eventId}`);
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+              >
+                Register Now
+              </button>
+            )}
           </div>
         </div>
 
@@ -170,14 +166,14 @@ function EventPage() {
           )}
         </div>
 
-      {/* Comment Section */}
-      <CommentSection /> 
+        {/* Comment Section */}
+        <CommentSection />
 
-      {/* Footer Section */}
-      <div className="m-0 p-0" id="contact">
-        <Footer menuItems1={footerMenuItems} />
+        {/* Footer Section */}
+        <div className="m-0 p-0" id="contact">
+          <Footer menuItems1={footerMenuItems} />
+        </div>
       </div>
-    </div>
     </>
   );
 }

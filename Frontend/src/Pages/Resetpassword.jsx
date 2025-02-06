@@ -71,7 +71,7 @@ const Resetpassword = (email) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
       <div className="bg-white shadow-2xl rounded-2xl overflow-hidden w-[600px] max-w-2xl lg:max-w-3xl xl:max-w-4xl flex mt-4 mb-4">
-        {/* LEFT PART */}
+        {/* Left Part */}
         <div
           className="hidden md:flex md:w-1/3 items-center justify-center p-8 relative "
           style={{ clipPath: "circle(73% at 4% 50%)" }}
@@ -89,13 +89,13 @@ const Resetpassword = (email) => {
           </video>
         </div>
 
-        {/* RIGHT PART */}
+        {/* Right Part */}
         <div className="w-full md:w-2/3 p-6 sm:p-8 relative">
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8">
             Reset Password
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* PASSWORD */}
+            {/* Password */}
             <div className="relative z-0 w-full mb-4 sm:mb-6 group">
               <input
                 type="password"
@@ -118,7 +118,7 @@ const Resetpassword = (email) => {
               )}
             </div>
 
-            {/* CONFIRM PASSWORD */}
+            {/* Confirm Password */}
             <div className="relative z-0 w-full mb-4 pb-4 sm:mb-6 group">
               <input
                 type="password"
@@ -143,7 +143,7 @@ const Resetpassword = (email) => {
               )}
             </div>
 
-            {/* LOG IN BUTTON */}
+            {/* Login button */}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"

@@ -156,7 +156,6 @@ const Registrationform = () => {
               </div>
 
               {/*Payment */}
-
               {formdata.Pay && !paymentDone && (
                 <div className="w-[90%] flex justify-center items-center flex-col">
                   <div

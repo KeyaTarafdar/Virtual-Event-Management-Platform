@@ -155,7 +155,7 @@ function VenueRegisteringPage() {
                   value={formData.contact}
                   onChange={(e) => {
                     const value = e.target.value;
-                    const regex = /^[0-9]{0,10}$/; // Only digits, max 10 characters
+                    const regex = /^[0-9]{0,10}$/; 
                     const errorMessage = !regex.test(value)
                       ? "Contact number must contain only digits."
                       : value.length !== 10 && value.length > 0
@@ -279,7 +279,6 @@ function VenueRegisteringPage() {
                   }}
                   required
                 />
-                {/* Show error message */}
                 {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
               </div>
 
@@ -288,13 +287,14 @@ function VenueRegisteringPage() {
                 <button
                   type="submit"
                   className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition duration-300"
-                  disabled={!!error} // Disable button if there's an error
+                  disabled={!!error} 
                 >
                   Apply
                 </button>
               </div>
             </form>
           </div>
+
           {/* Right Part*/}
           <div className="hidden lg:block relative">
             <div

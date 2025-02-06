@@ -64,13 +64,13 @@ export default function Home() {
 
   return (
     <>
-      {/*NAVBAR------------------------------------------------------------- */}
+      {/* Navbar ------------------------------------------------------------- */}
       <Navbar menuItems={headerMenuItems} />
 
-      {/*HERO PANEL ------------------------------------------------------------- */}
+      {/* Hero panel ------------------------------------------------------------- */}
       <Header />
 
-      {/*EVENT TYPES --------------------------------------------------------- */}
+      {/* Event types --------------------------------------------------------- */}
       <div
         id="services"
         className="bg-slate-900 h-auto px-8 rounded-[2rem] text-center mt-8 lg:mt-0 ml-12 mr-12"
@@ -82,7 +82,7 @@ export default function Home() {
         <Event_card />
       </div>
 
-      {/*FEATURES 1--------------------------------------------------------- */}
+      {/* Features 1--------------------------------------------------------- */}
       <div id="features" className="justify-center items-center flex-col flex">
         <div className="flex flex-col text-center sm:flex sm:flex-col md:flex md:flex-col lg:flex lg:flex-col xl:flex xl:flex-row 2xl:flex 2xl:flex-row px-10 py-14 xl:py-24 items-center h-auto">
           <div className="grid grid-col-2 w-auto text-2xl sm:text-3xl md:text-4xl font-bold px-10 pb-8 animate-assembleText">
@@ -109,7 +109,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* UPCOMING EVENTS ------------------------------------------------------------ */}
+        {/* Upcoming events---------------------------------------------------------- */}
         <div id="upcoming" className="w-[85%]">
           <Upcoming_event
             eventId={lastEvent ? lastEvent._id : null}
@@ -129,7 +129,7 @@ export default function Home() {
           />
         </div>
 
-        {/* FEATURES 2 ------------------------------------------------------------ */}
+        {/* Features 2 ------------------------------------------------------------ */}
         <div
           id="highlight"
           className=" px-6 sm:px-8 md:px-10 lg:px-12 xl:px-14 pb-16"
@@ -169,7 +169,7 @@ export default function Home() {
         {/* Gallery card */}
         <Gallery_Card />
 
-        {/* COMPANY NAMES ------------------------------------------------------------ */}
+        {/* Company name ------------------------------------------------------------ */}
         <div className="h-auto w-[85%]">
           <h1 className="text-center mt-[4rem] text-4xl md:text-6xl font-bold">
             Our Collaborators
@@ -177,7 +177,7 @@ export default function Home() {
           <Company_card />
         </div>
 
-        {/*ANALYTICS ---------------------------------------------------------------------- */}
+        {/* Analytics ---------------------------------------------------------------------- */}
         <div
           id="analytics"
           className="grid-cols-2 md:grid-cols-4 grid w-[90%] bg-gradient-to-r from-slate-900 to-blue-800 h-auto rounded-xl text-white items-center justify-center md:py-10"

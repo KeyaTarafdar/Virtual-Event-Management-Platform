@@ -290,7 +290,6 @@ export const loginVenue = async (email, password) => {
 // Find Venue
 export const findVenue = async () => {
   try {
-    // alert("bdc")
     let response = await axios.get(
       "http://localhost:8000/venue/fetchvenueuser",
       { withCredentials: true }
