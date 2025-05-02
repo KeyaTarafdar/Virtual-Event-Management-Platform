@@ -8,6 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 require("dotenv").config();
 const NodeCache = require("node-cache");
 const nodemailer = require("nodemailer");
+const sgMail = require('@sendgrid/mail');
 const nodeCache = new NodeCache();
 
 // Register User
@@ -365,6 +366,7 @@ module.exports.fetchLastCreatedEvent = async (req, res) => {
 };
 
 // Event Registration
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 module.exports.eventRegistration = async (req, res) => {
   try {
     const { eventId } = req.body;
@@ -386,24 +388,38 @@ module.exports.eventRegistration = async (req, res) => {
 
       const formattedTime = `${hours}:${minutes} ${period}`;
 
-      const testAccount = await nodemailer.createTestAccount();
+      // const testAccount = await nodemailer.createTestAccount();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        auth: {
-          user: process.env.user,
-          pass: process.env.pass,
-        },
-      });
+      // const transporter = nodemailer.createTransport({
+      //   host: "smtp.ethereal.email",
+      //   port: 587,
+      //   auth: {
+      //     user: process.env.user,
+      //     pass: process.env.pass,
+      //   },
+      // });
 
-      let info = await transporter.sendMail({
-        from: '"Eventek" <eventek@gmail.com>',
+      // let info = await transporter.sendMail({
+      //   from: '"Eventek" <eventek@gmail.com>',
+      //   to: user.email,
+      //   subject: "Registration successfull",
+      //   text: `Your registration is successfull in the event ${event.eventName}`,
+      //   html: `Your registration is successfull in the event <b>${event.eventName}</b>.<br> <b>Date:</b> ${formattedDate} <br> <b>Time:</b> ${formattedTime}`,
+      // });
+
+      const msg = {
         to: user.email,
-        subject: "Registration successfull",
-        text: `Your registration is successfull in the event ${event.eventName}`,
-        html: `Your registration is successfull in the event <b>${event.eventName}</b>.<br> <b>Date:</b> ${formattedDate} <br> <b>Time:</b> ${formattedTime}`,
-      });
+        from: 'eventek@gmail.com',
+        subject: 'Registration Successful',
+        text: `Your registration is successful in the event ${event.eventName}`,
+        html: `
+          <p>Your registration is successful in the event <strong>${event.eventName}</strong>.</p>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${formattedTime}</p>
+        `,
+      };
+
+      await sgMail.send(msg);
 
       await userModel.findOneAndUpdate(
         { email: user.email },

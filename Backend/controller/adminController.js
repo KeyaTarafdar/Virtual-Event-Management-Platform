@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const cloudinary = require("../utils/cloudinary");
 const nodemailer = require("nodemailer");
+const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
 
 // Register Admin
@@ -102,11 +103,11 @@ module.exports.uploadProfilePicture = async (req, res) => {
 
     const result = await cloudinary.uploader.upload(image, {
       folder: "eventManagement_adminProfilePicture",
-      width: 128, 
-      height: 128, 
-      crop: "fill", 
+      width: 128,
+      height: 128,
+      crop: "fill",
       gravity: "face",
-    });    
+    });
 
     await adminModel.updateOne(
       { email: req.admin.email },
@@ -153,54 +154,92 @@ module.exports.acceptVenue = async (req, res) => {
 
     await userModel.findOneAndDelete({ email: venue.email });
 
-    const testAccount = await nodemailer.createTestAccount();
+    //const testAccount = await nodemailer.createTestAccount();
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      auth: {
-        user: process.env.user,
-        pass: process.env.pass,
-      },
-    });
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.ethereal.email",
+    //   port: 587,
+    //   auth: {
+    //     user: process.env.user,
+    //     pass: process.env.pass,
+    //   },
+    // });
 
-    await transporter.sendMail({
-      from: '"Eventek" <eventek@gmail.com>',
+    //     await transporter.sendMail({
+    //       from: '"Eventek" <eventek@gmail.com>',
+    //       to: venue.email,
+    //       subject: "Application accepted",
+    //       html: `<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9f9; color: #333;">
+    //     <div style=" margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
+    //         <div style="background-color: #4CAF50; color: #ffffff; padding: 15px; border-radius: 8px 8px 0 0; text-align: center;">
+    //             <h2 style="margin: 0;">Venue Application Approved</h2>
+    //         </div>
+    //         <div style="padding: 20px;">
+    //             <p>Dear ${venue.name},</p>
+    //             <p>We are pleased to inform you that your venue application has been <strong>approved</strong>! Congratulations on joining our platform. Your venue will soon be available for event creators to explore and book.</p>
+    //             <p>To ensure smooth operation and maximize your visibility, we kindly request you to complete your profile to 100%. A fully completed profile helps event creators make informed decisions and enhances your chances of securing bookings.</p>
+    //             <p><strong>Your login credentials are as follows:</strong></p>
+    //             <ul style="padding-left: 20px;">
+    //                 <li><b>Email:</b> ${venue.email}</li>
+    //                 <li><b>Password:</b> ${venue.temporaryPassword}</li>
+    //             </ul>
+    //             <p><strong>Note:</strong> For your security, please change your password immediately after your first login.</p>
+    //             <div style="text-align: center; margin-top: 20px;">
+    //                 <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank" 
+    //                    style="background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 20px; border-radius: 8px; display: inline-block; cursor: pointer;">Change Password</a>
+    //             </div>
+    //             <p style="margin-top: 20px;">If you have any questions or need assistance, feel free to contact our support team. We are here to help you make the most of our platform.</p>
+    //             <p>Once again, welcome aboard! We look forward to a successful partnership.</p>
+    //         </div>
+    //         <div style="margin-top: 20px; font-size: 14px; color: #777; text-align: center; padding: 10px 0; border-top: 1px solid #ddd;">
+    //             <p>Warm regards,<br>The Eventek Team</p>
+    //             <p><i>Your success is our priority.</i></p>
+    //         </div>
+    //     </div>
+    // </body>`,
+    //     });
+
+    if (!process.env.SENDGRID_API_KEY) {
+      return res.status(500).send("SendGrid API key not configured.");
+    }
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    await sgMail.send({
       to: venue.email,
-      subject: "Application accepted",
+      from: process.env.SENDGRID_FROM_EMAIL,
+      subject: "Venue Approved",
       html: `<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9f9; color: #333;">
-    <div style=" margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
-        <div style="background-color: #4CAF50; color: #ffffff; padding: 15px; border-radius: 8px 8px 0 0; text-align: center;">
-            <h2 style="margin: 0;">Venue Application Approved</h2>
-        </div>
-        <div style="padding: 20px;">
-            <p>Dear ${venue.name},</p>
-            <p>We are pleased to inform you that your venue application has been <strong>approved</strong>! Congratulations on joining our platform. Your venue will soon be available for event creators to explore and book.</p>
-            <p>To ensure smooth operation and maximize your visibility, we kindly request you to complete your profile to 100%. A fully completed profile helps event creators make informed decisions and enhances your chances of securing bookings.</p>
-            <p><strong>Your login credentials are as follows:</strong></p>
-            <ul style="padding-left: 20px;">
-                <li><b>Email:</b> ${venue.email}</li>
-                <li><b>Password:</b> ${venue.temporaryPassword}</li>
-            </ul>
-            <p><strong>Note:</strong> For your security, please change your password immediately after your first login.</p>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank" 
-                   style="background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 20px; border-radius: 8px; display: inline-block; cursor: pointer;">Change Password</a>
+        <div style=" margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
+            <div style="background-color: #4CAF50; color: #ffffff; padding: 15px; border-radius: 8px 8px 0 0; text-align: center;">
+                <h2 style="margin: 0;">Venue Application Approved</h2>
             </div>
-            <p style="margin-top: 20px;">If you have any questions or need assistance, feel free to contact our support team. We are here to help you make the most of our platform.</p>
-            <p>Once again, welcome aboard! We look forward to a successful partnership.</p>
+            <div style="padding: 20px;">
+                <p>Dear ${venue.name},</p>
+                <p>We are pleased to inform you that your venue application has been <strong>approved</strong>! Congratulations on joining our platform. Your venue will soon be available for event creators to explore and book.</p>
+                <p>To ensure smooth operation and maximize your visibility, we kindly request you to complete your profile to 100%. A fully completed profile helps event creators make informed decisions and enhances your chances of securing bookings.</p>
+                <p><strong>Your login credentials are as follows:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><b>Email:</b> ${venue.email}</li>
+                    <li><b>Password:</b> ${venue.temporaryPassword}</li>
+                </ul>
+                <p><strong>Note:</strong> For your security, please change your password immediately after your first login.</p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank" 
+                       style="background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 20px; border-radius: 8px; display: inline-block; cursor: pointer;">Change Password</a>
+                </div>
+                <p style="margin-top: 20px;">If you have any questions or need assistance, feel free to contact our support team. We are here to help you make the most of our platform.</p>
+                <p>Once again, welcome aboard! We look forward to a successful partnership.</p>
+            </div>
+            <div style="margin-top: 20px; font-size: 14px; color: #777; text-align: center; padding: 10px 0; border-top: 1px solid #ddd;">
+                <p>Warm regards,<br>The Eventek Team</p>
+                <p><i>Your success is our priority.</i></p>
+            </div>
         </div>
-        <div style="margin-top: 20px; font-size: 14px; color: #777; text-align: center; padding: 10px 0; border-top: 1px solid #ddd;">
-            <p>Warm regards,<br>The Eventek Team</p>
-            <p><i>Your success is our priority.</i></p>
-        </div>
-    </div>
-</body>`,
+    </body>`,
     });
-
-    res.send("Venue is added");
+    res.send("Venue is added and email sent.");
   } catch (err) {
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
@@ -211,21 +250,21 @@ module.exports.rejectVenue = async (req, res) => {
     let venue = await venueModel.findOneAndDelete({ _id: venueId });
     await adminModel.updateMany({}, { $pull: { appliedVenues: venueId } });
 
-    const testAccount = await nodemailer.createTestAccount();
+    //const testAccount = await nodemailer.createTestAccount();
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      auth: {
-        user: process.env.user,
-        pass: process.env.pass,
-      },
-    });
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.ethereal.email",
+    //   port: 587,
+    //   auth: {
+    //     user: process.env.user,
+    //     pass: process.env.pass,
+    //   },
+    // });
 
-    await transporter.sendMail({
-      from: '"Eventek" <eventek@gmail.com>',
+    await sgMail.send({
       to: venue.email,
-      subject: "Application rejected",
+      from: '"Eventek" <eventek@gmail.com>',
+      subject: "Venue Application rejected",
       html: `<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9f9; color: #333;">
     <div style="margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
         <div style="background-color: #f6440e; color: #ffffff; padding: 15px; border-radius: 8px 8px 0 0; text-align: center;">
@@ -253,7 +292,7 @@ module.exports.rejectVenue = async (req, res) => {
 
     res.send("Venue is rejected");
   } catch (err) {
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
