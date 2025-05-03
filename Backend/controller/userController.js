@@ -8,7 +8,21 @@ const cloudinary = require("../utils/cloudinary");
 require("dotenv").config();
 const NodeCache = require("node-cache");
 const nodemailer = require("nodemailer");
+const sgMail = require('@sendgrid/mail');
+const Razorpay = require("razorpay");
+const crypto=require("crypto");
+const { validateWebhookSignature } = require("razorpay/dist/utils/razorpay-utils");
+
+
 const nodeCache = new NodeCache();
+
+
+// const razorpay = new Razorpay({
+//   key_id: process.env.RAZORPAY_KEY_ID,
+//   key_secret: process.env.RAZORPAY_SECRET,
+// });
+
+
 
 // Register User
 module.exports.signUp = async (req, res) => {
@@ -126,9 +140,9 @@ module.exports.getUser = async (req, res) => {
 // Update Password Request
 module.exports.updatePasswordRequest = async (req, res) => {
   try {
-    let user = userModel.findOne({ email: req.body.email });
+    let user =userModel.findOne({ email: req.body.email });
     if (user) {
-      res.send(true);
+     res.send(true);
     }
   } catch (err) {
     console.log(err.message);
@@ -144,7 +158,7 @@ module.exports.updatePassword = async (req, res) => {
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    let user = await userModel.updateOne(
+    let user = userModel.updateOne(
       { email: email.email },
       { $set: { password: hashedPassword } }
     );
@@ -243,8 +257,8 @@ module.exports.createEvent = async (req, res) => {
       eventType,
       city,
       venue_1: venue1,
-      venue_2: venue3,
-      venue_3: venue1,
+      venue_2: venue2,
+      venue_3: venue3,
       platform,
       isPublic,
       isPaid,
@@ -365,6 +379,8 @@ module.exports.fetchLastCreatedEvent = async (req, res) => {
 };
 
 // Event Registration
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 module.exports.eventRegistration = async (req, res) => {
   try {
     const { eventId } = req.body;
@@ -386,24 +402,38 @@ module.exports.eventRegistration = async (req, res) => {
 
       const formattedTime = `${hours}:${minutes} ${period}`;
 
-      const testAccount = await nodemailer.createTestAccount();
+      // const testAccount = await nodemailer.createTestAccount();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        auth: {
-          user: process.env.user,
-          pass: process.env.pass,
-        },
-      });
+      // const transporter = nodemailer.createTransport({
+      //   host: "smtp.ethereal.email",
+      //   port: 587,
+      //   auth: {
+      //     user: process.env.user,
+      //     pass: process.env.pass,
+      //   },
+      // });
 
-      let info = await transporter.sendMail({
-        from: '"Eventek" <eventek@gmail.com>',
+      // let info = await transporter.sendMail({
+      //   from: '"Eventek" <eventek@gmail.com>',
+      //   to: user.email,
+      //   subject: "Registration successfull",
+      //   text: `Your registration is successfull in the event ${event.eventName}`,
+      //   html: `Your registration is successfull in the event <b>${event.eventName}</b>.<br> <b>Date:</b> ${formattedDate} <br> <b>Time:</b> ${formattedTime}`,
+      // });
+
+      const msg = {
         to: user.email,
-        subject: "Registration successfull",
-        text: `Your registration is successfull in the event ${event.eventName}`,
-        html: `Your registration is successfull in the event <b>${event.eventName}</b>.<br> <b>Date:</b> ${formattedDate} <br> <b>Time:</b> ${formattedTime}`,
-      });
+        from: 'eventek@gmail.com',
+        subject: 'Registration Successful',
+        text: `Your registration is successful in the event ${event.eventName}`,
+        html: `
+          <p>Your registration is successful in the event <strong>${event.eventName}</strong>.</p>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${formattedTime}</p>
+        `,
+      };
+
+      await sgMail.send(msg);
 
       await userModel.findOneAndUpdate(
         { email: user.email },
@@ -539,3 +569,77 @@ module.exports.commentOnAEvent = async (req, res) => {
     res.send("Internal Server Error");
   }
 };
+
+// // CREATE RAZORPAY ORDER
+// exports.createRazorpayOrder = async (req, res) => {
+//   try {
+//     const { amount, currency, receipt, notes } = req.body;
+
+//     const options = {
+//       amount: amount * 100, // Razorpay accepts amount in paise, so multiply by 100
+//       currency,
+//       receipt,
+//       notes,
+//     };
+
+//     const order = await razorpay.orders.create(options);
+//     return res.json({
+//       success: true,
+//       message: "Razorpay order created",
+//       order: order,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // VERIFY RAZORPAY PAYMENT
+// exports.verifyRazorpayPayment = async (req, res) => {
+//   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+//   const body = razorpay_order_id + "|" + razorpay_payment_id;
+//   const secret = process.env.REZORPAY_KEY_SECRET || "";
+
+//   // Generate a HMAC SHA256 hash
+//   const crypto = require("crypto");
+//   const generated_signature = crypto
+//     .createHmac("sha256", secret)
+//     .update(body)
+//     .digest("hex");
+
+//   // Check if the generated signature matches the received signature
+//   if (generated_signature === razorpay_signature) {
+//     // If valid, update the payment status and user registration
+
+//     // Update user payment information
+//     await userModel.findByIdAndUpdate(req.body.userId, {
+//       $push: {
+//         appliedEvents: req.body.eventId,
+//         payments: {
+//           eventId: req.body.eventId,
+//           paymentId: razorpay_payment_id,
+//           amount: req.body.amount,
+//           status: "completed",
+//         },
+//       },
+//     });
+
+//     // Update event registration details
+//     await eventModel.findByIdAndUpdate(req.body.eventId, {
+//       $push: { registeredUser: req.body.userId },
+//     });
+
+//     return res.json({
+//       success: true,
+//       message: "Payment verified successfully",
+//     });
+//   } else {
+//     return res.status(400).json({
+//       success: false,
+//       message: "Invalid signature, payment verification failed",
+//     });
+//   }
+// };
