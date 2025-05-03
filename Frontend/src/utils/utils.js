@@ -322,11 +322,9 @@ export const uploadVenueProfilePicture = async (imageData) => {
 // Register Venue
 export const registerVenue = async (formData) => {
   try {
-    const response = await axios.post(
-      "http://localhost:8000/venue/signup",
-      { formData },
-      { withCredentials: true }
-    );
+    const response = await axios.post("http://localhost:8000/venue/signup", {
+      formData,
+    });
 
     return response.data;
   } catch (err) {
