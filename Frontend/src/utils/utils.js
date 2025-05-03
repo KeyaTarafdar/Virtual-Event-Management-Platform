@@ -6,7 +6,10 @@ import axios from "axios";
 // Fetch Company Details
 export const fetchCompanyDetails = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/fetchcompanydetails");
+    let response = await axios.get(
+      "http://localhost:8000/fetchcompanydetails",
+      { withCredentials: true }
+    );
     return response;
   } catch (err) {
     console.log(err.message);
