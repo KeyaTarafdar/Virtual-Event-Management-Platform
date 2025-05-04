@@ -1,7 +1,9 @@
-const adminModel = require("../models/adminModel");
-const venueModel = require("../models/venueModel");
-const userModel = require("../models/userModel");
-const eventModel = require("../models/EventModel");
+const {
+  adminModel,
+  venueModel,
+  userModel,
+  eventModel,
+} = require("../models/index");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const cloudinary = require("../utils/cloudinary");
@@ -185,7 +187,7 @@ module.exports.acceptVenue = async (req, res) => {
     //             </ul>
     //             <p><strong>Note:</strong> For your security, please change your password immediately after your first login.</p>
     //             <div style="text-align: center; margin-top: 20px;">
-    //                 <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank" 
+    //                 <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank"
     //                    style="background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 20px; border-radius: 8px; display: inline-block; cursor: pointer;">Change Password</a>
     //             </div>
     //             <p style="margin-top: 20px;">If you have any questions or need assistance, feel free to contact our support team. We are here to help you make the most of our platform.</p>

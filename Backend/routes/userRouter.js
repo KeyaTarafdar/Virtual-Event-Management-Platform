@@ -79,10 +79,10 @@ router.post(
 // GET ALL VENUE CITY
 router.get("/getallvenue", commonIsLoggedIn, fetchAllVenue);
 
-// //GET Razorpay order
-// router.post("/create-order",userIsLoggedIn,createRazorpayOrder);
+//GET Razorpay order
+router.post("/create-order", userIsLoggedIn, createRazorpayOrder);
 
-// //GET Razorpay Verify Payment
-// router.post("/verify-payment",userIsLoggedIn,verifyRazorpayPayment);
+//GET Razorpay Verify Payment
+router.post("/verify-payment", userIsLoggedIn, verifyRazorpayPayment);
 
 module.exports = router;

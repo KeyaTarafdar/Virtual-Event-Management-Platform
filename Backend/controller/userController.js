@@ -1,5 +1,5 @@
 const userModel = require("../models/userModel");
-const eventModel = require("../models/EventModel");
+const eventModel = require("../models/eventModel");
 const venueModel = require("../models/venueModel");
 const commentModel = require("../models/commentModel");
 const bcrypt = require("bcrypt");
@@ -8,21 +8,19 @@ const cloudinary = require("../utils/cloudinary");
 require("dotenv").config();
 const NodeCache = require("node-cache");
 const nodemailer = require("nodemailer");
-const sgMail = require('@sendgrid/mail');
+const sgMail = require("@sendgrid/mail");
 const Razorpay = require("razorpay");
-const crypto=require("crypto");
-const { validateWebhookSignature } = require("razorpay/dist/utils/razorpay-utils");
-
+const crypto = require("crypto");
+const {
+  validateWebhookSignature,
+} = require("razorpay/dist/utils/razorpay-utils");
 
 const nodeCache = new NodeCache();
 
-
-// const razorpay = new Razorpay({
-//   key_id: process.env.RAZORPAY_KEY_ID,
-//   key_secret: process.env.RAZORPAY_SECRET,
-// });
-
-
+const razorpay = new Razorpay({
+  key_id: process.env.REZORPAY_ID,
+  key_secret: process.env.REZORPAY_KEY_SCERET,
+});
 
 // Register User
 module.exports.signUp = async (req, res) => {
@@ -140,9 +138,9 @@ module.exports.getUser = async (req, res) => {
 // Update Password Request
 module.exports.updatePasswordRequest = async (req, res) => {
   try {
-    let user =userModel.findOne({ email: req.body.email });
+    let user = userModel.findOne({ email: req.body.email });
     if (user) {
-     res.send(true);
+      res.send(true);
     }
   } catch (err) {
     console.log(err.message);
@@ -290,15 +288,15 @@ module.exports.createEvent = async (req, res) => {
       { id: venue2.id, timeslot: venue2.timeslot },
       { id: venue3.id, timeslot: venue3.timeslot },
     ];
-    
+
     for (const venue of venueUpdates) {
       await venueModel.updateOne(
-        { _id: venue.id }, 
+        { _id: venue.id },
         {
           $push: {
             bookingRequests: {
-              id: event._id, 
-              timeslot: venue.timeslot, 
+              id: event._id,
+              timeslot: venue.timeslot,
             },
           },
         }
@@ -423,8 +421,8 @@ module.exports.eventRegistration = async (req, res) => {
 
       const msg = {
         to: user.email,
-        from: 'eventek@gmail.com',
-        subject: 'Registration Successful',
+        from: "eventek@gmail.com",
+        subject: "Registration Successful",
         text: `Your registration is successful in the event ${event.eventName}`,
         html: `
           <p>Your registration is successful in the event <strong>${event.eventName}</strong>.</p>
@@ -486,7 +484,7 @@ module.exports.fetchAllVenue = async (req, res) => {
 };
 
 // Comment on a particular event
-module.exports.commentOnAEvent = async (req, res) => {
+module.exports.commentOnAnEvent = async (req, res) => {
   try {
     let user = req.user;
     let { eventId, comment } = req.body;
@@ -531,7 +529,7 @@ module.exports.replyAComment = async (req, res) => {
 };
 
 // Like a Comment
-module.exports.commentOnAEvent = async (req, res) => {
+module.exports.likeComment = async (req, res) => {
   try {
     let user = req.user;
     let { commentId } = req.body;
@@ -551,7 +549,7 @@ module.exports.commentOnAEvent = async (req, res) => {
 };
 
 // Remove Like from a Comment
-module.exports.commentOnAEvent = async (req, res) => {
+module.exports.removeLikeFromComment = async (req, res) => {
   try {
     let user = req.user;
     let { commentId } = req.body;
@@ -570,76 +568,77 @@ module.exports.commentOnAEvent = async (req, res) => {
   }
 };
 
-// // CREATE RAZORPAY ORDER
-// exports.createRazorpayOrder = async (req, res) => {
-//   try {
-//     const { amount, currency, receipt, notes } = req.body;
+// CREATE RAZORPAY ORDER
+exports.createRazorpayOrder = async (req, res) => {
+  try {
+    const { amount, currency, receipt, notes } = req.body;
 
-//     const options = {
-//       amount: amount * 100, // Razorpay accepts amount in paise, so multiply by 100
-//       currency,
-//       receipt,
-//       notes,
-//     };
+    const options = {
+      amount: amount * 100, 
+      currency,
+      receipt,
+      notes,
+    };
 
-//     const order = await razorpay.orders.create(options);
-//     return res.json({
-//       success: true,
-//       message: "Razorpay order created",
-//       order: order,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
+    const order = await razorpay.orders.create(options);
+    return res.json({
+      success: true,
+      message: "Razorpay order created",
+      order: order,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-// // VERIFY RAZORPAY PAYMENT
-// exports.verifyRazorpayPayment = async (req, res) => {
-//   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+// VERIFY RAZORPAY PAYMENT
+exports.verifyRazorpayPayment = async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
 
-//   const body = razorpay_order_id + "|" + razorpay_payment_id;
-//   const secret = process.env.REZORPAY_KEY_SECRET || "";
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+  const secret = process.env.REZORPAY_KEY_SECRET || "";
 
-//   // Generate a HMAC SHA256 hash
-//   const crypto = require("crypto");
-//   const generated_signature = crypto
-//     .createHmac("sha256", secret)
-//     .update(body)
-//     .digest("hex");
+  // Generate a HMAC SHA256 hash
+  const crypto = require("crypto");
+  const generated_signature = crypto
+    .createHmac("sha256", secret)
+    .update(body)
+    .digest("hex");
 
-//   // Check if the generated signature matches the received signature
-//   if (generated_signature === razorpay_signature) {
-//     // If valid, update the payment status and user registration
+  // Check if the generated signature matches the received signature
+  if (generated_signature === razorpay_signature) {
+    // If valid, update the payment status and user registration
 
-//     // Update user payment information
-//     await userModel.findByIdAndUpdate(req.body.userId, {
-//       $push: {
-//         appliedEvents: req.body.eventId,
-//         payments: {
-//           eventId: req.body.eventId,
-//           paymentId: razorpay_payment_id,
-//           amount: req.body.amount,
-//           status: "completed",
-//         },
-//       },
-//     });
+    // Update user payment information
+    await userModel.findByIdAndUpdate(req.body.userId, {
+      $push: {
+        appliedEvents: req.body.eventId,
+        payments: {
+          eventId: req.body.eventId,
+          paymentId: razorpay_payment_id,
+          amount: req.body.amount,
+          status: "completed",
+        },
+      },
+    });
 
-//     // Update event registration details
-//     await eventModel.findByIdAndUpdate(req.body.eventId, {
-//       $push: { registeredUser: req.body.userId },
-//     });
+    // Update event registration details
+    await eventModel.findByIdAndUpdate(req.body.eventId, {
+      $push: { registeredUser: req.body.userId },
+    });
 
-//     return res.json({
-//       success: true,
-//       message: "Payment verified successfully",
-//     });
-//   } else {
-//     return res.status(400).json({
-//       success: false,
-//       message: "Invalid signature, payment verification failed",
-//     });
-//   }
-// };
+    return res.json({
+      success: true,
+      message: "Payment verified successfully",
+    });
+  } else {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid signature, payment verification failed",
+    });
+  }
+};
