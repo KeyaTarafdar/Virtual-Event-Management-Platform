@@ -6,13 +6,28 @@ import { findUser } from "../utils/utils";
 export default function Header() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  //const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    findUser().then((response) => {
-      setUser(response.username ? response.username.split(" ")[0] : null);
-    });
-  }, []);
+  // useEffect(() => {
+  //   findUser().then((response) => {
+  //     setUser(response.username ? response.username.split(" ")[0] : null);
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem("user");
+  //   if (storedUser) {
+  //     try {
+  //       const parsedUser = JSON.parse(storedUser);
+  //       const firstName = parsedUser?.username?.split(" ")[0];
+  //       setUser(firstName || null);
+  //     } catch (err) {
+  //       console.error("Invalid user in localStorage", err);
+  //       setUser(null);
+  //     }
+  //   }
+  // }, []);
+  
 
   const handleSignUpClick = () => {
     if (user) {

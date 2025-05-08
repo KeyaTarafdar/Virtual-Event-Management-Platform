@@ -5,6 +5,7 @@ import Loader from "../Components/loader";
 
 const Login = () => {
   const navigate = useNavigate();
+  //const {loginUser,loginVenue,loginAdmin}=useUser();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -87,11 +88,11 @@ const Login = () => {
         }
         if (
           userResponse ===
-            "Error during login: Request timed out after 4 seconds" ||
+          "Error during login: Request timed out after 4 seconds" ||
           venueResponse ===
-            "Error during login: Request timed out after 4 seconds" ||
+          "Error during login: Request timed out after 4 seconds" ||
           adminResponse ===
-            "Error during login: Request timed out after 4 seconds"
+          "Error during login: Request timed out after 4 seconds"
         ) {
           window.location.reload(true);
           alert("Some error has occured! Please try again");
@@ -156,9 +157,8 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 id="email"
-                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${errors.email ? "border-red-500" : "border-gray-300"
+                  } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
                 placeholder=" "
               />
               <label
@@ -179,9 +179,8 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${errors.password ? "border-red-500" : "border-gray-300"
+                  } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
                 placeholder=" "
               />
               <label

@@ -1,26 +1,7 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./Pages/Home";
-import Signup from "./Pages/Signup";
-import Login from "./Pages/Login";
-import Forgetpassword from "./Pages/Forgetpassword";
-import Resetpassword from "./Pages/Resetpassword";
-import VirtualEvent from "./Pages/VirtualEvent";
-import InPersonEvent from "./Pages/InPersonEvent";
-import HybridEvent from "./Pages/HybridEvent";
-import CreateForm from "./Pages/CreateForm";
-import CompanyPage from "./Pages/CompanyPage";
-import Registrationform from "./Pages/Registrationform";
-import EventPage from "./Pages/EventPage";
-import Event_card from "./Components/Event_card";
-import CustomCalendar from "./Components/CustomCalendar";
-import VenueUserPage from "./Pages/VenueUserPage";
-import VenueRegisteringPage from "./Pages/VenueRegisteringPage";
-import Venue from "./Pages/Venue";
-import Venue_card from "./Components/Venue_card";
-import Venue_Details from "./Pages/Venue_Details";
-import AdminPage from "./Pages/AdminPage";
-import ScrollToTop from "./Components/ScrollToTop";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AdminPage, CompanyPage, Home, Signup, Login, Forgetpassword, Resetpassword, VirtualEvent, InPersonEvent, HybridEvent, CreateForm, Registrationform, EventPage, Venue, VenueRegisteringPage, VenueUserPage, Venue_Details } from './Pages'
+import {Event_card,CustomCalendar,Venue_card } from './Components'
 
 function App() {
   return (

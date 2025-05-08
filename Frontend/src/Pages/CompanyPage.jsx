@@ -21,6 +21,7 @@ import {
   fetchCompanyDetails,
   uploadProfilePicture,
 } from "../utils/utils";
+import { useCompany } from "../context/companyContext/CompanyContext";
 
 const headerMenuItems = [{ label: "Home", to: "/" }];
 
@@ -30,6 +31,7 @@ const CompanyPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedTab, setSelectedTab] = useState("created");
+  const { company, setCompany } = useCompany()
 
   const handleCreateEventClick = () => {
     navigate("/createform");
@@ -91,7 +93,7 @@ const CompanyPage = () => {
     setMenuVisible((prev) => !prev);
   };
 
-  const [company, setCompany] = useState({});
+  // const [company, setCompany] = useState({});
 
   useEffect(() => {
     if (menuVisible) {
@@ -102,9 +104,11 @@ const CompanyPage = () => {
   }, [menuVisible]);
 
   useEffect(() => {
-    fetchCompanyDetails().then((response) => {
-      setCompany(response);
-    });
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response);
+      });
+    }
   }, []);
 
   const checkSlotConfirmation = (eventCreatedDate, slotConfirmedDate) => {
@@ -117,9 +121,9 @@ const CompanyPage = () => {
 
   const isSlotConfirmed = selectedEvent
     ? checkSlotConfirmation(
-        selectedEvent.createdDate,
-        selectedEvent.slotConfirmedDate
-      )
+      selectedEvent.createdDate,
+      selectedEvent.slotConfirmedDate
+    )
     : false;
 
   const checkEventCompletion = (eventDate, slotConfirmedDate, createdDate) => {
@@ -173,9 +177,8 @@ const CompanyPage = () => {
         </div>
 
         <div
-          className={`fixed lg:z-10 z-40 top-16 left-0 bg-[#081647] text-white rounded-r-2xl rounded-br-2xl shadow-2xl p-4 flex flex-col items-center transition-transform duration-300 transform ${
-            menuVisible ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 w-[18rem]`}
+          className={`fixed lg:z-10 z-40 top-16 left-0 bg-[#081647] text-white rounded-r-2xl rounded-br-2xl shadow-2xl p-4 flex flex-col items-center transition-transform duration-300 transform ${menuVisible ? "translate-x-0" : "-translate-x-full"
+            } lg:translate-x-0 w-[18rem]`}
           style={{ height: "calc(100vh - 60px)" }}
         >
           <img
@@ -227,9 +230,8 @@ const CompanyPage = () => {
 
         {/* EVENT DETAILS */}
         <div
-          className={` ${
-            menuVisible ? "blur-sm lg:blur-none" : ""
-          } mt-8 mb-8 w-full lg:w-4/6 ml-8 lg:ml-[24rem] mr-8 lgoverflow-y-auto space-y-4`}
+          className={` ${menuVisible ? "blur-sm lg:blur-none" : ""
+            } mt-8 mb-8 w-full lg:w-4/6 ml-8 lg:ml-[24rem] mr-8 lgoverflow-y-auto space-y-4`}
           style={{ height: "calc(100vh - 60px)" }}
         >
           <div className="mt-4 flex flex-row space-x-12 justify-center items-center mb-12">
@@ -259,11 +261,10 @@ const CompanyPage = () => {
                 setevents(createdEvents);
                 seteventsCopy(createdEvents);
               }}
-              className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${
-                selectedTab === "created"
-                  ? "text-indigo-400"
-                  : "hover:text-indigo-800"
-              }`}
+              className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${selectedTab === "created"
+                ? "text-indigo-400"
+                : "hover:text-indigo-800"
+                }`}
             >
               Created Events
             </div>
@@ -274,11 +275,10 @@ const CompanyPage = () => {
                 setevents(appliedEvents);
                 seteventsCopy(appliedEvents);
               }}
-              className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${
-                selectedTab === "participated"
-                  ? "text-indigo-400"
-                  : "hover:text-indigo-800"
-              }`}
+              className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${selectedTab === "participated"
+                ? "text-indigo-400"
+                : "hover:text-indigo-800"
+                }`}
             >
               Participated Events
             </div>
@@ -463,11 +463,10 @@ const CompanyPage = () => {
                   {/* Event Created */}
                   <div className="flex items-center">
                     <div
-                      className={`w-4 h-4 rounded-full ${
-                        selectedEvent.createdDate
-                          ? "bg-blue-600"
-                          : "bg-gray-400"
-                      } mr-2`}
+                      className={`w-4 h-4 rounded-full ${selectedEvent.createdDate
+                        ? "bg-blue-600"
+                        : "bg-gray-400"
+                        } mr-2`}
                     ></div>
                     <span className="text-sm xds:text-lg font-bold">
                       Event Creation
@@ -486,13 +485,12 @@ const CompanyPage = () => {
                     </span>
                   </div>
                   <div
-                    className={`w-1 ${
-                      selectedEvent.slotConfirmedDate
-                        ? isSlotConfirmed || selectedEvent.completed
-                          ? "bg-blue-600"
-                          : "bg-gray-400"
+                    className={`w-1 ${selectedEvent.slotConfirmedDate
+                      ? isSlotConfirmed || selectedEvent.completed
+                        ? "bg-blue-600"
                         : "bg-gray-400"
-                    } h-16`}
+                      : "bg-gray-400"
+                      } h-16`}
                     style={{
                       marginLeft: "0.35rem",
                       marginRight: "1.5rem",
@@ -503,13 +501,12 @@ const CompanyPage = () => {
                   {/* Slot Confirmation */}
                   <div className="flex items-center">
                     <div
-                      className={`w-4 h-4 rounded-full ${
-                        selectedEvent.slotConfirmedDate
-                          ? isSlotConfirmed
-                            ? "bg-blue-600"
-                            : "bg-gray-400"
+                      className={`w-4 h-4 rounded-full ${selectedEvent.slotConfirmedDate
+                        ? isSlotConfirmed
+                          ? "bg-blue-600"
                           : "bg-gray-400"
-                      } mr-2`}
+                        : "bg-gray-400"
+                        } mr-2`}
                     ></div>
                     <span className="text-xs xds:text-lg font-bold">
                       Slot Confirmation (Within 24 hours)
@@ -539,15 +536,14 @@ const CompanyPage = () => {
                     </span>
                   </div>
                   <div
-                    className={`w-1 ${
-                      checkEventCompletion(
-                        selectedEvent.date,
-                        selectedEvent.slotConfirmedDate,
-                        selectedEvent.createdDate
-                      )
-                        ? "bg-blue-600"
-                        : "bg-gray-400"
-                    } h-16`}
+                    className={`w-1 ${checkEventCompletion(
+                      selectedEvent.date,
+                      selectedEvent.slotConfirmedDate,
+                      selectedEvent.createdDate
+                    )
+                      ? "bg-blue-600"
+                      : "bg-gray-400"
+                      } h-16`}
                     style={{
                       marginLeft: "0.35rem",
                       marginRight: "1.5rem",
@@ -558,15 +554,14 @@ const CompanyPage = () => {
                   {/* Event Done */}
                   <div className="flex items-center">
                     <div
-                      className={`w-4 h-4 rounded-full ${
-                        checkEventCompletion(
-                          selectedEvent.date,
-                          selectedEvent.slotConfirmedDate,
-                          selectedEvent.createdDate
-                        )
-                          ? "bg-blue-600"
-                          : "bg-gray-400"
-                      } mr-2`}
+                      className={`w-4 h-4 rounded-full ${checkEventCompletion(
+                        selectedEvent.date,
+                        selectedEvent.slotConfirmedDate,
+                        selectedEvent.createdDate
+                      )
+                        ? "bg-blue-600"
+                        : "bg-gray-400"
+                        } mr-2`}
                     ></div>
                     <span className="text-xs xds:text-lg font-bold">
                       Event Completion

@@ -6,10 +6,8 @@ import axios from "axios";
 // Fetch Company Details
 export const fetchCompanyDetails = async () => {
   try {
-    let response = await axios.get(
-      "http://localhost:8000/fetchcompanydetails",
-      { withCredentials: true }
-    );
+    let response = await axios.get("http://localhost:8000/fetchcompanydetails");
+    localStorage.setItem("company", JSON.stringify(response.data))
     return response;
   } catch (err) {
     console.log(err.message);
@@ -22,6 +20,9 @@ export const logoutUser = async () => {
     let response = await axios.get("http://localhost:8000/commonroute/logout", {
       withCredentials: true,
     });
+    localStorage.removeItem("user")
+    localStorage.removeItem("admin")
+    localStorage.removeItem("venue")
     return response.data;
   } catch (err) {
     console.log(err.message);
@@ -134,6 +135,7 @@ export const findUser = async () => {
       withCredentials: true,
     });
     if (response.data) {
+      localStorage.setItem('user', JSON.stringify(response.data))
       return response.data;
     } else {
       return null;
@@ -297,6 +299,7 @@ export const findVenue = async () => {
       "http://localhost:8000/venue/fetchvenueuser",
       { withCredentials: true }
     );
+    localStorage.setItem('venue', JSON.stringify(response.data))
     return response.data;
   } catch (err) {
     console.log(err.message);
@@ -452,6 +455,7 @@ export const findAdmin = async () => {
     let response = await axios.get("http://localhost:8000/admins/fetchadmin", {
       withCredentials: true,
     });
+    localStorage.setItem('admin', JSON.stringify(response.data))
     return response.data;
   } catch (err) {
     console.log(err.message);
