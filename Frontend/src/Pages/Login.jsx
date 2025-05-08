@@ -63,7 +63,8 @@ const Login = () => {
           loginUser(formData.email, formData.password),
           4000
         );
-        if (userResponse && userResponse === "Login successfully") {
+        if (userResponse.success) {
+          localStorage.setItem("user", userResponse.data);
           setLoading(false);
           navigate("/");
           return;
@@ -72,7 +73,8 @@ const Login = () => {
         const venueResponse = await withTimeout(
           loginVenue(formData.email, formData.password)
         );
-        if (venueResponse === "Login successfully") {
+        if (venueResponse.success) {
+          localStorage.setItem("venue", userResponse.data);
           setLoading(false);
           navigate("/venueuser");
           return;
@@ -81,33 +83,34 @@ const Login = () => {
         const adminResponse = await withTimeout(
           loginAdmin(formData.email, formData.password)
         );
-        if (adminResponse === "Login successfully") {
+        if (adminResponse.success) {
+          localStorage.setItem("admin", userResponse.data);
           setLoading(false);
           navigate("/adminpanel");
           return;
         }
+
+        if (
+          !adminResponse.success &&
+          !userResponse.success &&
+          !venueResponse.success
+        ) {
+          alert("Failed to login");
+          return;
+        }
         if (
           userResponse ===
-          "Error during login: Request timed out after 4 seconds" ||
+            "Error during login: Request timed out after 4 seconds" ||
           venueResponse ===
-          "Error during login: Request timed out after 4 seconds" ||
+            "Error during login: Request timed out after 4 seconds" ||
           adminResponse ===
-          "Error during login: Request timed out after 4 seconds"
+            "Error during login: Request timed out after 4 seconds"
         ) {
           window.location.reload(true);
           alert("Some error has occured! Please try again");
           return;
         }
         setLoading(false);
-        if (
-          venueResponse === "You are already logged in." ||
-          userResponse === "You are already logged in." ||
-          adminResponse === "You are already logged in."
-        ) {
-          alert("You are already logged in");
-          return;
-        }
-        alert("Email or Password is wrong");
       } catch (err) {
         console.error("Error during API calls:", err.message);
       }
@@ -157,8 +160,9 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 id="email"
-                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${errors.email ? "border-red-500" : "border-gray-300"
-                  } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
                 placeholder=" "
               />
               <label
@@ -179,8 +183,9 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${errors.password ? "border-red-500" : "border-gray-300"
-                  } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
                 placeholder=" "
               />
               <label

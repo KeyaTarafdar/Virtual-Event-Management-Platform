@@ -14,7 +14,14 @@ const crypto = require("crypto");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
-const { successResponse_ok, successResponse_ok_withToken, successResponse_created, errorResponse_alreadyExists, errorResponse_catchError } = require('../responseObject/index')
+const {
+  successResponse_ok,
+  successResponse_ok_withToken,
+  successResponse_created,
+  errorResponse_alreadyExists,
+  errorResponse_catchError,
+} = require("../responseObject/index");
+const { errorResponse_notFound } = require("../responseObject/errorResponse");
 
 const nodeCache = new NodeCache();
 
@@ -31,7 +38,7 @@ module.exports.signUp = async (req, res) => {
     if (email && password && userName && contactNumber && agreeToTerms) {
       const existingUser = await userModel.findOne({ email });
       if (existingUser) {
-        return errorResponse_alreadyExists(res, "User Already exists")
+        return errorResponse_alreadyExists(res, "User Already exists");
       }
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -50,12 +57,12 @@ module.exports.signUp = async (req, res) => {
         sameSite: "Lax",
       });
 
-      return successResponse_created(res, "User Created Successfully", newUser)
+      return successResponse_created(res, "User Created Successfully", newUser);
     } else {
       res.send("All fields are required and you must agree to the terms.");
     }
   } catch (err) {
-    return errorResponse_catchError(res, err.message)
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -64,10 +71,9 @@ module.exports.loginUser = async (req, res) => {
   try {
     let token = req.cookies.token;
     if (token) {
-      res.send("You are already logged in.");
+      return errorResponse_alreadyExists(res, "You are already loggedin");
     } else {
       let { email, password } = req.body;
-      console.log(email, password);
 
       if (email && password) {
         let user = await userModel.findOne({ email });
@@ -88,21 +94,21 @@ module.exports.loginUser = async (req, res) => {
               });
               nodeCache.set("user", JSON.stringify(user));
 
-              return res.send("Login successfully");
+              return successResponse_ok(res, "User login successfull", user);
             } else {
-              return res.send("Wrong Password");
+              return errorResponse_notFound(res, "Wrong Password");
             }
           });
         } else {
-          return res.send("Email or Password is wrong");
+          return errorResponse_notFound(res, "Email or Password is wrong");
         }
       } else {
-        return res.send("Something is missing");
+        return res.send({ success: false, message: "Something is missing" });
       }
     }
   } catch (err) {
     console.log(err.message);
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -270,9 +276,9 @@ module.exports.createEvent = async (req, res) => {
       scannerImage:
         scannerImage !== null
           ? {
-            public_id: scannerResult.public_id,
-            url: scannerResult.secure_url,
-          }
+              public_id: scannerResult.public_id,
+              url: scannerResult.secure_url,
+            }
           : null,
       posterImage: {
         public_id: posterResult.public_id,
