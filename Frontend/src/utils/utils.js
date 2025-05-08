@@ -40,7 +40,7 @@ export const signUp = async (
   agreeToTerms
 ) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/users/signup",
       {
         userName,
@@ -48,12 +48,12 @@ export const signUp = async (
         contactNumber,
         password,
         agreeToTerms,
-      },
-      {
-        withCredentials: true,
       }
     );
-    return response.data;
+    if (data.success) {
+      localStorage.setItem("user", data.data)
+    }
+    return data
   } catch (err) {
     console.log(err.message);
   }
