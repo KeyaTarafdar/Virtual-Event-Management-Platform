@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
@@ -6,7 +8,6 @@ import {
   faXmark,
   faCaretDown,
   faCaretUp,
-  faMagnifyingGlass,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -20,11 +21,14 @@ import {
   fetchCompanyDetails,
 } from "../utils/utils";
 import Loader from "./loader";
+import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from '../context/userContext/UserContext'
 
 export default function Navbar({ menuItems }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const path = location.pathname;
+  const { company, setCompany } = useCompany()
+  const { user, setUser, admin, setAdmin, venue, setVenue } = useUser()
 
   const [hamburgerMenuClicked, setHamburgerMenuClicked] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -32,13 +36,8 @@ export default function Navbar({ menuItems }) {
   const [isClosingDropdown, setIsClosingDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [scrollDirection, setScrollDirection] = useState(null);
-
+  // eslint-disable-next-line no-unused-vars
   const [isMdOrLarger, setIsMdOrLarger] = useState(false);
-
-  const [user, setUser] = useState(null);
-  const [venue, setVenue] = useState(null);
-  const [admin, setAdmin] = useState(null);
 
   const handleLogInClick = () => {
     navigate("/login");
@@ -78,52 +77,107 @@ export default function Navbar({ menuItems }) {
     setHamburgerMenuClicked(false);
   };
 
-  const [company, setCompany] = useState({});
+  // const [company, setCompany] = useState({});
 
   useEffect(() => {
-    fetchCompanyDetails().then((response) => {
-      setCompany(response.data);
-    });
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response.data);
+      });
+    }
   }, []);
+
+
+  useEffect(() => {
+    if (!user) {
+      findUser().then((user) => {
+        if (user) {
+          setUser(user);
+        }
+      });
+    }
+    if (!venue) {
+      findVenue().then((venue) => {
+        if (venue) {
+          setVenue(venue);
+        }
+      });
+    }
+    if (!admin) {
+      findAdmin().then((admin) => {
+        if (admin) {
+          setAdmin(admin);
+        }
+      });
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   const stored = localStorage.getItem("user");
+  //   if (stored) {
+  //     try {
+  //       const u = JSON.parse(stored);
+  //       if (u.username) setUser(u.username.split(" ")[0]);
+  //     } catch (e) {
+  //       console.log("error :", e);
+  //       setUser(null);
+  //     }
+  //   } else {
+  //     setUser(null);
+  //   }
+  // }, [location]);
+
+  // useEffect(() => {
+  //   const fetchData = (key, setter) => {
+  //     const stored = localStorage.getItem(key);
+  //     if (stored) {
+  //       try {
+  //         const parsed = JSON.parse(stored);
+  //         if (parsed.username) {
+  //           setter(parsed.username.split(" ")[0]);
+  //         } else {
+  //           setter(null);
+  //         }
+  //       } catch (e) {
+  //         console.log(`Error parsing ${key}:`, e);
+  //         setter(null);
+  //       }
+  //     } else {
+  //       setter(null);
+  //     }
+  //   };
+
+  //   fetchData("user", setUser);
+  //   fetchData("venue", setVenue);
+  //   fetchData("admin", setAdmin);
+  // }, [location]);
 
   const handelLogout = () => {
     setLoading(true);
     setTimeout(() => {
       logoutUser().then((response) => {
         setLoading(false);
-        if (response === "User Logout successfully") {
-          if (location.pathname === "/") window.location.reload();
-          else navigate("/");
-        } else if (response === "Venue Logout successfully") {
-          if (location.pathname === "/") window.location.reload();
-          else navigate("/");
-        } else if (response === "Admin Logout successfully") {
-          if (location.pathname === "/") window.location.reload();
-          else navigate("/");
-        } else {
-          alert(response);
+        // if (response === "User Logout successfully") {
+        //   if (location.pathname === "/") window.location.reload();
+        //   else navigate("/");
+        // } else if (response === "Venue Logout successfully") {
+        //   if (location.pathname === "/") window.location.reload();
+        //   else navigate("/");
+        // } else if (response === "Admin Logout successfully") {
+        //   if (location.pathname === "/") window.location.reload();
+        //   else navigate("/");
+        // } else {
+        //   alert(response);
+        // }
+        localStorage.removeItem("user");
+        setUser(null);
+        if (response.includes("Logout successfully")) {
+          navigate("/");
         }
       });
     }, 3000);
   };
 
-  useEffect(() => {
-    findUser().then((user) => {
-      if (user && user.username) {
-        setUser(user.username.split(" ")[0]);
-      }
-    });
-    findVenue().then((venue) => {
-      if (venue && venue.name) {
-        setVenue(venue.name);
-      }
-    });
-    findAdmin().then((admin) => {
-      if (admin && admin.username) {
-        setAdmin(admin.username);
-      }
-    });
-  }, []);
 
   return (
     <>
@@ -138,7 +192,7 @@ export default function Navbar({ menuItems }) {
             className="text-gradient2 font-serif text-5xl w-[50%] sm:w-[20%] md:w-[20%] lg:w-[20%] xl:w-[20%] 2xl:w-[20%] lg:pl-5 xl:pl-8"
             style={{ fontFamily: '"quick"' }}
           >
-            {company.companyName}
+            {company?.companyName}
           </div>
 
           {/* Navbar Menu */}
@@ -181,13 +235,13 @@ export default function Navbar({ menuItems }) {
                       className="text-lg cursor-pointer"
                     />
                     <span className="text-white font-bold hover:text-blue-100 hover:underline">
-                      {user
-                        ? user.split(" ")[0]
-                        : venue
-                        ? venue.split(" ")[0]
-                        : admin
-                        ? admin.split(" ")[0]
-                        : null}
+                      {user?.username
+                        ? user.username.split(" ")[0]
+                        : venue?.name
+                          ? venue.name.split(" ")[0]
+                          : admin?.username
+                            ? admin.username.split(" ")[0]
+                            : null}
                     </span>
 
                     {dropDownOpen ? (
@@ -241,9 +295,8 @@ export default function Navbar({ menuItems }) {
         {/* Hamburger Menu */}
         {(hamburgerMenuClicked || isClosing) && (
           <div
-            className={`z-50 md:hidden flex-col flex justify-end mt-4 mr-2 text-white w-40 p-4 space-y-8 items-center h-auto ${
-              isClosing ? "animate-slideOut" : "animate-slideIn"
-            } fixed top-14 right-5 bg-slate-300 bg-opacity-[0.3] rounded-lg`}
+            className={`z-50 md:hidden flex-col flex justify-end mt-4 mr-2 text-white w-40 p-4 space-y-8 items-center h-auto ${isClosing ? "animate-slideOut" : "animate-slideIn"
+              } fixed top-14 right-5 bg-slate-300 bg-opacity-[0.3] rounded-lg`}
             style={{ backgroundColor: "rgba(0, 0, 255, 0.6)" }}
           >
             {menuItems.map((item, index) => (
@@ -275,11 +328,10 @@ export default function Navbar({ menuItems }) {
         )}
 
         {/* User Dropdown */}
-        {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
+        {/* {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
           <div
-            className={`border-2 z-50 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${
-              isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
-            }`}
+            className={`border-2 z-50 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
+              }`}
             style={{ backgroundColor: "rgba(0, 0, 255, 0.6)" }}
           >
             {location.pathname !== "/venueuser" &&
@@ -299,7 +351,33 @@ export default function Navbar({ menuItems }) {
               Log Out
             </div>
           </div>
+        )} */}
+
+        {/* User Dropdown */}
+        {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
+          <div
+            className={`absolute top-16 right-4 sm:right-8 md:right-12 z-50 w-40 flex flex-col items-center rounded-lg shadow-lg text-white bg-blue-600 bg-opacity-80 backdrop-blur-md transition-all duration-300 ease-in-out ${isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
+              }`}
+          >
+            {location.pathname !== "/venueuser" &&
+              location.pathname !== "/adminpanel" && (
+                <div
+                  onClick={handleCompanyPageClick}
+                  className="w-full text-center px-4 py-2 hover:cursor-pointer hover:bg-blue-700 hover:font-bold transition"
+                >
+                  Profile
+                </div>
+              )}
+
+            <div
+              onClick={handelLogout}
+              className="w-full text-center px-4 py-2 hover:cursor-pointer hover:bg-red-500 hover:font-bold transition"
+            >
+              Log Out
+            </div>
+          </div>
         )}
+
       </div>
       {loading && (
         <>

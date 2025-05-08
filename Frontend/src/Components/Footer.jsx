@@ -1,17 +1,20 @@
-import React from "react";
-import { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import {  useEffect } from "react";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { AiFillVideoCamera, AiFillMail, AiFillPhone } from "react-icons/ai";
 import { Link } from "react-scroll";
 import { fetchCompanyDetails } from "../utils/utils";
+import { useCompany } from "../context/companyContext/CompanyContext";
 
 export default function Footer({ menuItems1 }) {
-  const [company, setCompany] = useState({});
+  const { company, setCompany } = useCompany()
 
   useEffect(() => {
-    fetchCompanyDetails().then((response) => {
-      setCompany(response.data);
-    });
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response.data);
+      });
+    }
   }, []);
 
   return (
@@ -20,9 +23,9 @@ export default function Footer({ menuItems1 }) {
         {/* About Us */}
         <div className="flex flex-col items-center text-center">
           <div className="text-2xl font-serif text-center md:text-left md:mb-0">
-            {company.companyName}
+            {company?.companyName}
           </div>
-          <p className="mt-[2rem] text-gray-300">{company.description}</p>
+          <p className="mt-[2rem] text-gray-300">{company?.description}</p>
         </div>
 
         {/* Quick Links */}
@@ -52,7 +55,24 @@ export default function Footer({ menuItems1 }) {
             href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
+            Jayita Bhowmick
+          </a>
+          <a
+            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+            className="text-gray-300 hover:text-blue-400 transition-colors"
+          >
             Keya Tarafdar
+          </a>
+          <a
+            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+            className="text-gray-300 hover:text-blue-400 transition-colors"
+          >
+            Priya Acharjee
+          </a><a
+            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+            className="text-gray-300 hover:text-blue-400 transition-colors"
+          >
+            Shreya Kundu
           </a>
         </div>
 
@@ -61,19 +81,19 @@ export default function Footer({ menuItems1 }) {
           <h3 className="text-lg font-semibold mb-4">Get in Touch</h3>
           <div className="flex space-x-4 mb-4">
             <a
-              href={company.fbLink}
+              href={company?.fbLink}
               className="text-2xl text-gray-300 hover:text-blue-600 transition-colors"
             >
               <FaFacebook />
             </a>
             <a
-              href={company.instaLink}
+              href={company?.instaLink}
               className="text-2xl text-gray-300 hover:text-pink-500 transition-colors"
             >
               <FaInstagram />
             </a>
             <a
-              href={company.linkedinLink}
+              href={company?.linkedinLink}
               className="text-2xl text-gray-300 hover:text-blue-700 transition-colors"
             >
               <FaLinkedin />
@@ -92,12 +112,12 @@ export default function Footer({ menuItems1 }) {
           <div className="mt-4 flex justify-center items-center hover:text-blue-400">
             <AiFillMail className="mr-2" />
             <a href="mailto:eventek@gmail.com" className="hover:underline">
-              {company.email}
+              {company?.email}
             </a>
           </div>
           <div className="mt-4 flex justify-center items-center hover:text-blue-400">
             <AiFillPhone className="mr-2" />
-            {company.contact}
+            {company?.contact}
           </div>
         </div>
       </div>
@@ -105,7 +125,7 @@ export default function Footer({ menuItems1 }) {
       {/* Bottom Text */}
       <div className="bg-gray-900 text-center py-4 mt-8">
         <p className="text-sm">
-          &copy; {new Date().getFullYear()} {company.companyName}. All rights
+          &copy; {new Date().getFullYear()} {company?.companyName}. All rights
           reserved | Terms & Conditions | Privacy Policy
         </p>
       </div>

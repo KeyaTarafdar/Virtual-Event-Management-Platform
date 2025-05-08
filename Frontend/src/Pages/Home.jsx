@@ -25,6 +25,7 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 import { fetchLastCreatedEvent, fetchCompanyDetails } from "../utils/utils";
+import { useCompany } from "../context/companyContext/CompanyContext";
 
 const headerMenuItems = [
   { label: "Services", href: "services" },
@@ -44,6 +45,7 @@ const footerMenuItems = [
 
 export default function Home() {
   const navigate = useNavigate();
+  const { company, setCompany } = useCompany()
 
   const handleSignUpClick = () => {
     navigate("/signup");
@@ -51,21 +53,23 @@ export default function Home() {
 
   const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
-  const [company, setCompany] = useState({});
+  // const [company, setCompany] = useState({});
 
   useEffect(() => {
     fetchLastCreatedEvent().then((resonse) => {
       setlastEvent(resonse);
     });
 
-    fetchCompanyDetails().then((response) => {
-      if (response.status === 200) {
-        setCompany(response.data);
-        setfetchingCompleted(true);
-      } else {
-        alert(response.data);
-      }
-    });
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        if (response.status === 200) {
+          setCompany(response.data);
+        } else {
+          alert(response.data);
+        }
+      });
+    }
+    setfetchingCompleted(true);
   }, []);
 
   if (!fetchingCompleted) {
@@ -105,7 +109,7 @@ export default function Home() {
             Manage, promote, and track your event— all in one platform
           </div>
           <div className="px-10 text-md sm:text-lg">
-            Maximize your event's potential with our powerful, all-in-one
+            Maximize your events potential with our powerful, all-in-one
             management solution. With{" "}
             <i>
               <strong
@@ -118,7 +122,7 @@ export default function Home() {
                 {company.companyName}{" "}
               </strong>
             </i>
-            , you can effortlessly plan, execute, and evaluate your event's
+            , you can effortlessly plan, execute, and evaluate your events
             success. <br></br>
             <br></br>Simplify your workflow, amplify your impact, and leave a
             lasting impression on your attendees.

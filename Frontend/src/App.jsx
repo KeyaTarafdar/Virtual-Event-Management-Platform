@@ -9,7 +9,7 @@ import VirtualEvent from "./Pages/VirtualEvent";
 import InPersonEvent from "./Pages/InPersonEvent";
 import HybridEvent from "./Pages/HybridEvent";
 import CreateForm from "./Pages/CreateForm";
-import CompanyPage from "./Pages/CompanyPage";
+// import CompanyPage from "./Pages/CompanyPage";
 import Registrationform from "./Pages/Registrationform";
 import EventPage from "./Pages/EventPage";
 import Event_card from "./Components/Event_card";
@@ -19,7 +19,9 @@ import VenueRegisteringPage from "./Pages/VenueRegisteringPage";
 import Venue from "./Pages/Venue";
 import Venue_card from "./Components/Venue_card";
 import Venue_Details from "./Pages/Venue_Details";
-import AdminPage from "./Pages/AdminPage";
+// import AdminPage from "./Pages/AdminPage";
+import { AdminPage, CompanyPage } from './Pages'
+import { } from './Components'
 
 function App() {
   return (
