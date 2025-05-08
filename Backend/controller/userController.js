@@ -14,6 +14,7 @@ const crypto = require("crypto");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
+const { successResponse_ok, successResponse_ok_withToken, successResponse_created, errorResponse_alreadyExists, errorResponse_catchError } = require('../responseObject/index')
 
 const nodeCache = new NodeCache();
 
@@ -30,7 +31,7 @@ module.exports.signUp = async (req, res) => {
     if (email && password && userName && contactNumber && agreeToTerms) {
       const existingUser = await userModel.findOne({ email });
       if (existingUser) {
-        return res.send("User already exists. Please Login.");
+        return errorResponse_alreadyExists(res, "User Already exists")
       }
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -49,12 +50,12 @@ module.exports.signUp = async (req, res) => {
         sameSite: "Lax",
       });
 
-      res.send("User created successfully");
+      return successResponse_created(res, "User Created Successfully", newUser)
     } else {
       res.send("All fields are required and you must agree to the terms.");
     }
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message)
   }
 };
 
@@ -269,9 +270,9 @@ module.exports.createEvent = async (req, res) => {
       scannerImage:
         scannerImage !== null
           ? {
-              public_id: scannerResult.public_id,
-              url: scannerResult.secure_url,
-            }
+            public_id: scannerResult.public_id,
+            url: scannerResult.secure_url,
+          }
           : null,
       posterImage: {
         public_id: posterResult.public_id,
@@ -647,7 +648,7 @@ exports.fetchAllVenueBasedOnCity = async (req, res) => {
   try {
     const { city } = req.body;
     const venues = await venueModel.find({
-      city: { $regex: new RegExp(`^${city}$`, "i") }, 
+      city: { $regex: new RegExp(`^${city}$`, "i") },
     });
     res.send(venues);
   } catch (err) {

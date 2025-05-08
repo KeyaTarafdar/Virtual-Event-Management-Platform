@@ -89,10 +89,10 @@ const Signup = () => {
             formData.agreeToTerms
           );
 
-          if (result !== "User created successfully") {
-            alert(result);
-          } else {
+          if (result.success) {
             navigate("/");
+          } else {
+            alert(result.message);
           }
         } catch (error) {
           console.error("Signup failed:", error);
