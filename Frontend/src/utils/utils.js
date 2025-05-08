@@ -50,9 +50,7 @@ export const signUp = async (
         agreeToTerms,
       }
     );
-    if (data.success) {
-      localStorage.setItem("user", data.data)
-    }
+    console.log('data', data)
     return data
   } catch (err) {
     console.log(err.message);
