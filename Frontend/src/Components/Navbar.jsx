@@ -22,13 +22,13 @@ import {
 } from "../utils/utils";
 import Loader from "./loader";
 import { useCompany } from "../context/companyContext/CompanyContext";
-import { useUser } from '../context/userContext/UserContext'
+import { useUser } from "../context/userContext/UserContext";
 
 export default function Navbar({ menuItems }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { company, setCompany } = useCompany()
-  const { user, setUser, admin, setAdmin, venue, setVenue } = useUser()
+  const { company, setCompany } = useCompany();
+  const { user, setUser, admin, setAdmin, venue, setVenue } = useUser();
 
   const [hamburgerMenuClicked, setHamburgerMenuClicked] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -87,7 +87,6 @@ export default function Navbar({ menuItems }) {
     }
   }, []);
 
-
   useEffect(() => {
     if (!user) {
       findUser().then((user) => {
@@ -129,15 +128,13 @@ export default function Navbar({ menuItems }) {
         // } else {
         //   alert(response);
         // }
-        localStorage.removeItem("user");
         setUser(null);
-        if (response.includes("Logout successfully")) {
+        if (response.success) {
           navigate("/");
         }
       });
     }, 3000);
   };
-
 
   return (
     <>
@@ -198,10 +195,10 @@ export default function Navbar({ menuItems }) {
                       {user?.username
                         ? user.username.split(" ")[0]
                         : venue?.name
-                          ? venue.name.split(" ")[0]
-                          : admin?.username
-                            ? admin.username.split(" ")[0]
-                            : null}
+                        ? venue.name.split(" ")[0]
+                        : admin?.username
+                        ? admin.username.split(" ")[0]
+                        : null}
                     </span>
 
                     {dropDownOpen ? (
@@ -255,8 +252,9 @@ export default function Navbar({ menuItems }) {
         {/* Hamburger Menu */}
         {(hamburgerMenuClicked || isClosing) && (
           <div
-            className={`z-50 md:hidden flex-col flex justify-end mt-4 mr-2 text-white w-40 p-4 space-y-8 items-center h-auto ${isClosing ? "animate-slideOut" : "animate-slideIn"
-              } fixed top-14 right-5 bg-slate-300 bg-opacity-[0.3] rounded-lg`}
+            className={`z-50 md:hidden flex-col flex justify-end mt-4 mr-2 text-white w-40 p-4 space-y-8 items-center h-auto ${
+              isClosing ? "animate-slideOut" : "animate-slideIn"
+            } fixed top-14 right-5 bg-slate-300 bg-opacity-[0.3] rounded-lg`}
             style={{ backgroundColor: "rgba(0, 0, 255, 0.6)" }}
           >
             {menuItems.map((item, index) => (
@@ -290,8 +288,9 @@ export default function Navbar({ menuItems }) {
         {/* User Dropdown */}
         {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
           <div
-            className={`border-2 z-50 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
-              }`}
+            className={`border-2 z-50 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${
+              isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
+            }`}
             style={{ backgroundColor: "rgba(0, 0, 255, 0.6)" }}
           >
             {location.pathname !== "/venueuser" &&
@@ -311,7 +310,7 @@ export default function Navbar({ menuItems }) {
               Log Out
             </div>
           </div>
-        )} 
+        )}
       </div>
       {loading && (
         <>

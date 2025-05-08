@@ -121,10 +121,10 @@ module.exports.logoutUser = async (req, res) => {
       sameSite: "Lax",
       path: "/",
     });
-    res.send("Logout successfully");
+    return successResponse_ok(res, "Logout successfully", null);
   } catch (err) {
     console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res);
   }
 };
 
@@ -136,10 +136,10 @@ module.exports.getUser = async (req, res) => {
     await user.populate({
       path: "createdEvents appliedEvents",
     });
-    res.send(user);
+    return successResponse_ok(res, "User fetched", user);
   } catch (err) {
     console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res);
   }
 };
 

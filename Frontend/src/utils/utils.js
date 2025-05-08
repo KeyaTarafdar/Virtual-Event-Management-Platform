@@ -17,13 +17,11 @@ export const fetchCompanyDetails = async () => {
 // Logout
 export const logoutUser = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/commonroute/logout", {
+    let { data } = await axios.get("http://localhost:8000/commonroute/logout", {
       withCredentials: true,
     });
     localStorage.removeItem("user");
-    localStorage.removeItem("admin");
-    localStorage.removeItem("venue");
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -125,13 +123,14 @@ export const changePasswordVenue = async (venueId, password) => {
 // Find user
 export const findUser = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/users/getuser", {
+    let { data } = await axios.get("http://localhost:8000/users/getuser", {
       withCredentials: true,
     });
-    if (response.data) {
-      localStorage.setItem("user", JSON.stringify(response.data));
-      return response.data;
+    if (data.success) {
+      localStorage.setItem("user", JSON.stringify(data.data));
+      return data.data;
     } else {
+      alert(data.message);
       return null;
     }
   } catch (err) {
