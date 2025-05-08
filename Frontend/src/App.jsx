@@ -1,14 +1,33 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AdminPage, CompanyPage, Home, Signup, Login, Forgetpassword, Resetpassword, VirtualEvent, InPersonEvent, HybridEvent, CreateForm, Registrationform, EventPage, Venue, VenueRegisteringPage, VenueUserPage, Venue_Details } from './Pages'
-import {Event_card,CustomCalendar,Venue_card } from './Components'
+import {
+  AdminPage,
+  CompanyPage,
+  Home,
+  Signup,
+  Login,
+  Forgetpassword,
+  Resetpassword,
+  VirtualEvent,
+  InPersonEvent,
+  HybridEvent,
+  CreateForm,
+  Registrationform,
+  EventPage,
+  Venue,
+  VenueRegisteringPage,
+  VenueUserPage,
+  Venue_Details,
+} from "./Pages";
+import { Event_card, CustomCalendar, Venue_card } from "./Components";
+import ScrollToTop from "./Components/ScrollToTop";
 
 function App() {
   return (
     <>
       <div className="m-0 p-0 mx-auto">
-        <Router>
-        <ScrollToTop />
+        <Routes>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
@@ -38,7 +57,7 @@ function App() {
             <Route path="/venuedetails" element={<Venue_Details />} />
             <Route path="/adminpanel" element={<AdminPage />} />
           </Routes>
-        </Router>
+        </Routes>
       </div>
     </>
   );
