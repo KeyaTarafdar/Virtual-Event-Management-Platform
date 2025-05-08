@@ -100,7 +100,10 @@ module.exports.loginUser = async (req, res) => {
             }
           });
         } else {
-          return errorResponse_notFound(res, "Email or Password is wrong");
+          return res.send({
+            success: false,
+            message: "Email or Password is wrong",
+          });
         }
       } else {
         return res.send({ success: false, message: "Something is missing" });
@@ -152,7 +155,7 @@ module.exports.updatePasswordRequest = async (req, res) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -170,11 +173,11 @@ module.exports.updatePassword = async (req, res) => {
     );
 
     if (user) {
-      res.send("Password Updated Successfully");
+      return successResponse_ok(res, "Password Updated Successfully", null);
     }
   } catch (err) {
     console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 

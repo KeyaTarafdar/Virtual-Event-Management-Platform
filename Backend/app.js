@@ -6,6 +6,10 @@ const userRouter = require("./routes/userRouter");
 const venueRouter = require("./routes/venueRouter");
 const commonRouter = require("./routes/commonRouter");
 const companyModel = require("./models/companyModel");
+const {
+  successResponse_ok,
+  errorResponse_catchError,
+} = require("./responseObject");
 require("dotenv").config();
 require("./config/mongoose-connection");
 
@@ -52,9 +56,9 @@ app.post("/createcompany", async (req, res) => {
 app.get("/fetchcompanydetails", async (req, res) => {
   try {
     let company = await companyModel.find();
-    res.status(200).send(company[0]);
+    return successResponse_ok(res, "Company fetched", company[0]);
   } catch (err) {
-    res.status(500).send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 });
 

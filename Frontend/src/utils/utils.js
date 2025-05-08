@@ -6,9 +6,13 @@ import axios from "axios";
 // Fetch Company Details
 export const fetchCompanyDetails = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/fetchcompanydetails");
-    localStorage.setItem("company", JSON.stringify(response.data));
-    return response;
+    let { data } = await axios.get("http://localhost:8000/fetchcompanydetails");
+    if (data.success) {
+      localStorage.setItem("company", JSON.stringify(data.data));
+      return data.data;
+    } else {
+      return {};
+    }
   } catch (err) {
     console.log(err.message);
   }
@@ -20,7 +24,13 @@ export const logoutUser = async () => {
     let { data } = await axios.get("http://localhost:8000/commonroute/logout", {
       withCredentials: true,
     });
-    localStorage.removeItem("user");
+    if (data.success) {
+      if (data.message.includes("User")) localStorage.removeItem("user");
+      else if (data.message.includes("Admin")) localStorage.removeItem("admin");
+      else if (data.message.includes("Venue")) localStorage.removeItem("venue");
+    } else {
+      alert(data.message);
+    }
     return data;
   } catch (err) {
     console.log(err.message);
@@ -59,6 +69,7 @@ export const loginUser = async (email, password) => {
       { email, password },
       { withCredentials: true }
     );
+    console.log("data", data);
     return data;
   } catch (err) {
     console.log(err.message);
@@ -130,7 +141,6 @@ export const findUser = async () => {
       localStorage.setItem("user", JSON.stringify(data.data));
       return data.data;
     } else {
-      alert(data.message);
       return null;
     }
   } catch (err) {
@@ -288,12 +298,16 @@ export const loginVenue = async (email, password) => {
 // Find Venue
 export const findVenue = async () => {
   try {
-    let response = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/venue/fetchvenueuser",
       { withCredentials: true }
     );
-    localStorage.setItem("venue", JSON.stringify(response.data));
-    return response.data;
+    if (data.success) {
+      localStorage.setItem("venue", JSON.stringify(response.data));
+      return data.data;
+    } else {
+      return null;
+    }
   } catch (err) {
     console.log(err.message);
   }
@@ -445,11 +459,15 @@ export const loginAdmin = async (email, password) => {
 // Find Admin
 export const findAdmin = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/admins/fetchadmin", {
+    let { data } = await axios.get("http://localhost:8000/admins/fetchadmin", {
       withCredentials: true,
     });
-    localStorage.setItem("admin", JSON.stringify(response.data));
-    return response.data;
+    if (data.success) {
+      localStorage.setItem("admin", JSON.stringify(response.data));
+      return data.data;
+    } else {
+      return null;
+    }
   } catch (err) {
     console.log(err.message);
   }

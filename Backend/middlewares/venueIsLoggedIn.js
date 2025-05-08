@@ -4,7 +4,7 @@ const venueModel = require("../models/venueModel");
 module.exports = async (req, res, next) => {
   try {
     let token = req.cookies.token;
-    
+
     if (token) {
       let decode = jwt.verify(token, process.env.JWT_KEY);
       let venue = await venueModel
@@ -13,12 +13,14 @@ module.exports = async (req, res, next) => {
       if (venue) {
         req.venue = venue;
         next();
+      } else {
+        return errorResponse_notFound("Venue account Not found");
       }
-    }else {
-      res.send("You need to login first");
+    } else {
+      res.send({ success: false, message: "You need to login first" });
     }
   } catch (err) {
     console.log(err.message);
-    res.send("Something went wrong");
+    return errorResponse_catchError(res, err.message);
   }
 };

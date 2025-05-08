@@ -13,12 +13,14 @@ module.exports = async (req, res, next) => {
       if (admin) {
         req.admin = admin;
         next();
+      } else {
+        return errorResponse_notFound("Admin account Not found");
       }
     } else {
-      res.send("You need to login first");
+      res.send({ success: false, message: "You need to login first" });
     }
   } catch (err) {
     console.log(err.message);
-    res.send("Something went wrong");
+    return errorResponse_catchError(res, err.message);
   }
 };

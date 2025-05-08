@@ -65,7 +65,7 @@ export default function Home() {
         if (response.status === 200) {
           setCompany(response.data);
         } else {
-          alert(response.data);
+          // alert(response.data);
         }
       });
     }

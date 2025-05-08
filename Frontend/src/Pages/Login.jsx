@@ -96,6 +96,7 @@ const Login = () => {
           !venueResponse.success
         ) {
           alert("Failed to login");
+          setLoading(false);
           return;
         }
         if (
@@ -108,11 +109,12 @@ const Login = () => {
         ) {
           window.location.reload(true);
           alert("Some error has occured! Please try again");
+          setLoading(false);
           return;
         }
-        setLoading(false);
       } catch (err) {
         console.error("Error during API calls:", err.message);
+        setLoading(false);
       }
     }
   };

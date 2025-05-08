@@ -82,7 +82,8 @@ export default function Navbar({ menuItems }) {
   useEffect(() => {
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        setCompany(response.data);
+        console.log("response", response);
+        setCompany(response);
       });
     }
   }, []);
@@ -115,6 +116,7 @@ export default function Navbar({ menuItems }) {
     setLoading(true);
     setTimeout(() => {
       logoutUser().then((response) => {
+        console.log("response", response);
         setLoading(false);
         // if (response === "User Logout successfully") {
         //   if (location.pathname === "/") window.location.reload();
@@ -128,8 +130,8 @@ export default function Navbar({ menuItems }) {
         // } else {
         //   alert(response);
         // }
-        setUser(null);
         if (response.success) {
+          setUser(null);
           navigate("/");
         }
       });
