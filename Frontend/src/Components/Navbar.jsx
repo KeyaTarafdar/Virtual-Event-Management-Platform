@@ -116,7 +116,6 @@ export default function Navbar({ menuItems }) {
     setLoading(true);
     setTimeout(() => {
       logoutUser().then((response) => {
-        console.log("response", response);
         setLoading(false);
         // if (response === "User Logout successfully") {
         //   if (location.pathname === "/") window.location.reload();

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const venueModel = require("../models/venueModel");
+const { errorResponse_catchError } = require("../responseObject");
 
 module.exports = async (req, res, next) => {
   try {
