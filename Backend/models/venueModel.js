@@ -58,7 +58,7 @@ const venueSchema = new mongoose.Schema({
   bookedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "event" }],
   bookingRequests: [
     {
-      id: { type: mongoose.Schema.Types.ObjectId, ref: "Event" }, 
+      id: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
       timeslot: { type: String },
     },
   ],
@@ -70,6 +70,8 @@ const venueSchema = new mongoose.Schema({
   bookingShifts: {
     type: [String],
   },
+
+  bookingDetails: [{ date: String, timeSlot: String }],
 });
 
 module.exports = mongoose.model("venue", venueSchema);

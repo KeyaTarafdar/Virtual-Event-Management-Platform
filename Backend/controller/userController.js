@@ -66,6 +66,7 @@ module.exports.loginUser = async (req, res) => {
       res.send("You are already logged in.");
     } else {
       let { email, password } = req.body;
+      console.log(email, password);
 
       if (email && password) {
         let user = await userModel.findOne({ email });
@@ -290,7 +291,7 @@ module.exports.createEvent = async (req, res) => {
     ];
 
     for (const venue of venueUpdates) {
-      await venueModel.updateOne(
+      await venueModel.findOneAndUpdate(
         { _id: venue.id },
         {
           $push: {
@@ -377,8 +378,6 @@ module.exports.fetchLastCreatedEvent = async (req, res) => {
 };
 
 // Event Registration
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
 module.exports.eventRegistration = async (req, res) => {
   try {
     const { eventId } = req.body;
@@ -431,6 +430,7 @@ module.exports.eventRegistration = async (req, res) => {
         `,
       };
 
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
       await sgMail.send(msg);
 
       await userModel.findOneAndUpdate(
@@ -574,7 +574,7 @@ exports.createRazorpayOrder = async (req, res) => {
     const { amount, currency, receipt, notes } = req.body;
 
     const options = {
-      amount: amount * 100, 
+      amount: amount * 100,
       currency,
       receipt,
       notes,
@@ -640,5 +640,17 @@ exports.verifyRazorpayPayment = async (req, res) => {
       success: false,
       message: "Invalid signature, payment verification failed",
     });
+  }
+};
+
+exports.fetchAllVenueBasedOnCity = async (req, res) => {
+  try {
+    const { city } = req.body;
+    const venues = await venueModel.find({
+      city: { $regex: new RegExp(`^${city}$`, "i") }, 
+    });
+    res.send(venues);
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };

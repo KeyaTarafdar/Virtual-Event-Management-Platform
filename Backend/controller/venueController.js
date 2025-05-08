@@ -6,6 +6,8 @@ const cloudinary = require("../utils/cloudinary");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const axios = require("axios");
+const eventModel = require("../models/eventModel");
+const { formateDate } = require("../utils/helper");
 
 // Register Venue
 module.exports.signUp = async (req, res) => {
@@ -19,7 +21,7 @@ module.exports.signUp = async (req, res) => {
       fullAddress,
       maxCapacity,
       canOrganizeMultidayEvent,
-    } = req.body.formData;
+    } = req.body;
 
     if (
       venueName &&
@@ -273,7 +275,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        let updatedVenue = { ...venue, email: newHallEmail };  
+        let updatedVenue = { ...venue, email: newHallEmail };
         let token = generateToken(updatedVenue);
 
         res.cookie("token", token, {
@@ -289,7 +291,7 @@ module.exports.updateHallEmail = async (req, res) => {
         res.send(err.message);
       });
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     res.send(err.message);
   }
 };
@@ -355,5 +357,60 @@ module.exports.updateHallMultiday = async (req, res) => {
     res.send("Hall Multiday Fecility updated");
   } catch (err) {
     res.send(err.message);
+  }
+};
+
+// Update Hall timing
+module.exports.updateHallTime = async (req, res) => {
+  try {
+    const {
+      time_1stHalf,
+      bookingPrice_1stHalf,
+      time_2ndHalf,
+      bookingPrice_2ndHalf,
+      time_fullDay,
+      bookingPrice_fullDay,
+    } = req.body;
+    const { _id } = req.venue;
+    const venue = await venueModel.findOneAndUpdate(
+      { _id },
+      {
+        $set: {
+          time_1stHalf,
+          bookingPrice_1stHalf,
+          time_2ndHalf,
+          bookingPrice_2ndHalf,
+          time_fullDay,
+          bookingPrice_fullDay,
+        },
+      },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .send({ success: true, message: "Venue details updated", data: venue });
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Accept event request
+module.exports.acceptEvent = async (req, res) => {
+  try {
+    const { eventId, timeslot } = req.body;
+    const event = await eventModel.findOne({ _id: eventId });
+    let venue = req.venue;
+    if (event) {
+      event.venues = [{ id: venue.id, timeslot }];
+      event.isVenueConfirmed = true;
+      await event.save();
+    }
+
+    await venueModel.findOneAndUpdate({_id:venue._id},{})
+
+    const { _id } = req.vneue;
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
