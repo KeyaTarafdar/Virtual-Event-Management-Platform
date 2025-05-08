@@ -112,46 +112,6 @@ export default function Navbar({ menuItems }) {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const stored = localStorage.getItem("user");
-  //   if (stored) {
-  //     try {
-  //       const u = JSON.parse(stored);
-  //       if (u.username) setUser(u.username.split(" ")[0]);
-  //     } catch (e) {
-  //       console.log("error :", e);
-  //       setUser(null);
-  //     }
-  //   } else {
-  //     setUser(null);
-  //   }
-  // }, [location]);
-
-  // useEffect(() => {
-  //   const fetchData = (key, setter) => {
-  //     const stored = localStorage.getItem(key);
-  //     if (stored) {
-  //       try {
-  //         const parsed = JSON.parse(stored);
-  //         if (parsed.username) {
-  //           setter(parsed.username.split(" ")[0]);
-  //         } else {
-  //           setter(null);
-  //         }
-  //       } catch (e) {
-  //         console.log(`Error parsing ${key}:`, e);
-  //         setter(null);
-  //       }
-  //     } else {
-  //       setter(null);
-  //     }
-  //   };
-
-  //   fetchData("user", setUser);
-  //   fetchData("venue", setVenue);
-  //   fetchData("admin", setAdmin);
-  // }, [location]);
-
   const handelLogout = () => {
     setLoading(true);
     setTimeout(() => {
@@ -328,7 +288,7 @@ export default function Navbar({ menuItems }) {
         )}
 
         {/* User Dropdown */}
-        {/* {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
+        {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
           <div
             className={`border-2 z-50 fixed mt-4 sm:ml-8 top-14 left-[49%] 2xl:left-[87%] xl:left-[83%] lg:left-[75%] md:left-[71%] sm:left-[66%] flex-col justify-end flex text-white w-40 items-center mr-[5%] sm:mr-[5%] md:mr-[3%] lg:mr-[5%] bg-slate-300 bg-opacity-[0.3] rounded-lg ${isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
               }`}
@@ -351,33 +311,7 @@ export default function Navbar({ menuItems }) {
               Log Out
             </div>
           </div>
-        )} */}
-
-        {/* User Dropdown */}
-        {(dropDownOpen || isClosingDropdown) && (user || venue || admin) && (
-          <div
-            className={`absolute top-16 right-4 sm:right-8 md:right-12 z-50 w-40 flex flex-col items-center rounded-lg shadow-lg text-white bg-blue-600 bg-opacity-80 backdrop-blur-md transition-all duration-300 ease-in-out ${isClosingDropdown ? "animate-slideUp" : "animate-slideBelow"
-              }`}
-          >
-            {location.pathname !== "/venueuser" &&
-              location.pathname !== "/adminpanel" && (
-                <div
-                  onClick={handleCompanyPageClick}
-                  className="w-full text-center px-4 py-2 hover:cursor-pointer hover:bg-blue-700 hover:font-bold transition"
-                >
-                  Profile
-                </div>
-              )}
-
-            <div
-              onClick={handelLogout}
-              className="w-full text-center px-4 py-2 hover:cursor-pointer hover:bg-red-500 hover:font-bold transition"
-            >
-              Log Out
-            </div>
-          </div>
-        )}
-
+        )} 
       </div>
       {loading && (
         <>

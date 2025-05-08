@@ -119,7 +119,7 @@ export default function Home() {
                   fontFamily: '"quick"',
                 }}
               >
-                {company.companyName}{" "}
+                {company?.companyName}{" "}
               </strong>
             </i>
             , you can effortlessly plan, execute, and evaluate your events
