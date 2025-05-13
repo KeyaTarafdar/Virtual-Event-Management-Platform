@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const adminModel = require("../models/adminModel");
-const { errorResponse_catchError } = require("../responseObject");
+const { errorResponse_catchError, errorResponse_notFound } = require("../responseObject");
 
 module.exports = async (req, res, next) => {
   try {

@@ -102,7 +102,7 @@ module.exports.uploadVenueProfilePicture = async (req, res) => {
       crop: "scale",
     });
 
-    await venueModel.updateOne(
+    const venue = await venueModel.updateOne(
       { email: req.venue.email },
       {
         $set: {
@@ -117,10 +117,9 @@ module.exports.uploadVenueProfilePicture = async (req, res) => {
     if (oldImage) {
       await cloudinary.uploader.destroy(oldImage);
     }
-    res.send("File uploaded successfully");
+    return successResponse_ok(res, "File uploaded successfully", venue);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
