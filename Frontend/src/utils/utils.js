@@ -151,13 +151,13 @@ export const findUser = async () => {
 // Create Event
 export const createEvent = async (formData) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/users/createevent",
       { formData },
       { withCredentials: true }
     );
 
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }

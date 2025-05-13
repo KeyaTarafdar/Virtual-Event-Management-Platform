@@ -7,21 +7,19 @@ const { generateToken } = require("../utils/generateToken");
 const cloudinary = require("../utils/cloudinary");
 require("dotenv").config();
 const NodeCache = require("node-cache");
-const nodemailer = require("nodemailer");
 const sgMail = require("@sendgrid/mail");
 const Razorpay = require("razorpay");
-const crypto = require("crypto");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
 const {
   successResponse_ok,
-  successResponse_ok_withToken,
   successResponse_created,
   errorResponse_alreadyExists,
   errorResponse_catchError,
+  errorResponse_notFound,
+  errorResponse_badRequest,
 } = require("../responseObject/index");
-const { errorResponse_notFound } = require("../responseObject/errorResponse");
 
 const nodeCache = new NodeCache();
 
@@ -59,7 +57,7 @@ module.exports.signUp = async (req, res) => {
 
       return successResponse_created(res, "User Created Successfully", newUser);
     } else {
-      res.send("All fields are required and you must agree to the terms.");
+      return errorResponse_badRequest(res);
     }
   } catch (err) {
     return errorResponse_catchError(res, err.message);
@@ -106,11 +104,10 @@ module.exports.loginUser = async (req, res) => {
           });
         }
       } else {
-        return res.send({ success: false, message: "Something is missing" });
+        return errorResponse_badRequest(res);
       }
     }
   } catch (err) {
-    console.log(err.message);
     return errorResponse_catchError(res, err.message);
   }
 };
@@ -126,8 +123,7 @@ module.exports.logoutUser = async (req, res) => {
     });
     return successResponse_ok(res, "Logout successfully", null);
   } catch (err) {
-    console.log(err.message);
-    return errorResponse_catchError(res);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -141,8 +137,7 @@ module.exports.getUser = async (req, res) => {
     });
     return successResponse_ok(res, "User fetched", user);
   } catch (err) {
-    console.log(err.message);
-    return errorResponse_catchError(res);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -154,7 +149,6 @@ module.exports.updatePasswordRequest = async (req, res) => {
       res.send(true);
     }
   } catch (err) {
-    console.log(err.message);
     return errorResponse_catchError(res, err.message);
   }
 };
@@ -176,7 +170,6 @@ module.exports.updatePassword = async (req, res) => {
       return successResponse_ok(res, "Password Updated Successfully", null);
     }
   } catch (err) {
-    console.log(err.message);
     return errorResponse_catchError(res, err.message);
   }
 };
@@ -208,10 +201,9 @@ module.exports.uploadProfilePicture = async (req, res) => {
     if (oldImage) {
       await cloudinary.uploader.destroy(req.user.image.public_id);
     }
-    res.send("File uploaded successfully");
+    return successResponse_ok(res, "File uploaded successfully", null);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -314,10 +306,9 @@ module.exports.createEvent = async (req, res) => {
       );
     }
 
-    return res.send("Event created successfully!");
+    return successResponse_created(res, "Event created successfully!", event);
   } catch (error) {
-    console.log(error.message);
-    return res.send(error.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -327,9 +318,16 @@ module.exports.fetchAllVirtualEvents = async (req, res) => {
     let virtualEvents = await eventModel
       .find({ eventType: "virtual" })
       .populate({ path: "ownerId" });
-    res.send(virtualEvents);
+    let upcomingEvents = virtualEvents.filter(
+      (event) => new Date(event.date) >= Date.now()
+    );
+    return successResponse_ok(
+      res,
+      "All virtual events fetched",
+      upcomingEvents
+    );
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -339,9 +337,16 @@ module.exports.fetchAllIn_PersonEvents = async (req, res) => {
     let in_personEvents = await eventModel
       .find({ eventType: "in_person" })
       .populate({ path: "ownerId" });
-    res.send(in_personEvents);
+    let upcomingEvents = in_personEvents.filter(
+      (event) => new Date(event.date) >= Date.now()
+    );
+    return successResponse_ok(
+      res,
+      "All In-person events fetched",
+      upcomingEvents
+    );
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -351,9 +356,12 @@ module.exports.fetchAllHybridEvents = async (req, res) => {
     let hybridEvents = await eventModel
       .find({ eventType: "hybrid" })
       .populate({ path: "ownerId" });
-    res.send(hybridEvents);
+    let upcomingEvents = hybridEvents.filter(
+      (event) => new Date(event.date) >= Date.now()
+    );
+    return successResponse_ok(res, "All Hybrid events fetched", upcomingEvents);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -366,9 +374,9 @@ module.exports.fetchSingleEvent = async (req, res) => {
       .findOne({ _id: eventId })
       .populate({ path: "ownerId" });
 
-    res.send(event);
+    return successResponse_ok(res, "Event fetched", event);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -376,14 +384,20 @@ module.exports.fetchSingleEvent = async (req, res) => {
 module.exports.fetchLastCreatedEvent = async (req, res) => {
   try {
     const lastEvent = await eventModel.find();
-    if (lastEvent.length !== 0) {
-      res.send(lastEvent[lastEvent.length - 1]);
+    if (
+      lastEvent.length !== 0 &&
+      new Date(lastEvent[lastEvent.length - 1].date) >= Date.now()
+    ) {
+      return successResponse_ok(
+        res,
+        "Last event fetched",
+        lastEvent[lastEvent.length - 1]
+      );
     } else {
-      res.send("No Event Created!");
+      return errorResponse_notFound(res, "No Event Created!");
     }
   } catch (err) {
-    console.log(err.message);
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -391,12 +405,15 @@ module.exports.fetchLastCreatedEvent = async (req, res) => {
 module.exports.eventRegistration = async (req, res) => {
   try {
     const { eventId } = req.body;
-    const user = req.user;
+    let user = req.user;
 
     const event = await eventModel.findOne({ _id: eventId });
 
     if (event.registeredUser && event.registeredUser.includes(user._id)) {
-      res.send("User already registered in the event");
+      return errorResponse_alreadyExists(
+        res,
+        "User already registered in the event"
+      );
     } else {
       const formattedDate = new Date(event.date).toLocaleDateString("en-GB");
 
@@ -443,9 +460,10 @@ module.exports.eventRegistration = async (req, res) => {
       sgMail.setApiKey(process.env.SENDGRID_API_KEY);
       await sgMail.send(msg);
 
-      await userModel.findOneAndUpdate(
+      user = await userModel.findOneAndUpdate(
         { email: user.email },
-        { $push: { appliedEvents: eventId } }
+        { $push: { appliedEvents: eventId } },
+        { new: true }
       );
 
       await eventModel.findOneAndUpdate(
@@ -458,10 +476,10 @@ module.exports.eventRegistration = async (req, res) => {
         }
       );
 
-      res.send("Registration successfull");
+      return successResponse_ok(res, "Registration successfull", user);
     }
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -478,7 +496,7 @@ module.exports.checkUserIsRegisteredInEventOrNot = async (req, res) => {
       res.send(false);
     }
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -486,10 +504,9 @@ module.exports.checkUserIsRegisteredInEventOrNot = async (req, res) => {
 module.exports.fetchAllVenue = async (req, res) => {
   try {
     const venues = await venueModel.find();
-    res.send(venues);
+    return successResponse_ok(res, "All venues fetched", venues);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -499,16 +516,15 @@ module.exports.commentOnAnEvent = async (req, res) => {
     let user = req.user;
     let { eventId, comment } = req.body;
 
-    await commentModel.create({
+    comment = await commentModel.create({
       userId: user._id,
       eventId,
       commentBody: comment,
     });
 
-    res.send("Comment added");
+    return successResponse_ok(res, "Comment added", comment);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -524,17 +540,19 @@ module.exports.replyAComment = async (req, res) => {
       commentBody: reply,
     });
 
-    await commentModel.findOneAndUpdate(
+    const comment = await commentModel.findOneAndUpdate(
       {
         _id: commentId,
       },
-      { $push: { reply: replyComment._id } }
+      { $push: { reply: replyComment._id } },
+      { new: true }
     );
 
-    res.send("Replied to a comment");
+    await comment.populate({ path: "reply" });
+
+    return successResponse_ok(res, "Replied to a comment", comment);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -544,17 +562,17 @@ module.exports.likeComment = async (req, res) => {
     let user = req.user;
     let { commentId } = req.body;
 
-    await commentModel.findOneAndUpdate(
+    const comment = await commentModel.findOneAndUpdate(
       {
         _id: commentId,
       },
-      { $push: { likeCount: user._id } }
+      { $push: { likeCount: user._id } },
+      { new: true }
     );
 
-    res.send("Liked");
+    return successResponse_ok(res, "Liked", comment);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -564,17 +582,17 @@ module.exports.removeLikeFromComment = async (req, res) => {
     let user = req.user;
     let { commentId } = req.body;
 
-    await commentModel.findOneAndUpdate(
+    const comment = await commentModel.findOneAndUpdate(
       {
         _id: commentId,
       },
-      { $pull: { likeCount: user._id } }
+      { $pull: { likeCount: user._id } },
+      { new: true }
     );
 
-    res.send("Like Removed");
+    return successResponse_ok(res, "Like Removed", comment);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -659,7 +677,7 @@ exports.fetchAllVenueBasedOnCity = async (req, res) => {
     const venues = await venueModel.find({
       city: { $regex: new RegExp(`^${city}$`, "i") },
     });
-    res.send(venues);
+    return successResponse_ok(res, "Venue fetched", venues);
   } catch (err) {
     res.status(500).send(err.message);
   }

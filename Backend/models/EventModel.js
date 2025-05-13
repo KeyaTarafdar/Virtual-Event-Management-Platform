@@ -9,6 +9,7 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     validate: {
       validator: function (v) {
+        if (!v) return ture;
         return v > this.date;
       },
       message: "End date must be later than start date.",
@@ -42,7 +43,6 @@ const eventSchema = new mongoose.Schema({
 
   finalVenueDeatails: { type: mongoose.Schema.Types.ObjectId, ref: "venue" },
   isVenueConfirmed: { type: Boolean, default: false },
-
 
   tillNowTotalRegistration: { type: Number, default: 0 },
   lastDateOfRegistration: Date,
