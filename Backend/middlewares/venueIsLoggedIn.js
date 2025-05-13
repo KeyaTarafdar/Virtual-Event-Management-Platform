@@ -21,7 +21,6 @@ module.exports = async (req, res, next) => {
       res.send({ success: false, message: "You need to login first" });
     }
   } catch (err) {
-    console.log(err.message);
     return errorResponse_catchError(res, err.message);
   }
 };

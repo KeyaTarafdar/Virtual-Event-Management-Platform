@@ -671,6 +671,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
   }
 };
 
+// FETCH ALL VENUES BASED ON VENUE
 exports.fetchAllVenueBasedOnCity = async (req, res) => {
   try {
     const { city } = req.body;

@@ -8,6 +8,11 @@ require("dotenv").config();
 const axios = require("axios");
 const eventModel = require("../models/eventModel");
 const { formateDate } = require("../utils/helper");
+const {
+  errorResponse_badRequest,
+  errorResponse_catchError,
+  successResponse_ok,
+} = require("../responseObject");
 
 // Register Venue
 module.exports.signUp = async (req, res) => {
@@ -67,15 +72,19 @@ module.exports.signUp = async (req, res) => {
 
       await adminModel.updateMany({}, { $push: { appliedVenues: venue._id } });
 
-      res.send("You have successfully applied for Registering your Venue");
+      return successResponse_ok(
+        res,
+        "You have successfully applied for Registering your Venue",
+        venue
+      );
       // } else {
       // res.send("Email Address doesn't exists!! Please enter a valid Email Address.")
       // }
     } else {
-      res.send("All fields are required.");
+      return errorResponse_badRequest(res);
     }
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -220,10 +229,9 @@ module.exports.fetchVenueUser = async (req, res) => {
       { path: "bookedEvents" },
     ]);
 
-    res.send(venue);
+    return successResponse_ok(res, "Venue fetched", venue);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -407,7 +415,7 @@ module.exports.acceptEvent = async (req, res) => {
       await event.save();
     }
 
-    await venueModel.findOneAndUpdate({_id:venue._id},{})
+    await venueModel.findOneAndUpdate({ _id: venue._id }, {});
 
     const { _id } = req.vneue;
   } catch (err) {
