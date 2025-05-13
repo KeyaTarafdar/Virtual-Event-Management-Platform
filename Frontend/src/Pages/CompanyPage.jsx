@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import Navabar from "../Components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,6 +23,7 @@ import {
   uploadProfilePicture,
 } from "../utils/utils";
 import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 const headerMenuItems = [{ label: "Home", to: "/" }];
 
@@ -32,6 +34,7 @@ const CompanyPage = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedTab, setSelectedTab] = useState("created");
   const { company, setCompany } = useCompany()
+  const { user, setUser } = useUser()
 
   const handleCreateEventClick = () => {
     navigate("/createform");
@@ -57,12 +60,12 @@ const CompanyPage = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImage(reader.result);
+        // setImage(reader.result);
         resolve(reader.result);
       };
     });
   };
-  const [image, setImage] = useState();
+  // const [image, setImage] = useState();
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -78,10 +81,14 @@ const CompanyPage = () => {
       const imageData = await setFileToBase(file);
 
       uploadProfilePicture(imageData).then((response) => {
-        alert(response);
-        findUser().then((response) => {
-          setuserProfile(response);
-        });
+        if (response.success) {
+          localStorage.setItem("user", JSON.stringify(response.data))
+          setUser(response.data)
+        }
+        alert(response.message);
+        // findUser().then((response) => {
+        //   setuserProfile(response);
+        // });
       });
     } else {
       alert("Please Upload an Image");
@@ -106,6 +113,7 @@ const CompanyPage = () => {
   useEffect(() => {
     if (!company) {
       fetchCompanyDetails().then((response) => {
+        localStorage.setItem("company", JSON.stringify(response))
         setCompany(response);
       });
     }
@@ -142,19 +150,23 @@ const CompanyPage = () => {
     return isSlotConfirmed && currentDate > eventDateObj;
   };
 
-  const [userProfile, setuserProfile] = useState();
-  const [createdEvents, setcreatedEvents] = useState([]);
-  const [appliedEvents, setappliedEvents] = useState([]);
+  // const [userProfile, setuserProfile] = useState();
+  // const [createdEvents, setcreatedEvents] = useState([]);
+  // const [appliedEvents, setappliedEvents] = useState([]);
   const [events, setevents] = useState([]);
   const [eventsCopy, seteventsCopy] = useState([]);
 
   useEffect(() => {
-    findUser().then((response) => {
-      setuserProfile(response);
-      setcreatedEvents(response.createdEvents);
-      setappliedEvents(response.appliedEvents);
-      setevents(response.createdEvents);
-    });
+    if (!user) {
+      findUser().then((response) => {
+        localStorage.setItem("user", JSON.stringify(response))
+        setUser(response)
+        setevents(response?.createdEvents)
+      })
+    } else {
+      const user = JSON.parse(localStorage.getItem("user"))
+      setevents(user?.createdEvents)
+    }
   }, []);
 
   return (
@@ -183,9 +195,7 @@ const CompanyPage = () => {
         >
           <img
             src={
-              userProfile && userProfile.image
-                ? userProfile.image.url
-                : "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
+              user?.image?.url || "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
             }
             alt="User Profile"
             className="rounded-full w-24 bg-gray-900 text-sm h-24 mb-4 shadow-lg border-[.4rem] border-indigo-400 sm:w-32 sm:h-32"
@@ -202,7 +212,7 @@ const CompanyPage = () => {
           </label>
 
           <h2 className="text-md font-bold sm:text-lg">
-            {userProfile ? userProfile.username : null}
+            {user?.username}
           </h2>
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-12"></div>
 
@@ -210,21 +220,21 @@ const CompanyPage = () => {
             <div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faEnvelope} className="text-indigo-300" />
               <p className="text-xs sm:text-sm">
-                {userProfile ? userProfile.email : null}
+                {user?.email}
               </p>
             </div>
 
             <div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faPhone} className="text-indigo-300" />
               <p className="text-xs sm:text-sm">
-                {userProfile ? userProfile.contact : null}
+                {user?.contact}
               </p>
             </div>
           </div>
 
           <div className="mt-auto w-[100%] flex flex-col text-xs items-center">
             <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-10 mb-4"></div>
-            &copy;{company.companyName}2024.
+            &copy;{company?.companyName}2024.
           </div>
         </div>
 
@@ -258,8 +268,8 @@ const CompanyPage = () => {
             <div
               onClick={() => {
                 setSelectedTab("created");
-                setevents(createdEvents);
-                seteventsCopy(createdEvents);
+                setevents(user?.createdEvents);
+                seteventsCopy(user?.createdEvents);
               }}
               className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${selectedTab === "created"
                 ? "text-indigo-400"
@@ -272,8 +282,8 @@ const CompanyPage = () => {
             <div
               onClick={() => {
                 setSelectedTab("participated");
-                setevents(appliedEvents);
-                seteventsCopy(appliedEvents);
+                setevents(user?.appliedEvents);
+                seteventsCopy(user?.appliedEvents);
               }}
               className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${selectedTab === "participated"
                 ? "text-indigo-400"
