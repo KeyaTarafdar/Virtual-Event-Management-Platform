@@ -186,22 +186,25 @@ module.exports.uploadProfilePicture = async (req, res) => {
       crop: "scale",
     });
 
-    await userModel.updateOne(
-      { email: req.user.email },
-      {
-        $set: {
-          image: {
-            public_id: result.public_id,
-            url: result.secure_url,
+    const user = await userModel
+      .updateOne(
+        { email: req.user.email },
+        {
+          $set: {
+            image: {
+              public_id: result.public_id,
+              url: result.secure_url,
+            },
           },
         },
-      }
-    );
+        { new: true }
+      )
+      .populate({ path: "createdEvents appliedEvents pastEvents" });
 
     if (oldImage) {
       await cloudinary.uploader.destroy(req.user.image.public_id);
     }
-    return successResponse_ok(res, "File uploaded successfully", null);
+    return successResponse_ok(res, "File uploaded successfully", user);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
