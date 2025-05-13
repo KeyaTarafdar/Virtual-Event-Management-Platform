@@ -33,7 +33,7 @@ module.exports = async (req, res, next) => {
         req.admin = admin;
         next();
       } else {
-        return errorResponse_notFound("User Not found");
+        return errorResponse_notFound(res,"User Not found");
       }
     } else {
       res.send({ success: false, message: "You need to login first" });

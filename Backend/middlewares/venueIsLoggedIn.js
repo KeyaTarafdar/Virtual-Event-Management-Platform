@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
         req.venue = venue;
         next();
       } else {
-        return errorResponse_notFound("Venue account not found");
+        return errorResponse_notFound(res,"Venue account not found");
       }
     } else {
       res.send({ success: false, message: "You need to login first" });

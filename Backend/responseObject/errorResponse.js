@@ -10,10 +10,10 @@ module.exports.errorResponse_alreadyExists = (res, message) => {
   res.status(403).send({ success: false, message });
 };
 
-module.exports.errorResponse_catchError = (res, message) => {
-  res.status(500).send({ success: false, message });
-};
-
 module.exports.errorResponse_notFound = (res, message) => {
   res.status(404).send({ success: false, message });
+};
+
+module.exports.errorResponse_catchError = (res, message) => {
+  res.status(500).send({ success: false, message });
 };

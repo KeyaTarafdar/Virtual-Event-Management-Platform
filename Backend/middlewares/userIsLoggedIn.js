@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
         req.user = user;
         next();
       } else {
-        return errorResponse_notFound("User account Not found");
+        return errorResponse_notFound(res,"User account Not found");
       }
     } else {
       res.send({ success: false, message: "You need to login first" });
