@@ -207,11 +207,10 @@ module.exports.updatePasswordFirstTime = async (req, res) => {
     );
 
     if (venue) {
-      res.send("Password Updated Successfully");
+      return successResponse_ok(res, "Password Updated Successfully", null);
     }
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
