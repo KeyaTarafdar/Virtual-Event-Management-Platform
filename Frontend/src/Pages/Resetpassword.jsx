@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { changePassword, changePasswordVenue } from "../utils/utils";
 
-const Resetpassword = (email) => {
+// eslint-disable-next-line react/prop-types
+const Resetpassword = ({email}) => {
   const navigate = useNavigate();
   const { venueId } = useParams();
 
