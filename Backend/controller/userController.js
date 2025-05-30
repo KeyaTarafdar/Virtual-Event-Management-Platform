@@ -146,7 +146,7 @@ module.exports.updatePasswordRequest = async (req, res) => {
   try {
     let user = userModel.findOne({ email: req.body.email });
     if (user) {
-      res.send(true);
+      return successResponse_ok(res, "", true)
     }
   } catch (err) {
     return errorResponse_catchError(res, err.message);
@@ -274,9 +274,9 @@ module.exports.createEvent = async (req, res) => {
       scannerImage:
         scannerImage !== null
           ? {
-              public_id: scannerResult.public_id,
-              url: scannerResult.secure_url,
-            }
+            public_id: scannerResult.public_id,
+            url: scannerResult.secure_url,
+          }
           : null,
       posterImage: {
         public_id: posterResult.public_id,

@@ -69,7 +69,6 @@ export const loginUser = async (email, password) => {
       { email, password },
       { withCredentials: true }
     );
-    console.log("data", data);
     return data;
   } catch (err) {
     console.log(err.message);
@@ -78,15 +77,16 @@ export const loginUser = async (email, password) => {
 
 // Upload Profile Picture
 export const uploadProfilePicture = async (imageData) => {
+
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/users/uploadprofilepicture",
       { image: imageData },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -95,11 +95,11 @@ export const uploadProfilePicture = async (imageData) => {
 // Change Password Request
 export const changePasswordRequest = async (email) => {
   try {
-    let response = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/users/updatepasswordrequest",
       { email }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -153,7 +153,7 @@ export const createEvent = async (formData) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/users/createevent",
-      { formData },
+      { ...formData },
       { withCredentials: true }
     );
 
@@ -303,7 +303,7 @@ export const findVenue = async () => {
       { withCredentials: true }
     );
     if (data.success) {
-      localStorage.setItem("venue", JSON.stringify(response.data));
+      localStorage.setItem("venue", JSON.stringify(data));
       return data.data;
     } else {
       return null;
@@ -463,7 +463,7 @@ export const findAdmin = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("admin", JSON.stringify(response.data));
+      localStorage.setItem("admin", JSON.stringify(data));
       return data.data;
     } else {
       return null;

@@ -77,12 +77,9 @@ export default function Navbar({ menuItems }) {
     setHamburgerMenuClicked(false);
   };
 
-  // const [company, setCompany] = useState({});
-
   useEffect(() => {
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        console.log("response", response);
         setCompany(response);
       });
     }
