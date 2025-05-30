@@ -124,7 +124,7 @@ const CreateForm = () => {
       const result = await createEvent(formData);
       setTimeout(async () => {
         setLoading(false);
-        alert(result);
+        alert(result.message);
         if (
           formData.eventType === "virtual" &&
           result === "Event created successfully!"
