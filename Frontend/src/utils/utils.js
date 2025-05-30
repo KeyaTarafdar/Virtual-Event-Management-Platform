@@ -195,13 +195,13 @@ export const fetchVirtualEvents = async () => {
 // Fetch In-person Events
 export const fetchIn_PersonEvents = async () => {
   try {
-    let response = await axios.get(
+    let {data} = await axios.get(
       "http://localhost:8000/users/fetchallin_personvents",
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
