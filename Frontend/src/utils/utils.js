@@ -121,11 +121,11 @@ export const changePassword = async (email, password) => {
 // Change Password of Venue User
 export const changePasswordVenue = async (venueId, password) => {
   try {
-    let response = await axios.put(
+    let {data}= await axios.put(
       "http://localhost:8000/venue/updatepasswordfirsttime",
       { venueId, password }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
