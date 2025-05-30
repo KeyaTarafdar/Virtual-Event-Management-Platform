@@ -340,13 +340,13 @@ module.exports.fetchAllIn_PersonEvents = async (req, res) => {
     let in_personEvents = await eventModel
       .find({ eventType: "in_person" })
       .populate({ path: "ownerId" });
-    let upcomingEvents = in_personEvents.filter(
+    let events = in_personEvents.filter(
       (event) => new Date(event.date) >= Date.now()
     );
     return successResponse_ok(
       res,
       "All In-person events fetched",
-      upcomingEvents
+      events
     );
   } catch (err) {
     return errorResponse_catchError(res, err.message);
