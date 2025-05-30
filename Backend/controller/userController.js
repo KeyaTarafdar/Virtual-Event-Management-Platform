@@ -157,17 +157,14 @@ module.exports.updatePasswordRequest = async (req, res) => {
 module.exports.updatePassword = async (req, res) => {
   try {
     let { email, password } = req.body;
-    console.log("email", email);
-    console.log("password", password);
 
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    let user = userModel.findOneAndUpdate(
+    let user = await userModel.findOneAndUpdate(
       { email: email },
       { $set: { password: hashedPassword } }
     );
-    console.log("user", user);
 
     if (user) {
       return successResponse_ok(res, "Password Updated Successfully", null);
