@@ -162,7 +162,7 @@ module.exports.updatePassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     let user = userModel.updateOne(
-      { email: email.email },
+      { email },
       { $set: { password: hashedPassword } }
     );
 
