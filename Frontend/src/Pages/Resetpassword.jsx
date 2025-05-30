@@ -54,11 +54,11 @@ const Resetpassword = (email) => {
       try {
         if (venueId) {
           changePasswordVenue(venueId, formData.password).then((response) => {
-            alert(response);
+            alert(response.message);
           });
         } else {
           changePassword(email, formData.password).then((response) => {
-            alert(response);
+            alert(response.message);
           });
         }
         navigate("/login");

@@ -108,11 +108,11 @@ export const changePasswordRequest = async (email) => {
 // Change Password of User
 export const changePassword = async (email, password) => {
   try {
-    let response = await axios.put(
+    let {data}= await axios.put(
       "http://localhost:8000/users/updatepassword",
       { email, password }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }

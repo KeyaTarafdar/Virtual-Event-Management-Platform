@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
