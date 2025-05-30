@@ -161,8 +161,8 @@ module.exports.updatePassword = async (req, res) => {
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    let user = userModel.updateOne(
-      { email },
+    let user = userModel.findOneAndUpdate(
+      { email: email },
       { $set: { password: hashedPassword } }
     );
 
