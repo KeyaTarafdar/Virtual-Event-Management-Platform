@@ -180,7 +180,7 @@ export const fetchAllVenues = async () => {
 // Fetch Virtual Events
 export const fetchVirtualEvents = async () => {
   try {
-    let {data} = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/users/fetchallvirtualevents",
       {
         withCredentials: true,
@@ -195,7 +195,7 @@ export const fetchVirtualEvents = async () => {
 // Fetch In-person Events
 export const fetchIn_PersonEvents = async () => {
   try {
-    let {data} = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/users/fetchallin_personvents",
       {
         withCredentials: true,
@@ -210,13 +210,13 @@ export const fetchIn_PersonEvents = async () => {
 // Fetch Hybrid Events
 export const fetchHybridEvents = async () => {
   try {
-    let response = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/users/fetchallhyybridevents",
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
