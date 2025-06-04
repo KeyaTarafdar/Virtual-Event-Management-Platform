@@ -69,6 +69,7 @@ module.exports.loginAdmin = async (req, res) => {
                 sameSite: "Lax",
                 path: "/",
               });
+              await admin.populate({ path: "appliedVenues" });
               return successResponse_ok(res, "Admin login successfull", admin);
             } else {
               return res.send({ success: false, message: "Wrong Password" });
