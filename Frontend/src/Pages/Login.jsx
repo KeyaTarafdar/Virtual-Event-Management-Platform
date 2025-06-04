@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, loginVenue, loginAdmin } from "../utils/utils";
 import Loader from "../Components/loader";
+import { useUser } from "../context/userContext/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setAdmin, setUser } = useUser();
   //const {loginUser,loginVenue,loginAdmin}=useUser();
 
   const [formData, setFormData] = useState({
@@ -63,7 +65,6 @@ const Login = () => {
           loginUser(formData.email, formData.password),
           4000
         );
-        console.log('userResponse', userResponse)
         if (userResponse.success) {
           localStorage.setItem("user", userResponse.data);
           setLoading(false);
@@ -74,7 +75,7 @@ const Login = () => {
         const venueResponse = await withTimeout(
           loginVenue(formData.email, formData.password)
         );
-        console.log('venueResponse', venueResponse)
+        console.log("venueResponse", venueResponse);
         if (venueResponse.success) {
           localStorage.setItem("venue", userResponse.data);
           setLoading(false);
@@ -85,9 +86,10 @@ const Login = () => {
         const adminResponse = await withTimeout(
           loginAdmin(formData.email, formData.password)
         );
-        console.log('adminResponse', adminResponse)
+        console.log("adminResponse", adminResponse.data);
         if (adminResponse.success) {
-          localStorage.setItem("admin", userResponse.data);
+          localStorage.setItem("admin", JSON.stringify(adminResponse.data));
+          setAdmin(adminResponse.data);
           setLoading(false);
           navigate("/adminpanel");
           return;

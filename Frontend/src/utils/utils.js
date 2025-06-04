@@ -443,12 +443,12 @@ export const updateVenueMultidayEvent = async (newHallMultiday) => {
 // Admin Login
 export const loginAdmin = async (email, password) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/admins/login",
       { email, password },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -461,7 +461,7 @@ export const findAdmin = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("admin", JSON.stringify(data));
+      localStorage.setItem("admin", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -474,14 +474,14 @@ export const findAdmin = async () => {
 // Upload Profile Picture
 export const uploadProfilePictureAdmin = async (imageData) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/admins/uploadprofilepicture",
       { image: imageData },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -490,12 +490,12 @@ export const uploadProfilePictureAdmin = async (imageData) => {
 // Accept a Venue
 export const acceptVenue = async (venueId) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/admins/acceptvenue",
       { venueId },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -504,12 +504,12 @@ export const acceptVenue = async (venueId) => {
 // Reject a Venue
 export const rejectVenue = async (venueId, reason) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/admins/rejectvenue",
       { venueId, reason },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -518,13 +518,13 @@ export const rejectVenue = async (venueId, reason) => {
 // Fetch All Venue
 export const fetchAllEvents = async () => {
   try {
-    let response = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/admins/fetchallvenue",
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
