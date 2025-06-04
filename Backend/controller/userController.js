@@ -234,7 +234,7 @@ module.exports.createEvent = async (req, res) => {
       venue1,
       venue2,
       venue3,
-    } = req.body.formData;
+    } = req.body;
 
     let scannerResult = null;
     if (scannerImage) {
@@ -311,7 +311,7 @@ module.exports.createEvent = async (req, res) => {
 
     return successResponse_created(res, "Event created successfully!", event);
   } catch (error) {
-    return errorResponse_catchError(res, err.message);
+    return errorResponse_catchError(res, error.message);
   }
 };
 

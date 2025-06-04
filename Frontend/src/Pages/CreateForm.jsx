@@ -118,36 +118,29 @@ const CreateForm = () => {
   };
 
   const handleSubmit = async (event) => {
-      event.preventDefault();
-      try {
-        setLoading(true);
-        const result = await createEvent(formData);
-        setTimeout(async () => {
-          setLoading(false);
-          alert(result.message);
-          if (
-            formData.eventType === "virtual" &&
-            result === "Event created successfully!"
-          ) {
+    event.preventDefault();
+    try {
+      setLoading(true);
+      const result = await createEvent(formData);
+      setTimeout(async () => {
+        setLoading(false);
+        alert(result.message);
+        if (result.success) {
+          if (formData.eventType === "virtual") {
             navigate("/virtualevent");
           }
-          if (
-            formData.eventType === "hybrid" &&
-            result === "Event created successfully!"
-          ) {
+          if (formData.eventType === "hybrid") {
             navigate("/hybridevent");
           }
-          if (
-            formData.eventType === "in_person" &&
-            result === "Event created successfully!"
-          ) {
+          if (formData.eventType === "in_person") {
             navigate("/inpersonevent");
           }
-        }, 3000);
-      } catch (error) {
-        alert("An error occurred while creating the event. Please try again.");
-      }
-    };
+        }
+      }, 3000);
+    } catch (error) {
+      alert("An error occurred while creating the event. Please try again.");
+    }
+  };
 
     const [allVenues, setallVenues] = useState([]);
     const [allVenuesCopy, setallVenuesCopy] = useState([]);
