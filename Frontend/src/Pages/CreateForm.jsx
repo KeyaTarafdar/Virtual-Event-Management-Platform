@@ -122,7 +122,6 @@ const CreateForm = () => {
     try {
       setLoading(true);
       const result = await createEvent(formData);
-      console.log("result", result);
       setTimeout(async () => {
         setLoading(false);
         alert(result.message);
