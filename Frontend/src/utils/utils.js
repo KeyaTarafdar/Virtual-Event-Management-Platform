@@ -157,7 +157,6 @@ export const createEvent = async (formData) => {
       { ...formData },
       { withCredentials: true }
     );
-
     return data;
   } catch (err) {
     console.log(err.message);
@@ -171,10 +170,10 @@ export const fetchAllVenues = async () => {
       "http://localhost:8000/users/getallvenue",
       { withCredentials: true }
     );
-
     return data;
   } catch (err) {
     console.log(err.message);
+    return [];
   }
 };
 
