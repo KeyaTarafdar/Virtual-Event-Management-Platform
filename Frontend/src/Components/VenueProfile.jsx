@@ -13,6 +13,7 @@ import {
   updateVenueAddress,
   updateVenueCapacity,
   updateVenueMultidayEvent,
+  updateVenueHalltype,
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
 import { useUser } from "../context/userContext/UserContext";
@@ -30,6 +31,7 @@ function VenueProfile() {
   const [newHallAddress, setnewHallAddress] = useState("");
   const [newHallCapacity, setnewHallCapacity] = useState("");
   const [newHallMultiday, setnewHallMultiday] = useState();
+  const [newHallType, setnewHallType] = useState();
 
   const handleReject = () => {
     setIsModalOpen(true);
@@ -620,14 +622,33 @@ function VenueProfile() {
                       </span>
                     )}
                     <button
-                      onClick={() =>
-                        isEditing === "halltype"
-                          ? handleSave("halltype")
-                          : setIsEditing("halltype")
+                      onClick={() => {
+                        if (isEditing === "hallType") {
+                          updateVenueHalltype(newHallType).then(
+                            (response) => {
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  localStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else {
+                          setnewHallType(
+                            venue ? venue.hallType : null
+                          );
+                          setIsEditing("hallType");
+                        }
+                      }
                       }
                       className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
                     >
-                      {isEditing === "halltype" ? (
+                      {isEditing === "hallType" ? (
                         <AiOutlineCheck size={16} />
                       ) : (
                         <AiOutlineEdit size={16} />

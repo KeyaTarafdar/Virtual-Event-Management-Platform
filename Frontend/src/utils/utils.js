@@ -437,6 +437,20 @@ export const updateVenueMultidayEvent = async (newHallMultiday) => {
   }
 };
 
+// Update Venue halltype
+export const updateVenueHalltype = async (newHalltype) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehalltype",
+      { newHalltype },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 
 // Admin Login
