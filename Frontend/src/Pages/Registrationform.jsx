@@ -20,7 +20,7 @@ const Registrationform = () => {
     scannerImage: "",
     payAmount: 0,
   });
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formdata.Pay && !paymentDone) {
@@ -41,19 +41,22 @@ const Registrationform = () => {
 
   useEffect(() => {
     findUser().then((user) => {
-      fetchSingleEvent(eventId).then((event) => {
-        setformdata({
-          ...formdata,
-          Emailid: user.email,
-          PhoneNo: user.contact,
-          Name: user.username,
-          EventName: event.eventName,
-          EventDate: new Date(event.date).toLocaleDateString("en-GB"),
-          Pay: event.isPaid,
-          paidAmount: event.payableAmount ? event.payableAmount : 0,
-          scannerImage: event.scannerImage ? event.scannerImage.url : null,
-          payAmount: event.payableAmount ? event.payableAmount : null,
-        });
+      fetchSingleEvent(eventId).then((response) => {
+        if (response.success) {
+          const event = response.data;
+          setformdata({
+            ...formdata,
+            Emailid: user.email,
+            PhoneNo: user.contact,
+            Name: user.username,
+            EventName: event.eventName,
+            EventDate: new Date(event.date).toLocaleDateString("en-GB"),
+            Pay: event.isPaid,
+            paidAmount: event.payableAmount ? event.payableAmount : 0,
+            scannerImage: event.scannerImage ? event.scannerImage.url : null,
+            payAmount: event.payableAmount ? event.payableAmount : null,
+          });
+        }
       });
     });
   }, []);
