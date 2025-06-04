@@ -147,7 +147,7 @@ module.exports.fetchAdmin = async (req, res) => {
   try {
     const admin = req.admin;
     await admin.populate({ path: "appliedVenues" });
-    res.send(admin);
+    return successResponse_ok(res, "Admin fetched successfully", admin);
   } catch (err) {
     res.send("Internal Server Error");
   }
