@@ -94,7 +94,7 @@ module.exports.loginUser = async (req, res) => {
 
               return successResponse_ok(res, "User login successfull", user);
             } else {
-              return errorResponse_notFound(res, "Wrong Password");
+              return res.send({ success: false, message: "Wrong Password" });
             }
           });
         } else {
@@ -146,7 +146,7 @@ module.exports.updatePasswordRequest = async (req, res) => {
   try {
     let user = userModel.findOne({ email: req.body.email });
     if (user) {
-      return successResponse_ok(res, "", true)
+      return successResponse_ok(res, "", true);
     }
   } catch (err) {
     return errorResponse_catchError(res, err.message);
@@ -274,9 +274,9 @@ module.exports.createEvent = async (req, res) => {
       scannerImage:
         scannerImage !== null
           ? {
-            public_id: scannerResult.public_id,
-            url: scannerResult.secure_url,
-          }
+              public_id: scannerResult.public_id,
+              url: scannerResult.secure_url,
+            }
           : null,
       posterImage: {
         public_id: posterResult.public_id,
@@ -343,11 +343,7 @@ module.exports.fetchAllIn_PersonEvents = async (req, res) => {
     let events = in_personEvents.filter(
       (event) => new Date(event.date) >= Date.now()
     );
-    return successResponse_ok(
-      res,
-      "All In-person events fetched",
-      events
-    );
+    return successResponse_ok(res, "All In-person events fetched", events);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }

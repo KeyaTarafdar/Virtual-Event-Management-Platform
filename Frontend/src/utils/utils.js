@@ -64,12 +64,13 @@ export const signUp = async (
 // User Login
 export const loginUser = async (email, password) => {
   try {
-    let { data } = await axios.post(
+    let response = await axios.post(
       "http://localhost:8000/users/login",
       { email, password },
       { withCredentials: true }
     );
-    return data;
+    console.log('response', response)
+    return response.data;
   } catch (err) {
     console.log(err.message);
   }

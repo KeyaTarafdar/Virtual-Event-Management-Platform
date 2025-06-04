@@ -63,6 +63,7 @@ const Login = () => {
           loginUser(formData.email, formData.password),
           4000
         );
+        console.log('userResponse', userResponse)
         if (userResponse.success) {
           localStorage.setItem("user", userResponse.data);
           setLoading(false);
@@ -73,6 +74,7 @@ const Login = () => {
         const venueResponse = await withTimeout(
           loginVenue(formData.email, formData.password)
         );
+        console.log('venueResponse', venueResponse)
         if (venueResponse.success) {
           localStorage.setItem("venue", userResponse.data);
           setLoading(false);
@@ -83,6 +85,7 @@ const Login = () => {
         const adminResponse = await withTimeout(
           loginAdmin(formData.email, formData.password)
         );
+        console.log('adminResponse', adminResponse)
         if (adminResponse.success) {
           localStorage.setItem("admin", userResponse.data);
           setLoading(false);

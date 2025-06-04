@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { changePassword, changePasswordVenue } from "../utils/utils";
 
-const Resetpassword = (email) => {
+const Resetpassword = ({ email }) => {
   const navigate = useNavigate();
   const { venueId } = useParams();
 
@@ -54,11 +54,11 @@ const Resetpassword = (email) => {
       try {
         if (venueId) {
           changePasswordVenue(venueId, formData.password).then((response) => {
-            alert(response);
+            alert(response.message);
           });
         } else {
           changePassword(email, formData.password).then((response) => {
-            alert(response);
+            alert(response.message);
           });
         }
         navigate("/login");
