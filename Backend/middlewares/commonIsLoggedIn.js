@@ -2,10 +2,7 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 const adminModel = require("../models/adminModel");
 const venueModel = require("../models/venueModel");
-const {
-  errorResponse_notFound,
-  errorResponse_catchError,
-} = require("../responseObject/errorResponse");
+const { errorResponse_catchError } = require("../responseObject/errorResponse");
 
 module.exports = async (req, res, next) => {
   try {
@@ -33,10 +30,10 @@ module.exports = async (req, res, next) => {
         req.admin = admin;
         next();
       } else {
-        return errorResponse_notFound(res,"User Not found");
+        return res.send({ success: false, message: "User not found" });
       }
     } else {
-      res.send({ success: false, message: "You need to login first" });
+      return res.send({ success: false, message: "You need to login first" });
     }
   } catch (err) {
     return errorResponse_catchError(res, err.message);

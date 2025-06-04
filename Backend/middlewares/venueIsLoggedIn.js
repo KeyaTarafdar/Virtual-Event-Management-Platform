@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const venueModel = require("../models/venueModel");
-const { errorResponse_catchError, errorResponse_notFound } = require("../responseObject");
+const {
+  errorResponse_catchError,
+  errorResponse_notFound,
+} = require("../responseObject");
 
 module.exports = async (req, res, next) => {
   try {
@@ -15,7 +18,7 @@ module.exports = async (req, res, next) => {
         req.venue = venue;
         next();
       } else {
-        return errorResponse_notFound(res,"Venue account not found");
+        return res.send({ success: false, message: "Venue account not found" });
       }
     } else {
       res.send({ success: false, message: "You need to login first" });

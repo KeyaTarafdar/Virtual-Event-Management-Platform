@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
         req.admin = admin;
         next();
       } else {
-        return errorResponse_notFound(res, "Admin account Not found");
+        return res.send({ success: false, message: "Admin account Not found" });
       }
     } else {
       res.send({ success: false, message: "You need to login first" });
