@@ -69,6 +69,7 @@ module.exports.loginAdmin = async (req, res) => {
                 sameSite: "Lax",
                 path: "/",
               });
+              await admin.populate({ path: "appliedVenues" });
               return successResponse_ok(res, "Admin login successfull", admin);
             } else {
               return res.send({ success: false, message: "Wrong Password" });
@@ -146,7 +147,7 @@ module.exports.fetchAdmin = async (req, res) => {
   try {
     const admin = req.admin;
     await admin.populate({ path: "appliedVenues" });
-    res.send(admin);
+    return successResponse_ok(res, "Admin fetched successfully", admin);
   } catch (err) {
     res.send("Internal Server Error");
   }

@@ -222,7 +222,7 @@ export const fetchHybridEvents = async () => {
 // Fetch a Single Event
 export const fetchSingleEvent = async (eventId) => {
   try {
-    let {data} = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/users/fetchsingleevent",
       { eventId }
     );

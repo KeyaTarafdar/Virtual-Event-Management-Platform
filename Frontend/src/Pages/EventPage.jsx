@@ -34,8 +34,9 @@ function EventPage() {
     },
     {
       label: "Date & Time",
-      value: `${new Date(event.date).toLocaleDateString("en-GB")}, ${event.time
-        }`,
+      value: `${new Date(event.date).toLocaleDateString("en-GB")}, ${
+        event.time
+      }`,
     },
     { label: "Speaker", value: event.speaker },
     {
@@ -72,7 +73,7 @@ function EventPage() {
 
   useEffect(() => {
     fetchSingleEvent(eventId).then((response) => {
-      setevent(response);
+      setevent(response.data);
     });
   }, []);
 
@@ -152,8 +153,8 @@ function EventPage() {
         <div className="w-full max-w-4xl mt-8">
           {descriptionTags.map((item, index) =>
             (event.eventType === "virtual" && item.label === "Venue") ||
-              (event.eventType === "in_person" &&
-                item.label === "Platform") ? null : (
+            (event.eventType === "in_person" &&
+              item.label === "Platform") ? null : (
               <p key={index} className="text-lg font-medium">
                 {item.label} : <span className="font-light">{item.value}</span>
               </p>
@@ -165,7 +166,7 @@ function EventPage() {
         <CommentSection />
 
         {/* Footer Section */}
-        <div className="m-0 p-0" id="contact">
+        <div className="m-0 p-0 w-full" id="contact">
           <Footer menuItems1={footerMenuItems} />
         </div>
       </div>

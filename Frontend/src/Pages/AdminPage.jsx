@@ -41,11 +41,11 @@ function AdminPage() {
     setReason("");
   };
 
-  const handleAcceptVenue = (venueId) => {
+  function handleAcceptVenue(venueId) {
     acceptVenue(venueId).then((response) => {
       alert(response);
     });
-  };
+  }
 
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
@@ -59,7 +59,7 @@ function AdminPage() {
   };
   const [image, setImage] = useState();
 
-  const handleImageChange = async (e) => {
+  async function handleImageChange(e) {
     const file = e.target.files[0];
 
     if (file) {
@@ -79,7 +79,7 @@ function AdminPage() {
       alert("Please Upload an Image");
       return;
     }
-  };
+  }
 
   const handleSearch = (type) => {
     const input = document.querySelector(`#${type}Input`).value;
@@ -90,7 +90,7 @@ function AdminPage() {
         }`
       );
 
-      document.querySelector(`#${type}Input`).value = ""; 
+      document.querySelector(`#${type}Input`).value = "";
     } else {
       alert(
         `Please enter a ${
@@ -618,7 +618,7 @@ function AdminPage() {
       setadmin(response);
       setvenueRequests(response.appliedVenues);
     });
-  }, [handleAcceptVenue, handleImageChange]);
+  }, []);
 
   useEffect(() => {
     fetchAllVenues().then((response) => {
