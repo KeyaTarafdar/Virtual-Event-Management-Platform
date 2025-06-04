@@ -6,7 +6,7 @@ import { useUser } from "../context/userContext/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAdmin, setUser } = useUser();
+  const { setAdmin, setUser, setVenue } = useUser();
   //const {loginUser,loginVenue,loginAdmin}=useUser();
 
   const [formData, setFormData] = useState({
@@ -77,7 +77,8 @@ const Login = () => {
         );
         console.log("venueResponse", venueResponse);
         if (venueResponse.success) {
-          localStorage.setItem("venue", userResponse.data);
+          localStorage.setItem("venue", JSON.stringify(venueResponse.data));
+          setVenue(venueResponse.data);
           setLoading(false);
           navigate("/venueuser");
           return;

@@ -281,12 +281,12 @@ export const checkUserIsRegisteredInEventOrNot = async (eventId) => {
 // Venues Login
 export const loginVenue = async (email, password) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/venue/login",
       { email, password },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }

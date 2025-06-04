@@ -146,9 +146,9 @@ module.exports.loginVenue = async (req, res) => {
                   sameSite: "Lax",
                   path: "/",
                 });
-                return res.send("Login successfully");
+                return successResponse_ok(res, "Login successfull");
               } else {
-                return res.send("Wrong Password");
+                return res.send({ success: false, message: "Wrong Password" });
               }
             });
           } else if (venue.temporaryPassword == password) {
@@ -160,20 +160,22 @@ module.exports.loginVenue = async (req, res) => {
               path: "/",
             });
 
-            return res.send("Login successfully");
+            return successResponse_ok(res, "Login successfull");
           } else {
-            return res.send("Wrong Password");
+            return res.send({ success: false, message: "Wrong Password" });
           }
         } else {
-          return res.send("Email or Password is wrong");
+          return res.send({
+            success: false,
+            message: "Email or Password is wrong",
+          });
         }
       } else {
-        return res.send("Something is missing");
+        return errorResponse_badRequest(res);
       }
     }
   } catch (err) {
-    console.log(err.message);
-    return res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
