@@ -30,7 +30,7 @@ const Registrationform = () => {
       setTimeout(() => {
         eventRegistration(eventId).then((response) => {
           setLoading(false);
-          alert(response);
+          alert(response.message);
           if (response === "Registration successfull") {
             navigate(`/eventpage/${eventId}`);
           }
@@ -159,7 +159,7 @@ const Registrationform = () => {
               </div>
 
               {/*Payment */}
-              {formdata.Pay && !paymentDone && (
+              {/* {formdata.Pay && !paymentDone && (
                 <div className="w-[90%] flex justify-center items-center flex-col">
                   <div
                     className="mt-2 ml-8 bg-red-500 text-white p-2 rounded-md hover:bg-red-600 cursor-pointer"
@@ -168,7 +168,6 @@ const Registrationform = () => {
                     Pay Now &emsp; {formdata.paidAmount}/-
                   </div>
 
-                  {/* Modal */}
                   {modalOpen && (
                     <div
                       style={{
@@ -242,7 +241,7 @@ const Registrationform = () => {
                     Payment Done
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Register Button */}
               <div className="mt-8 text-center">
