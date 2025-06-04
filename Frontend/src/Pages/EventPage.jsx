@@ -89,6 +89,10 @@ function EventPage() {
           });
         }
       });
+    } else {
+      checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
+        setregistered(result);
+      });
     }
   }, []);
 

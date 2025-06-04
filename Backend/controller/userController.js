@@ -20,6 +20,7 @@ const {
   errorResponse_notFound,
   errorResponse_badRequest,
 } = require("../responseObject/index");
+const nodemailer = require("nodemailer");
 
 const nodeCache = new NodeCache();
 
@@ -478,7 +479,7 @@ module.exports.eventRegistration = async (req, res) => {
       return successResponse_ok(res, "Registration successfull", user);
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return errorResponse_catchError(res, err.message);
   }
 };
