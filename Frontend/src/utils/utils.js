@@ -313,14 +313,14 @@ export const findVenue = async () => {
 // Upload venue Profile Picture
 export const uploadVenueProfilePicture = async (imageData) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/uploadvenueprofilepicture",
       { image: imageData },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -342,12 +342,12 @@ export const registerVenue = async (formData) => {
 // Update Venue Name
 export const updateVenueName = async (newHallName) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallname",
       { newHallName },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -356,12 +356,12 @@ export const updateVenueName = async (newHallName) => {
 // Update Venue City
 export const updateVenueCity = async (newHallCity) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallcity",
       { newHallCity },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -370,12 +370,12 @@ export const updateVenueCity = async (newHallCity) => {
 // Update Venue Email
 export const updateVenueEmail = async (newHallEmail) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallemail",
       { newHallEmail },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -384,12 +384,12 @@ export const updateVenueEmail = async (newHallEmail) => {
 // Update Venue Phone
 export const updateVenuePhone = async (newHallPhone) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallphone",
       { newHallPhone },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -398,12 +398,12 @@ export const updateVenuePhone = async (newHallPhone) => {
 // Update Venue Address
 export const updateVenueAddress = async (newHallAddress) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehalladdress",
       { newHallAddress },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -412,12 +412,12 @@ export const updateVenueAddress = async (newHallAddress) => {
 // Update Venue MaxCapacity
 export const updateVenueCapacity = async (newHallCapacity) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallcapacity",
       { newHallCapacity },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -426,12 +426,12 @@ export const updateVenueCapacity = async (newHallCapacity) => {
 // Update Venue Multiday
 export const updateVenueMultidayEvent = async (newHallMultiday) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallmultiday",
       { newHallMultiday },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }

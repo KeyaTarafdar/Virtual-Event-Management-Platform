@@ -78,7 +78,7 @@ function VenueUserPage() {
         const imageData = await setFileToBase(file);
   
         uploadVenueProfilePicture(imageData).then((response) => {
-          alert(response);
+          alert(response.message);
           findVenue().then((response) => {
             setvenue(response);
           });
