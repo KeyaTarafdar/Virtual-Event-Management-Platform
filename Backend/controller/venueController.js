@@ -242,9 +242,10 @@ module.exports.updateHallName = async (req, res) => {
     let { newHallName } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.updateOne(
       { email: venue.email },
-      { $set: { name: newHallName } }
+      { $set: { name: newHallName } },
+      { new: true }
     );
     return successResponse_ok(res, "Hallname updated", venue);
   } catch (err) {
@@ -258,13 +259,14 @@ module.exports.updateHallCity = async (req, res) => {
     let { newHallCity } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.updateOne(
       { email: venue.email },
-      { $set: { city: newHallCity } }
+      { $set: { city: newHallCity } },
+      { new: true }
     );
-    res.send("Hall City updated");
+    return successResponse_ok(res, "Hall City updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -275,7 +277,10 @@ module.exports.updateHallEmail = async (req, res) => {
     let venue = req.venue;
 
     venueModel
-      .updateOne({ email: venue.email }, { $set: { email: newHallEmail } })
+      .findOneAndUpdate(
+        { email: venue.email },
+        { $set: { email: newHallEmail } }
+      )
       .then((response) => {
         res.cookie("token", "", {
           httpOnly: true,
@@ -294,14 +299,13 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        res.send("Hall Email updated");
+        return successResponse_ok(res, "Hall Email updated", updatedVenue);
       })
       .catch((err) => {
         res.send(err.message);
       });
   } catch (err) {
-    console.log(err.message);
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -311,13 +315,14 @@ module.exports.updateHallContact = async (req, res) => {
     let { newHallPhone } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { contact: newHallPhone } }
+      { $set: { contact: newHallPhone } },
+      { new: true }
     );
-    res.send("Hall contact updated");
+    return successResponse_ok(res, "Hall contact updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -327,13 +332,14 @@ module.exports.updateHallAddress = async (req, res) => {
     let { newHallAddress } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { address: newHallAddress } }
+      { $set: { address: newHallAddress } },
+      { new: true }
     );
-    res.send("Hall address updated");
+    return successResponse_ok(res, "Hall address updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -343,13 +349,14 @@ module.exports.updateHallCapacity = async (req, res) => {
     let { newHallCapacity } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { maxCapacity: newHallCapacity } }
+      { $set: { maxCapacity: newHallCapacity } },
+      { new: true }
     );
-    res.send("Hall capacity updated");
+    return successResponse_ok(res, "Hall capacity updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -359,13 +366,14 @@ module.exports.updateHallMultiday = async (req, res) => {
     let { newHallCapacity } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { canOrganizeMultidayEvent: newHallCapacity } }
+      { $set: { canOrganizeMultidayEvent: newHallCapacity } },
+      { new: true }
     );
-    res.send("Hall Multiday Fecility updated");
+    return successResponse_ok(res, "Hall Multiday Fecility updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
