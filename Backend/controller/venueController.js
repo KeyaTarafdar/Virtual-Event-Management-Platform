@@ -12,6 +12,7 @@ const {
   errorResponse_badRequest,
   errorResponse_catchError,
   successResponse_ok,
+  errorResponse_alreadyExists,
 } = require("../responseObject");
 
 // Register Venue
@@ -39,7 +40,7 @@ module.exports.signUp = async (req, res) => {
     ) {
       const existingVenue = await venueModel.findOne({ email });
       if (existingVenue) {
-        return res.send("Venue already exists. Please Login.");
+        return errorResponse_alreadyExists(res, "Venue already exists!");
       }
 
       // const apiUrl = `https://api.zerobounce.net/v2/validate?api_key=${
@@ -245,9 +246,9 @@ module.exports.updateHallName = async (req, res) => {
       { email: venue.email },
       { $set: { name: newHallName } }
     );
-    res.send("Hallname updated");
+    return successResponse_ok(res, "Hallname updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
