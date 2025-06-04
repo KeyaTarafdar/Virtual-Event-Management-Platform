@@ -344,12 +344,12 @@ export const registerVenue = async (formData) => {
 // Update Venue Name
 export const updateVenueName = async (newHallName) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallname",
       { newHallName },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }

@@ -15,6 +15,7 @@ import {
   updateVenueMultidayEvent,
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
+import { useUser } from "../context/userContext/UserContext";
 
 function VenueProfile() {
   const [activeMenu, setActiveMenu] = useState("BasicDetails");
@@ -104,12 +105,16 @@ function VenueProfile() {
     setIsEditing(null);
   };
 
-  const [venue, setvenue] = useState(null);
+  const { venue, setVenue } = useUser();
 
   useEffect(() => {
-    findVenue().then((response) => {
-      setvenue(response);
-    });
+    if (!venue) {
+      findVenue().then((response) => {
+        if (response.success) {
+          setVenue(response);
+        }
+      });
+    }
   }, []);
 
   const renderComponent = () => {
@@ -209,9 +214,13 @@ function VenueProfile() {
                       onClick={() => {
                         if (isEditing === "name") {
                           updateVenueName(newHallName).then((response) => {
-                            findVenue().then((response) => {
-                              setvenue(response);
-                            });
+                            if (response.success) {
+                              setVenue(response.data);
+                              localStorage.setItem(
+                                "venue",
+                                JSON.stringify(response.data)
+                              );
+                            }
                             setIsEditing(null);
                           });
                         } else {
@@ -507,7 +516,7 @@ function VenueProfile() {
                             : "text-red-500 bg-white"
                         }`}
                       >
-                        {venue && (venue.canOrganizeMultidayEvent)
+                        {venue && venue.canOrganizeMultidayEvent
                           ? venue.canOrganizeMultidayEvent
                               .charAt(0)
                               .toUpperCase() +
