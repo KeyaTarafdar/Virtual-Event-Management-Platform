@@ -7,6 +7,7 @@ const venueSchema = new mongoose.Schema({
   password: String,
   contact: String,
   ownerName: String,
+  hallType: String,
 
   address: String,
   city: String,
