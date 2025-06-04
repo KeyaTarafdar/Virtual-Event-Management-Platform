@@ -79,16 +79,20 @@ function EventPage() {
   const [registered, setregistered] = useState(false);
 
   useEffect(() => {
-      if (!user) {
-        findUser().then((response) => {
-          setUser(response);
-          if (response.username) {
-            checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
-              setregistered(result);
-            });
-          }
-        });
-      }
+    if (!user) {
+      findUser().then((response) => {
+        setUser(response);
+        if (response.username) {
+          checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
+            setregistered(result);
+          });
+        }
+      });
+    } else {
+      checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
+        setregistered(result);
+      });
+    }
   }, []);
 
   useEffect(() => {
