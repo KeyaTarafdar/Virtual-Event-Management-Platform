@@ -249,14 +249,14 @@ export const fetchLastCreatedEvent = async () => {
 // Event Registration
 export const eventRegistration = async (eventId) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/users/eventregistration",
       { eventId },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -265,14 +265,14 @@ export const eventRegistration = async (eventId) => {
 // Check a User is Registered in Event or Not
 export const checkUserIsRegisteredInEventOrNot = async (eventId) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/users/checkuserisregisteredineventornot",
       { eventId },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }

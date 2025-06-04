@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { findUser, fetchSingleEvent, eventRegistration } from "../utils/utils";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useUser } from "../context/userContext/UserContext";
 
 const Registrationform = () => {
   const { eventId } = useParams();
@@ -8,6 +10,7 @@ const Registrationform = () => {
   const [paymentDone, setpaymentDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const { setUser } = useUser();
 
   const [formdata, setformdata] = useState({
     Name: "",
@@ -21,21 +24,78 @@ const Registrationform = () => {
     payAmount: 0,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formdata.Pay && !paymentDone) {
-      alert("Please complete your payment first to register in the event!");
-    } else {
-      setLoading(true);
-      setTimeout(() => {
+    try {
+      if (formdata.Pay) {
+        const { data } = await axios.post(
+          "http://localhost:8000/users/create-order",
+          {
+            amount: Number(formdata.payAmount),
+            currency: "INR",
+            receipt: "receipt#1",
+            notes: {},
+          },
+          { withCredentials: true }
+        );
+
+        const options = {
+          key: "rzp_test_B9RwKdpPVSHcZx",
+          amount: data.order.amount,
+          currency: data.order.currency,
+          name: "abc",
+          description: "abcd",
+          order_id: data.order.id,
+          handler: async (response) => {
+            let verifyResponse = await axios.post(
+              "http://localhost:8000/users/verify-payment",
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              },
+              { withCredentials: true }
+            );
+            console.log("verifyResponse", verifyResponse);
+            if (verifyResponse.data.success) {
+              setLoading(true);
+              eventRegistration(eventId).then((response) => {
+                setLoading(false);
+                alert(response.message);
+                if (response.success) {
+                  localStorage.setItem("user", JSON.stringify(response.data));
+                  setUser(response.data);
+                  navigate(`/eventpage/${eventId}`);
+                }
+              });
+            } else {
+              alert("Failed to register!");
+            }
+          },
+          prefill: {
+            name: "Rahul Jha",
+            email: "rahul@gmail.com",
+            contact: "9999999999",
+          },
+          theme: {
+            color: "#F37254",
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } else {
+        setLoading(true);
         eventRegistration(eventId).then((response) => {
           setLoading(false);
-          alert(response);
-          if (response === "Registration successfull") {
+          alert(response.message);
+          if (response.success) {
             navigate(`/eventpage/${eventId}`);
           }
         });
-      }, 3000);
+      }
+    } catch (err) {
+      console.log("err", err);
     }
   };
 

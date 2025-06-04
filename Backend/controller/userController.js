@@ -425,39 +425,39 @@ module.exports.eventRegistration = async (req, res) => {
 
       const formattedTime = `${hours}:${minutes} ${period}`;
 
-      // const testAccount = await nodemailer.createTestAccount();
+      const testAccount = await nodemailer.createTestAccount();
 
-      // const transporter = nodemailer.createTransport({
-      //   host: "smtp.ethereal.email",
-      //   port: 587,
-      //   auth: {
-      //     user: process.env.user,
-      //     pass: process.env.pass,
-      //   },
-      // });
+      const transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        auth: {
+          user: process.env.user,
+          pass: process.env.pass,
+        },
+      });
 
-      // let info = await transporter.sendMail({
-      //   from: '"Eventek" <eventek@gmail.com>',
-      //   to: user.email,
-      //   subject: "Registration successfull",
-      //   text: `Your registration is successfull in the event ${event.eventName}`,
-      //   html: `Your registration is successfull in the event <b>${event.eventName}</b>.<br> <b>Date:</b> ${formattedDate} <br> <b>Time:</b> ${formattedTime}`,
-      // });
-
-      const msg = {
+      let info = await transporter.sendMail({
+        from: '"Eventek" <eventek@gmail.com>',
         to: user.email,
-        from: "eventek@gmail.com",
-        subject: "Registration Successful",
-        text: `Your registration is successful in the event ${event.eventName}`,
-        html: `
-          <p>Your registration is successful in the event <strong>${event.eventName}</strong>.</p>
-          <p><strong>Date:</strong> ${formattedDate}</p>
-          <p><strong>Time:</strong> ${formattedTime}</p>
-        `,
-      };
+        subject: "Registration successfull",
+        text: `Your registration is successfull in the event ${event.eventName}`,
+        html: `Your registration is successfull in the event <b>${event.eventName}</b>.<br> <b>Date:</b> ${formattedDate} <br> <b>Time:</b> ${formattedTime}`,
+      });
 
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-      await sgMail.send(msg);
+      // const msg = {
+      //   to: user.email,
+      //   from: "eventek@gmail.com",
+      //   subject: "Registration Successful",
+      //   text: `Your registration is successful in the event ${event.eventName}`,
+      //   html: `
+      //     <p>Your registration is successful in the event <strong>${event.eventName}</strong>.</p>
+      //     <p><strong>Date:</strong> ${formattedDate}</p>
+      //     <p><strong>Time:</strong> ${formattedTime}</p>
+      //   `,
+      // };
+
+      // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      // await sgMail.send(msg);
 
       user = await userModel.findOneAndUpdate(
         { email: user.email },
@@ -478,6 +478,7 @@ module.exports.eventRegistration = async (req, res) => {
       return successResponse_ok(res, "Registration successfull", user);
     }
   } catch (err) {
+    console.log(err)
     return errorResponse_catchError(res, err.message);
   }
 };
@@ -623,49 +624,33 @@ exports.createRazorpayOrder = async (req, res) => {
 
 // VERIFY RAZORPAY PAYMENT
 exports.verifyRazorpayPayment = async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-    req.body;
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
-  const body = razorpay_order_id + "|" + razorpay_payment_id;
-  const secret = process.env.REZORPAY_KEY_SECRET || "";
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const secret = process.env.REZORPAY_KEY_SCERET || "";
 
-  // Generate a HMAC SHA256 hash
-  const crypto = require("crypto");
-  const generated_signature = crypto
-    .createHmac("sha256", secret)
-    .update(body)
-    .digest("hex");
-
-  // Check if the generated signature matches the received signature
-  if (generated_signature === razorpay_signature) {
-    // If valid, update the payment status and user registration
-
-    // Update user payment information
-    await userModel.findByIdAndUpdate(req.body.userId, {
-      $push: {
-        appliedEvents: req.body.eventId,
-        payments: {
-          eventId: req.body.eventId,
-          paymentId: razorpay_payment_id,
-          amount: req.body.amount,
-          status: "completed",
-        },
-      },
-    });
-
-    // Update event registration details
-    await eventModel.findByIdAndUpdate(req.body.eventId, {
-      $push: { registeredUser: req.body.userId },
-    });
-
-    return res.json({
-      success: true,
-      message: "Payment verified successfully",
-    });
-  } else {
-    return res.status(400).json({
+    const isValidSignature = validateWebhookSignature(
+      body,
+      razorpay_signature,
+      secret
+    );
+    if (isValidSignature) {
+      return res.json({
+        success: true,
+        message: "Payment verified successfully",
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid signature, payment verification failed",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
       success: false,
-      message: "Invalid signature, payment verification failed",
+      message: err.message,
     });
   }
 };
