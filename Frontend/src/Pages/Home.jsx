@@ -45,7 +45,7 @@ const footerMenuItems = [
 
 export default function Home() {
   const navigate = useNavigate();
-  const { company, setCompany } = useCompany()
+  const { company, setCompany } = useCompany();
 
   const handleSignUpClick = () => {
     navigate("/signup");
@@ -53,19 +53,16 @@ export default function Home() {
 
   const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
-  // const [company, setCompany] = useState({});
 
   useEffect(() => {
-    fetchLastCreatedEvent().then((resonse) => {
-      setlastEvent(resonse);
+    fetchLastCreatedEvent().then((response) => {
+      if (response.success) setlastEvent(response.data);
     });
 
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        if (response.status === 200) {
+        if (response.success) {
           setCompany(response.data);
-        } else {
-          // alert(response.data);
         }
       });
     }
@@ -166,7 +163,9 @@ export default function Home() {
                 Discover Our Key Features
               </h2>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-[25px] lg:pt-5 md:pt-1">
-                Explore the unique features that set us apart from the others. Our platform is designed to cater your every need, ensuring a seamless and successful event experience.
+                Explore the unique features that set us apart from the others.
+                Our platform is designed to cater your every need, ensuring a
+                seamless and successful event experience.
               </p>
 
               <div className="md:absolute 2xl:ml-[-17rem] xl:ml-[-10rem] lg:ml-[-10rem] md:ml-[-8rem] 2xl:mt-[25%] xl:mt-[20%] lg:mt-[21%] md:mt-[30%] sm:m-auto">

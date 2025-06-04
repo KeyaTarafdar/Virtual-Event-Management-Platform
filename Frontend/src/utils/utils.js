@@ -64,13 +64,12 @@ export const signUp = async (
 // User Login
 export const loginUser = async (email, password) => {
   try {
-    let response = await axios.post(
+    let { data } = await axios.post(
       "http://localhost:8000/users/login",
       { email, password },
       { withCredentials: true }
     );
-    console.log('response', response)
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -78,7 +77,6 @@ export const loginUser = async (email, password) => {
 
 // Upload Profile Picture
 export const uploadProfilePicture = async (imageData) => {
-
   try {
     const { data } = await axios.post(
       "http://localhost:8000/users/uploadprofilepicture",
@@ -239,10 +237,10 @@ export const fetchSingleEvent = async (eventId) => {
 // Fetch Last Created Event
 export const fetchLastCreatedEvent = async () => {
   try {
-    let response = await axios.get(
+    let { data } = await axios.get(
       "http://localhost:8000/users/fetchlastcreatedevent"
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
