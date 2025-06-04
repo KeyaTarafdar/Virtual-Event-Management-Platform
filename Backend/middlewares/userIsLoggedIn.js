@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
-const { errorResponse_catchError, errorResponse_notFound } = require("../responseObject");
+const {
+  errorResponse_catchError,
+  errorResponse_notFound,
+} = require("../responseObject");
 
 module.exports = async (req, res, next) => {
   try {
@@ -15,7 +18,7 @@ module.exports = async (req, res, next) => {
         req.user = user;
         next();
       } else {
-        return errorResponse_notFound(res,"User account Not found");
+        return res.send({ success: false, message: "User account Not found" });
       }
     } else {
       res.send({ success: false, message: "You need to login first" });

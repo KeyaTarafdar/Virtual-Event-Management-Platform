@@ -22,7 +22,7 @@ function VirtualEvent() {
     fetchVirtualEvents().then((events) => {
       if (events.success) {
         setvirtualEvents(
-          events.filter((event) => {
+          events.data.filter((event) => {
             const today = new Date();
             const currentDate = today.toISOString().split("T")[0];
             const eventDate = new Date(event.date).toISOString().split("T")[0];
