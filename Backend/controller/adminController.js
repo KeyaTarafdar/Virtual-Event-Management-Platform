@@ -9,6 +9,12 @@ const { generateToken } = require("../utils/generateToken");
 const cloudinary = require("../utils/cloudinary");
 const nodemailer = require("nodemailer");
 const sgMail = require("@sendgrid/mail");
+const {
+  errorResponse_badRequest,
+  errorResponse_catchError,
+  successResponse_ok,
+  errorResponse_alreadyExists,
+} = require("../responseObject");
 require("dotenv").config();
 
 // Register Admin
@@ -46,7 +52,7 @@ module.exports.loginAdmin = async (req, res) => {
     let token = req.cookies.token;
 
     if (token) {
-      res.send("You are already logged in.");
+      return errorResponse_alreadyExists(res, "You are already logged in");
     } else {
       let { email, password } = req.body;
 
@@ -63,21 +69,23 @@ module.exports.loginAdmin = async (req, res) => {
                 sameSite: "Lax",
                 path: "/",
               });
-              return res.send("Login successfully");
+              return successResponse_ok(res, "Admin login successfull", admin);
             } else {
-              return res.send("Wrong Password");
+              return res.send({ success: false, message: "Wrong Password" });
             }
           });
         } else {
-          return res.send("Email or Password is wrong");
+          return res.send({
+            success: false,
+            message: "Email or Password is wrong",
+          });
         }
       } else {
-        return res.send("Something is missing");
+        return errorResponse_badRequest(res);
       }
     }
   } catch (err) {
-    console.log(err.message);
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 

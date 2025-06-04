@@ -114,24 +114,14 @@ export default function Navbar({ menuItems }) {
     setTimeout(() => {
       logoutUser().then((response) => {
         setLoading(false);
-        // if (response === "User Logout successfully") {
-        //   if (location.pathname === "/") window.location.reload();
-        //   else navigate("/");
-        // } else if (response === "Venue Logout successfully") {
-        //   if (location.pathname === "/") window.location.reload();
-        //   else navigate("/");
-        // } else if (response === "Admin Logout successfully") {
-        //   if (location.pathname === "/") window.location.reload();
-        //   else navigate("/");
-        // } else {
-        //   alert(response);
-        // }
         if (response.success) {
           setUser(null);
+          setAdmin(null);
+          setVenue(null);
           navigate("/");
         }
       });
-    }, 3000);
+    }, 1000);
   };
 
   return (

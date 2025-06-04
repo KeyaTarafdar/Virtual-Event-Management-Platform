@@ -136,7 +136,7 @@ const CreateForm = () => {
             navigate("/inpersonevent");
           }
         }
-      }, 3000);
+      }, 1000);
     } catch (error) {
       alert("An error occurred while creating the event. Please try again.");
     }
