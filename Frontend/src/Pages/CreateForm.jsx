@@ -122,26 +122,20 @@ const CreateForm = () => {
     try {
       setLoading(true);
       const result = await createEvent(formData);
+      console.log("result", result);
       setTimeout(async () => {
         setLoading(false);
         alert(result.message);
-        if (
-          formData.eventType === "virtual" &&
-          result === "Event created successfully!"
-        ) {
-          navigate("/virtualevent");
-        }
-        if (
-          formData.eventType === "hybrid" &&
-          result === "Event created successfully!"
-        ) {
-          navigate("/hybridevent");
-        }
-        if (
-          formData.eventType === "in_person" &&
-          result === "Event created successfully!"
-        ) {
-          navigate("/inpersonevent");
+        if (result.success) {
+          if (formData.eventType === "virtual") {
+            navigate("/virtualevent");
+          }
+          if (formData.eventType === "hybrid") {
+            navigate("/hybridevent");
+          }
+          if (formData.eventType === "in_person") {
+            navigate("/inpersonevent");
+          }
         }
       }, 3000);
     } catch (error) {
