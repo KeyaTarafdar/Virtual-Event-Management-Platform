@@ -251,9 +251,8 @@ function VenueProfile() {
                           type="text"
                           value={newHallEmail}
                           onChange={(e) => setnewHallEmail(e.target.value)}
-                          className={`p-2 border rounded-md w-full ${
-                            !newHallEmail.includes("@") ? "border-red-500" : ""
-                          }`}
+                          className={`p-2 border rounded-md w-full ${!newHallEmail.includes("@") ? "border-red-500" : ""
+                            }`}
                         />
                       ) : (
                         <span className="font-bold">
@@ -264,9 +263,15 @@ function VenueProfile() {
                         onClick={() => {
                           if (isEditing === "email") {
                             updateVenueEmail(newHallEmail).then((response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  localStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             });
                           } else {
@@ -304,11 +309,10 @@ function VenueProfile() {
                           type="text"
                           value={newHallPhone}
                           onChange={(e) => setnewHallPhone(e.target.value)}
-                          className={`p-2 border rounded-md w-full ${
-                            !/^\d{10}$/.test(newHallPhone.phone)
-                              ? "border-red-500"
-                              : ""
-                          }`}
+                          className={`p-2 border rounded-md w-full ${!/^\d{10}$/.test(newHallPhone.phone)
+                            ? "border-red-500"
+                            : ""
+                            }`}
                         />
                       ) : (
                         <span className="font-bold">
@@ -319,9 +323,15 @@ function VenueProfile() {
                         onClick={() => {
                           if (isEditing === "phone") {
                             updateVenuePhone(newHallPhone).then((response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  localStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             });
                           } else {
@@ -367,9 +377,15 @@ function VenueProfile() {
                       onClick={() => {
                         if (isEditing === "city") {
                           updateVenueCity(newHallCity).then((response) => {
-                            findVenue().then((response) => {
-                              setvenue(response);
-                            });
+                            if (response.success) {
+                              findVenue().then((response) => {
+                                setVenue(response.data);
+                                localStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              });
+                            }
                             setIsEditing(null);
                           });
                         } else {
@@ -409,13 +425,18 @@ function VenueProfile() {
                     <button
                       onClick={() => {
                         if (isEditing === "address") {
-                          updateVenueAddress(newHallAddress).then(
-                            (response) => {
+                          updateVenueAddress(newHallAddress).then((response) => {
+                            if (response.success) {
                               findVenue().then((response) => {
-                                setvenue(response);
+                                setVenue(response.data);
+                                localStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
                               });
-                              setIsEditing(null);
                             }
+                            setIsEditing(null);
+                          }
                           );
                         } else {
                           setnewHallAddress(venue ? venue.address : "");
@@ -457,9 +478,15 @@ function VenueProfile() {
                         if (isEditing === "seat") {
                           updateVenueCapacity(newHallCapacity).then(
                             (response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.data) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  localStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             }
                           );
@@ -510,17 +537,16 @@ function VenueProfile() {
                       </div>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          venue && venue.canOrganizeMultidayEvent
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${venue && venue.canOrganizeMultidayEvent
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
                       >
                         {venue && venue.canOrganizeMultidayEvent
                           ? venue.canOrganizeMultidayEvent
-                              .charAt(0)
-                              .toUpperCase() +
-                            venue.canOrganizeMultidayEvent.slice(1)
+                            .charAt(0)
+                            .toUpperCase() +
+                          venue.canOrganizeMultidayEvent.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}
@@ -529,9 +555,15 @@ function VenueProfile() {
                         if (isEditing === "multiDayBooking") {
                           updateVenueMultidayEvent(newHallMultiday).then(
                             (response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  localStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             }
                           );
@@ -578,13 +610,12 @@ function VenueProfile() {
                       </select>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.halltype ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.halltype ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.halltype
                           ? companyDetails.halltype.charAt(0).toUpperCase() +
-                            companyDetails.halltype.slice(1)
+                          companyDetails.halltype.slice(1)
                           : "Please Select Hall Type"}
                       </span>
                     )}
@@ -645,7 +676,7 @@ function VenueProfile() {
                           {companyDetails.start_time &&
                             companyDetails.end_time &&
                             companyDetails.start_time >=
-                              companyDetails.end_time && (
+                            companyDetails.end_time && (
                               <p className="text-red-500 text-sm mt-1">
                                 **Start time must be earlier than end time
                               </p>
@@ -653,11 +684,10 @@ function VenueProfile() {
                         </div>
                       ) : (
                         <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time && companyDetails.end_time
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
+                          className={`rounded-lg w-[90%] p-2 ${companyDetails.start_time && companyDetails.end_time
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
                         >
                           {companyDetails.start_time && companyDetails.end_time
                             ? `${companyDetails.start_time} -- ${companyDetails.end_time}`
@@ -712,9 +742,8 @@ function VenueProfile() {
                       />
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price1 ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.price1 ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.price1 ||
                           "Please Enter Price for 1st Half Booking "}
@@ -777,7 +806,7 @@ function VenueProfile() {
                           {companyDetails.start_time2 &&
                             companyDetails.end_time2 &&
                             companyDetails.start_time2 >=
-                              companyDetails.end_time2 && (
+                            companyDetails.end_time2 && (
                               <p className="text-red-500 text-sm mt-1">
                                 **Start time must be earlier than end time
                               </p>
@@ -785,15 +814,14 @@ function VenueProfile() {
                         </div>
                       ) : (
                         <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time2 &&
+                          className={`rounded-lg w-[90%] p-2 ${companyDetails.start_time2 &&
                             companyDetails.end_time2
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
                         >
                           {companyDetails.start_time2 &&
-                          companyDetails.end_time2
+                            companyDetails.end_time2
                             ? `${companyDetails.start_time2} -- ${companyDetails.end_time2}`
                             : "Please Enter Start and End Time"}
                         </span>
@@ -805,7 +833,7 @@ function VenueProfile() {
                             companyDetails.start_time2 &&
                             companyDetails.end_time2 &&
                             companyDetails.start_time2 <
-                              companyDetails.end_time2
+                            companyDetails.end_time2
                           ) {
                             handleSave("time2");
                           } else if (isEditing === "time2") {
@@ -847,9 +875,8 @@ function VenueProfile() {
                       />
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price2 ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.price2 ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.price2 ||
                           "Please Enter Price for 2nd Half Booking "}
@@ -912,7 +939,7 @@ function VenueProfile() {
                           {companyDetails.start_time3 &&
                             companyDetails.end_time3 &&
                             companyDetails.start_time3 >=
-                              companyDetails.end_time3 && (
+                            companyDetails.end_time3 && (
                               <p className="text-red-500 text-sm mt-1">
                                 **Start time must be earlier than end time
                               </p>
@@ -920,15 +947,14 @@ function VenueProfile() {
                         </div>
                       ) : (
                         <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time3 &&
+                          className={`rounded-lg w-[90%] p-2 ${companyDetails.start_time3 &&
                             companyDetails.end_time3
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
                         >
                           {companyDetails.start_time3 &&
-                          companyDetails.end_time3
+                            companyDetails.end_time3
                             ? `${companyDetails.start_time3} -- ${companyDetails.end_time3}`
                             : "Please Enter Start and End Time"}
                         </span>
@@ -940,7 +966,7 @@ function VenueProfile() {
                             companyDetails.start_time3 &&
                             companyDetails.end_time3 &&
                             companyDetails.start_time3 <
-                              companyDetails.end_time3
+                            companyDetails.end_time3
                           ) {
                             handleSave("time3");
                           } else if (isEditing === "time3") {
@@ -982,9 +1008,8 @@ function VenueProfile() {
                       />
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price3 ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.price3 ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.price3 ||
                           "Please Enter Price for Full Day Booking "}
@@ -1048,15 +1073,14 @@ function VenueProfile() {
                       </div>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.projector
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.projector
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.projector
                           ? companyDetails.projector.charAt(0).toUpperCase() +
-                            companyDetails.projector.slice(1)
+                          companyDetails.projector.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}
@@ -1118,15 +1142,14 @@ function VenueProfile() {
                       </div>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.broadband
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.broadband
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.broadband
                           ? companyDetails.broadband.charAt(0).toUpperCase() +
-                            companyDetails.broadband.slice(1)
+                          companyDetails.broadband.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}
@@ -1219,8 +1242,8 @@ function VenueProfile() {
                           <span className="font-bold">Date : </span>
                           {request.id
                             ? new Date(request.id.date).toLocaleDateString(
-                                "en-GB"
-                              )
+                              "en-GB"
+                            )
                             : null}
                         </p>
                         <p className="text-gray-700 mt-2">
@@ -1345,11 +1368,10 @@ function VenueProfile() {
           <div className="flex gap-12 items-center justify-center cursor-pointer ml-5 mt-6">
             {/* Basic Details */}
             <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "BasicDetails"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "BasicDetails"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
               onClick={() => setActiveMenu("BasicDetails")}
             >
               Basic Details
@@ -1362,9 +1384,8 @@ function VenueProfile() {
             </div>
             {/* Gallery */}
             <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Gallery" ? "text-blue-700" : "text-gray-600"
-              }`}
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Gallery" ? "text-blue-700" : "text-gray-600"
+                }`}
               onClick={() => setActiveMenu("Gallery")}
             >
               Gallery
@@ -1377,11 +1398,10 @@ function VenueProfile() {
             </div>
             {/* Booking Requests */}
             <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Booking Requests"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Booking Requests"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
               onClick={() => setActiveMenu("Booking Requests")}
             >
               Booking Requests
@@ -1394,11 +1414,10 @@ function VenueProfile() {
             </div>
             {/* Upcoming Bookings */}
             <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Upcoming Bookings"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Upcoming Bookings"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
               onClick={() => setActiveMenu("Upcoming Bookings")}
             >
               Upcoming Bookings
@@ -1411,11 +1430,10 @@ function VenueProfile() {
             </div>
             {/* Past Bookings */}
             <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Past Bookings"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Past Bookings"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
               onClick={() => setActiveMenu("Past Bookings")}
             >
               Past Bookings
