@@ -412,6 +412,137 @@ module.exports.updateHallTime = async (req, res) => {
   }
 };
 
+// Update Hall type
+module.exports.updateHallType = async (req, res) => {
+  try {
+    let { newHallType } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { hallType: newHallType } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall type updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall time (1st)
+module.exports.updateHall_1stHalfTime = async (req, res) => {
+  try {
+    let { newHall_1stHalfTime } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { time_1stHalf: newHall_1stHalfTime } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall 1st half time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall time (2nd)
+module.exports.updateHall_2ndHalfTime = async (req, res) => {
+  try {
+    let { newHall_2ndHalfTime } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { time_2ndHalf: newHall_2ndHalfTime } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall 2nd half time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall time (full day)
+module.exports.updateHall_fullDayTime = async (req, res) => {
+  try {
+    let { newHall_fullDayTime } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { time_fullDay: newHall_fullDayTime } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall full day time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall price (1st)
+module.exports.updateHall_1stHalfPrice = async (req, res) => {
+  try {
+    let { newHall_1stHalfprice } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { bookingPrice_1stHalf: newHall_1stHalfprice } },
+      { new: true }
+    );
+    return successResponse_ok(
+      res,
+      "Hall 1st half booking price updated",
+      venue
+    );
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall price (2nd)
+module.exports.updateHall_2ndHalfPrice = async (req, res) => {
+  try {
+    let { newHall_2ndHalfprice } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { bookingPrice_2ndHalf: newHall_2ndHalfprice } },
+      { new: true }
+    );
+    return successResponse_ok(
+      res,
+      "Hall 2nd half booking price updated",
+      venue
+    );
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall price (full day)
+module.exports.updateHall_fullDayPrice = async (req, res) => {
+  try {
+    let { newHall_fullDayprice } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { bookingPrice_fullDay: newHall_fullDayprice } },
+      { new: true }
+    );
+    return successResponse_ok(
+      res,
+      "Hall full day booking price updated",
+      venue
+    );
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
 // Accept event request
 module.exports.acceptEvent = async (req, res) => {
   try {
