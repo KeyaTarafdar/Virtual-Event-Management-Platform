@@ -302,7 +302,7 @@ export const findVenue = async () => {
       { withCredentials: true }
     );
     if (data.success) {
-      localStorage.setItem("venue", JSON.stringify(data));
+      localStorage.setItem("venue", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
