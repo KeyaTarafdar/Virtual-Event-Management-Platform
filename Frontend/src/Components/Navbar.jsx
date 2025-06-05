@@ -19,26 +19,23 @@ import {
   findAdmin,
   fetchCompanyDetails,
 } from "../utils/utils";
-import Loader from "./Loader";
+import Loader from "./loader";
+import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 export default function Navbar({ menuItems }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const path = location.pathname;
+  const { company, setCompany } = useCompany();
+  const { user, setUser, admin, setAdmin, venue, setVenue } = useUser();
 
   const [hamburgerMenuClicked, setHamburgerMenuClicked] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [isClosingDropdown, setIsClosingDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const [scrollDirection, setScrollDirection] = useState(null);
-
   const [isMdOrLarger, setIsMdOrLarger] = useState(false);
-
-  const [user, setUser] = useState(null);
-  const [venue, setVenue] = useState(null);
-  const [admin, setAdmin] = useState(null);
+  const [scrollDirection, setScrollDirection] = useState(null);
 
   const handleLogInClick = () => {
     navigate("/login");
@@ -78,12 +75,36 @@ export default function Navbar({ menuItems }) {
     setHamburgerMenuClicked(false);
   };
 
-  const [company, setCompany] = useState({});
+  useEffect(() => {
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response);
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    fetchCompanyDetails().then((response) => {
-      setCompany(response.data);
-    });
+    if (!user) {
+      findUser().then((user) => {
+        if (user) {
+          setUser(user);
+        }
+      });
+    }
+    if (!venue) {
+      findVenue().then((venue) => {
+        if (venue) {
+          setVenue(venue);
+        }
+      });
+    }
+    if (!admin) {
+      findAdmin().then((admin) => {
+        if (admin) {
+          setAdmin(admin);
+        }
+      });
+    }
   }, []);
 
   const handelLogout = () => {
@@ -91,39 +112,15 @@ export default function Navbar({ menuItems }) {
     setTimeout(() => {
       logoutUser().then((response) => {
         setLoading(false);
-        if (response === "User Logout successfully") {
-          if (location.pathname === "/") window.location.reload();
-          else navigate("/");
-        } else if (response === "Venue Logout successfully") {
-          if (location.pathname === "/") window.location.reload();
-          else navigate("/");
-        } else if (response === "Admin Logout successfully") {
-          if (location.pathname === "/") window.location.reload();
-          else navigate("/");
-        } else {
-          alert(response);
+        if (response.success) {
+          setUser(null);
+          setAdmin(null);
+          setVenue(null);
+          navigate("/");
         }
       });
-    }, 3000);
+    }, 1000);
   };
-
-  useEffect(() => {
-    findUser().then((user) => {
-      if (user && user.username) {
-        setUser(user.username.split(" ")[0]);
-      }
-    });
-    findVenue().then((venue) => {
-      if (venue && venue.name) {
-        setVenue(venue.name);
-      }
-    });
-    findAdmin().then((admin) => {
-      if (admin && admin.username) {
-        setAdmin(admin.username);
-      }
-    });
-  }, []);
 
   return (
     <>
@@ -137,7 +134,7 @@ export default function Navbar({ menuItems }) {
           <div className="text-gradient2 font-serif text-5xl w-[50%] sm:w-[20%] md:w-[30%] lg:w-[20%] xl:w-[20%] 2xl:w-[20%] lg:pl-5 xl:pl-8"
             style={{ fontFamily: '"quick"' }}
           >
-            {company.companyName}
+            {company?.companyName}
           </div>
 
           {/* Navbar Menu */}
@@ -180,12 +177,12 @@ export default function Navbar({ menuItems }) {
                       className="text-lg cursor-pointer"
                     />
                     <span className="text-white font-bold hover:text-blue-100 hover:underline">
-                      {user
-                        ? user.split(" ")[0]
-                        : venue
-                        ? venue.split(" ")[0]
-                        : admin
-                        ? admin.split(" ")[0]
+                      {user?.username
+                        ? user.username.split(" ")[0]
+                        : venue?.name
+                        ? venue.name.split(" ")[0]
+                        : admin?.username
+                        ? admin.username.split(" ")[0]
                         : null}
                     </span>
 

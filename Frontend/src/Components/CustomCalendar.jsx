@@ -44,11 +44,13 @@ const CustomCalendar = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const blankDays = Array(startOfMonth.getDay()).fill(null);
 
+  // Format date for comparison
   const formatDate = (date) => {
     const parsedDate = new Date(date);
     return `${parsedDate.getFullYear()}-${String(parsedDate.getMonth() + 1).padStart(2, '0')}-${String(parsedDate.getDate()).padStart(2, '0')}`;
   };
 
+  // Check if a date has an event
   const getEventForDate = (day) => {
     const formattedDate = formatDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
@@ -56,13 +58,15 @@ const CustomCalendar = () => {
     return events.find((event) => event.date.startsWith(formattedDate));
   };
 
+  // Convert 24-hour time to 12-hour format
   const formatTime = (time) => {
     const [hours, minutes] = time.split(':');
     const period = +hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = +hours % 12 || 12;
+    const formattedHours = +hours % 12 || 12; 
     return `${formattedHours}:${minutes} ${period}`;
   };
 
+  // Check if a date is today
   const isToday = (day) => {
     const currentDay = new Date(
       currentDate.getFullYear(),

@@ -1,12 +1,20 @@
-const adminModel = require("../models/adminModel");
-const venueModel = require("../models/venueModel");
-const userModel = require("../models/userModel");
-const eventModel = require("../models/EventModel");
+const {
+  adminModel,
+  venueModel,
+  userModel,
+  eventModel,
+} = require("../models/index");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const cloudinary = require("../utils/cloudinary");
 const nodemailer = require("nodemailer");
 const sgMail = require("@sendgrid/mail");
+const {
+  errorResponse_badRequest,
+  errorResponse_catchError,
+  successResponse_ok,
+  errorResponse_alreadyExists,
+} = require("../responseObject");
 require("dotenv").config();
 
 // Register Admin
@@ -44,7 +52,7 @@ module.exports.loginAdmin = async (req, res) => {
     let token = req.cookies.token;
 
     if (token) {
-      res.send("You are already logged in.");
+      return errorResponse_alreadyExists(res, "You are already logged in");
     } else {
       let { email, password } = req.body;
 
@@ -61,21 +69,24 @@ module.exports.loginAdmin = async (req, res) => {
                 sameSite: "Lax",
                 path: "/",
               });
-              return res.send("Login successfully");
+              await admin.populate({ path: "appliedVenues" });
+              return successResponse_ok(res, "Admin login successfull", admin);
             } else {
-              return res.send("Wrong Password");
+              return res.send({ success: false, message: "Wrong Password" });
             }
           });
         } else {
-          return res.send("Email or Password is wrong");
+          return res.send({
+            success: false,
+            message: "Email or Password is wrong",
+          });
         }
       } else {
-        return res.send("Something is missing");
+        return errorResponse_badRequest(res);
       }
     }
   } catch (err) {
-    console.log(err.message);
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -136,7 +147,7 @@ module.exports.fetchAdmin = async (req, res) => {
   try {
     const admin = req.admin;
     await admin.populate({ path: "appliedVenues" });
-    res.send(admin);
+    return successResponse_ok(res, "Admin fetched successfully", admin);
   } catch (err) {
     res.send("Internal Server Error");
   }
@@ -185,7 +196,7 @@ module.exports.acceptVenue = async (req, res) => {
     //             </ul>
     //             <p><strong>Note:</strong> For your security, please change your password immediately after your first login.</p>
     //             <div style="text-align: center; margin-top: 20px;">
-    //                 <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank" 
+    //                 <a href="http://localhost:5173/resetpassword/${venueId}" target="_blank"
     //                    style="background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 20px; border-radius: 8px; display: inline-block; cursor: pointer;">Change Password</a>
     //             </div>
     //             <p style="margin-top: 20px;">If you have any questions or need assistance, feel free to contact our support team. We are here to help you make the most of our platform.</p>

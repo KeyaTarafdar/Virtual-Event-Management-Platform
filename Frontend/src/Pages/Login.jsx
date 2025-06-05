@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, loginVenue, loginAdmin } from "../utils/utils";
-import Loader from "../Components/Loader";
+import Loader from "../Components/loader";
+import { useUser } from "../context/userContext/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setAdmin, setUser, setVenue } = useUser();
+  //const {loginUser,loginVenue,loginAdmin}=useUser();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -62,7 +65,8 @@ const Login = () => {
           loginUser(formData.email, formData.password),
           4000
         );
-        if (userResponse && userResponse === "Login successfully") {
+        if (userResponse.success) {
+          localStorage.setItem("user", userResponse.data);
           setLoading(false);
           navigate("/");
           return;
@@ -71,7 +75,10 @@ const Login = () => {
         const venueResponse = await withTimeout(
           loginVenue(formData.email, formData.password)
         );
-        if (venueResponse === "Login successfully") {
+        console.log("venueResponse", venueResponse);
+        if (venueResponse.success) {
+          localStorage.setItem("venue", JSON.stringify(venueResponse.data));
+          setVenue(venueResponse.data);
           setLoading(false);
           navigate("/venueuser");
           return;
@@ -80,9 +87,22 @@ const Login = () => {
         const adminResponse = await withTimeout(
           loginAdmin(formData.email, formData.password)
         );
-        if (adminResponse === "Login successfully") {
+        console.log("adminResponse", adminResponse.data);
+        if (adminResponse.success) {
+          localStorage.setItem("admin", JSON.stringify(adminResponse.data));
+          setAdmin(adminResponse.data);
           setLoading(false);
           navigate("/adminpanel");
+          return;
+        }
+
+        if (
+          !adminResponse.success &&
+          !userResponse.success &&
+          !venueResponse.success
+        ) {
+          alert("Failed to login");
+          setLoading(false);
           return;
         }
         if (
@@ -95,20 +115,12 @@ const Login = () => {
         ) {
           window.location.reload(true);
           alert("Some error has occured! Please try again");
+          setLoading(false);
           return;
         }
-        setLoading(false);
-        if (
-          venueResponse === "You are already logged in." ||
-          userResponse === "You are already logged in." ||
-          adminResponse === "You are already logged in."
-        ) {
-          alert("You are already logged in");
-          return;
-        }
-        alert("Email or Password is wrong");
       } catch (err) {
         console.error("Error during API calls:", err.message);
+        setLoading(false);
       }
     }
   };

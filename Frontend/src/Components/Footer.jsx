@@ -61,13 +61,12 @@ export default function Footer({ menuItems1 }) {
             Keya Tarafdar
           </a>
           <a
-            href="#"
+            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Priya Acharjee
-          </a>
-          <a
-            href="https://drive.google.com/file/d/1USH3LX83vEr8ie7Iw_qxR2thUcCtG_8h/view?usp=sharing"
+          </a><a
+            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Shreya Kundu
@@ -79,19 +78,19 @@ export default function Footer({ menuItems1 }) {
           <h3 className="text-lg font-semibold mb-4">Get in Touch</h3>
           <div className="flex space-x-4 mb-4">
             <a
-              href={company.fbLink}
+              href={company?.fbLink}
               className="text-2xl text-gray-300 hover:text-blue-600 transition-colors"
             >
               <FaFacebook />
             </a>
             <a
-              href={company.instaLink}
+              href={company?.instaLink}
               className="text-2xl text-gray-300 hover:text-pink-500 transition-colors"
             >
               <FaInstagram />
             </a>
             <a
-              href={company.linkedinLink}
+              href={company?.linkedinLink}
               className="text-2xl text-gray-300 hover:text-blue-700 transition-colors"
             >
               <FaLinkedin />
@@ -110,12 +109,12 @@ export default function Footer({ menuItems1 }) {
           <div className="mt-4 flex justify-center items-center hover:text-blue-400">
             <AiFillMail className="mr-2" />
             <a href="mailto:eventek@gmail.com" className="hover:underline">
-              {company.email}
+              {company?.email}
             </a>
           </div>
           <div className="mt-4 flex justify-center items-center hover:text-blue-400">
             <AiFillPhone className="mr-2" />
-            {company.contact}
+            {company?.contact}
           </div>
         </div>
       </div>
@@ -123,7 +122,7 @@ export default function Footer({ menuItems1 }) {
       {/* Bottom Text */}
       <div className="bg-gray-900 text-center py-4 mt-8">
         <p className="text-sm">
-          &copy; {new Date().getFullYear()} {company.companyName}. All rights
+          &copy; {new Date().getFullYear()} {company?.companyName}. All rights
           reserved | Terms & Conditions | Privacy Policy
         </p>
       </div>

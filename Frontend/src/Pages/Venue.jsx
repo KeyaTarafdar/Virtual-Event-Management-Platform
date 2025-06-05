@@ -78,5 +78,4 @@ function Venue() {
     </>
   );
 }
-
 export default Venue;

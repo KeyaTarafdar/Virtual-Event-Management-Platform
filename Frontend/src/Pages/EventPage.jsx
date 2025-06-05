@@ -10,6 +10,7 @@ import Footer from "../Components/Footer";
 import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
 import ImageLoader from "../Components/ImageLoader1";
 import CommentSection from "../Components/CommentSection";
+import { useUser } from "../context/userContext/UserContext";
 
 const footerMenuItems = [
   { href: "header", label: "Header", icon: AiFillHome },
@@ -20,6 +21,7 @@ const footerMenuItems = [
 function EventPage() {
   const navigate = useNavigate();
   const { eventId } = useParams();
+  const { user, setUser } = useUser();
 
   const [event, setevent] = useState({});
 
@@ -66,32 +68,29 @@ function EventPage() {
     }
   };
 
-  const handleCommentSubmit = () => {
-    alert("Comment submitted!");
-  };
-
-  const handleReplyClick = () => {
-    alert("Reply clicked!");
-  };
-
   useEffect(() => {
     fetchSingleEvent(eventId).then((response) => {
-      setevent(response);
+      setevent(response.data);
     });
   }, []);
 
-  const [user, setUser] = useState(null);
   const [registered, setregistered] = useState(false);
 
   useEffect(() => {
-    findUser().then((response) => {
-      setUser(response.username.split(" ")[0]);
-      if (response.username) {
-        checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
-          setregistered(result);
-        });
-      }
-    });
+    if (!user) {
+      findUser().then((response) => {
+        setUser(response);
+        if (response.username) {
+          checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
+            setregistered(result);
+          });
+        }
+      });
+    } else {
+      checkUserIsRegisteredInEventOrNot(eventId).then((result) => {
+        setregistered(result);
+      });
+    }
   }, []);
 
   useEffect(() => {

@@ -1,3 +1,5 @@
+const { errorResponse_catchError, successResponse_ok } = require("../responseObject");
+
 // Logout
 module.exports.logout = async (req, res) => {
   try {
@@ -8,13 +10,13 @@ module.exports.logout = async (req, res) => {
       path: "/",
     });
     if (req.user) {
-      res.send("User Logout successfully");
+      return successResponse_ok(res, "User Logout successfully", null);
     } else if (req.venue) {
-      res.send("Venue Logout successfully");
+      return successResponse_ok(res, "Venue Logout successfully", null);
     } else {
-      res.send("Admin Logout successfully");
+      return successResponse_ok(res, "Admin Logout successfully", null);
     }
   } catch (err) {
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };

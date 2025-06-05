@@ -26,6 +26,7 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 import { fetchLastCreatedEvent, fetchCompanyDetails } from "../utils/utils";
+import { useCompany } from "../context/companyContext/CompanyContext";
 
 const headerMenuItems = [
   { label: "Services", href: "services" },
@@ -45,6 +46,7 @@ const footerMenuItems = [
 
 export default function Home() {
   const navigate = useNavigate();
+  // const { company, setCompany } = useCompany();
 
   const handleSignUpClick = () => {
     navigate("/signup");
@@ -52,7 +54,8 @@ export default function Home() {
 
   const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
-  const [company, setCompany] = useState({});
+  // const [company, setCompany] = useState({});
+  const { company, setCompany } = useCompany();
   const servicesRef = useRef(null);
   const [user, setUser] = useState(null);
 
@@ -88,7 +91,7 @@ export default function Home() {
     return (
       <>
         <div className="h-screen w-full flex items-center justify-center">
-        <div class="loader"></div>
+          Loading...
         </div>
       </>
     );

@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../utils/utils";
-import Loader from "../Components/Loader";
+import Loader from "../Components/loader";
+import { useUser } from "../context/userContext/UserContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { setAdmin, setUser, setVenue } = useUser();
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -89,10 +91,20 @@ const Signup = () => {
             formData.agreeToTerms
           );
 
-          if (result !== "User created successfully") {
-            alert(result);
-          } else {
+          if (result.success) {
+            if (result.message.includes("User")) {
+              setUser(result.data);
+              localStorage.setItem("user", JSON.stringify(result.data));
+            } else if (result.message.includes("Admin")) {
+              setAdmin(result.data);
+              localStorage.setItem("admin", JSON.stringify(result.data));
+            } else if (result.message.includes("Venue")) {
+              setVenue(result.data);
+              localStorage.setItem("venue", JSON.stringify(result.data));
+            }
             navigate("/");
+          } else {
+            alert(result.message);
           }
         } catch (error) {
           console.error("Signup failed:", error);

@@ -6,6 +6,14 @@ const cloudinary = require("../utils/cloudinary");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const axios = require("axios");
+const eventModel = require("../models/eventModel");
+const { formateDate } = require("../utils/helper");
+const {
+  errorResponse_badRequest,
+  errorResponse_catchError,
+  successResponse_ok,
+  errorResponse_alreadyExists,
+} = require("../responseObject");
 
 // Register Venue
 module.exports.signUp = async (req, res) => {
@@ -19,7 +27,7 @@ module.exports.signUp = async (req, res) => {
       fullAddress,
       maxCapacity,
       canOrganizeMultidayEvent,
-    } = req.body.formData;
+    } = req.body;
 
     if (
       venueName &&
@@ -32,7 +40,7 @@ module.exports.signUp = async (req, res) => {
     ) {
       const existingVenue = await venueModel.findOne({ email });
       if (existingVenue) {
-        return res.send("Venue already exists. Please Login.");
+        return errorResponse_alreadyExists(res, "Venue already exists!");
       }
 
       // const apiUrl = `https://api.zerobounce.net/v2/validate?api_key=${
@@ -65,15 +73,19 @@ module.exports.signUp = async (req, res) => {
 
       await adminModel.updateMany({}, { $push: { appliedVenues: venue._id } });
 
-      res.send("You have successfully applied for Registering your Venue");
+      return successResponse_ok(
+        res,
+        "You have successfully applied for Registering your Venue",
+        venue
+      );
       // } else {
       // res.send("Email Address doesn't exists!! Please enter a valid Email Address.")
       // }
     } else {
-      res.send("All fields are required.");
+      return errorResponse_badRequest(res);
     }
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -91,7 +103,7 @@ module.exports.uploadVenueProfilePicture = async (req, res) => {
       crop: "scale",
     });
 
-    await venueModel.updateOne(
+    const venue = await venueModel.updateOne(
       { email: req.venue.email },
       {
         $set: {
@@ -106,10 +118,9 @@ module.exports.uploadVenueProfilePicture = async (req, res) => {
     if (oldImage) {
       await cloudinary.uploader.destroy(oldImage);
     }
-    res.send("File uploaded successfully");
+    return successResponse_ok(res, "File uploaded successfully", venue);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -136,9 +147,9 @@ module.exports.loginVenue = async (req, res) => {
                   sameSite: "Lax",
                   path: "/",
                 });
-                return res.send("Login successfully");
+                return successResponse_ok(res, "Login successfull");
               } else {
-                return res.send("Wrong Password");
+                return res.send({ success: false, message: "Wrong Password" });
               }
             });
           } else if (venue.temporaryPassword == password) {
@@ -150,20 +161,22 @@ module.exports.loginVenue = async (req, res) => {
               path: "/",
             });
 
-            return res.send("Login successfully");
+            return successResponse_ok(res, "Login successfull");
           } else {
-            return res.send("Wrong Password");
+            return res.send({ success: false, message: "Wrong Password" });
           }
         } else {
-          return res.send("Email or Password is wrong");
+          return res.send({
+            success: false,
+            message: "Email or Password is wrong",
+          });
         }
       } else {
-        return res.send("Something is missing");
+        return errorResponse_badRequest(res);
       }
     }
   } catch (err) {
-    console.log(err.message);
-    return res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -197,11 +210,10 @@ module.exports.updatePasswordFirstTime = async (req, res) => {
     );
 
     if (venue) {
-      res.send("Password Updated Successfully");
+      return successResponse_ok(res, "Password Updated Successfully", null);
     }
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -218,10 +230,9 @@ module.exports.fetchVenueUser = async (req, res) => {
       { path: "bookedEvents" },
     ]);
 
-    res.send(venue);
+    return successResponse_ok(res, "Venue fetched", venue);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -231,13 +242,14 @@ module.exports.updateHallName = async (req, res) => {
     let { newHallName } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.updateOne(
       { email: venue.email },
-      { $set: { name: newHallName } }
+      { $set: { name: newHallName } },
+      { new: true }
     );
-    res.send("Hallname updated");
+    return successResponse_ok(res, "Hallname updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -247,13 +259,14 @@ module.exports.updateHallCity = async (req, res) => {
     let { newHallCity } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.updateOne(
       { email: venue.email },
-      { $set: { city: newHallCity } }
+      { $set: { city: newHallCity } },
+      { new: true }
     );
-    res.send("Hall City updated");
+    return successResponse_ok(res, "Hall City updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -264,7 +277,10 @@ module.exports.updateHallEmail = async (req, res) => {
     let venue = req.venue;
 
     venueModel
-      .updateOne({ email: venue.email }, { $set: { email: newHallEmail } })
+      .findOneAndUpdate(
+        { email: venue.email },
+        { $set: { email: newHallEmail } }
+      )
       .then((response) => {
         res.cookie("token", "", {
           httpOnly: true,
@@ -273,7 +289,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        let updatedVenue = { ...venue, email: newHallEmail };  
+        let updatedVenue = { ...venue, email: newHallEmail };
         let token = generateToken(updatedVenue);
 
         res.cookie("token", token, {
@@ -283,14 +299,13 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        res.send("Hall Email updated");
+        return successResponse_ok(res, "Hall Email updated", updatedVenue);
       })
       .catch((err) => {
         res.send(err.message);
       });
   } catch (err) {
-    console.log(err.message)
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -300,13 +315,14 @@ module.exports.updateHallContact = async (req, res) => {
     let { newHallPhone } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { contact: newHallPhone } }
+      { $set: { contact: newHallPhone } },
+      { new: true }
     );
-    res.send("Hall contact updated");
+    return successResponse_ok(res, "Hall contact updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -316,13 +332,14 @@ module.exports.updateHallAddress = async (req, res) => {
     let { newHallAddress } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { address: newHallAddress } }
+      { $set: { address: newHallAddress } },
+      { new: true }
     );
-    res.send("Hall address updated");
+    return successResponse_ok(res, "Hall address updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -332,13 +349,14 @@ module.exports.updateHallCapacity = async (req, res) => {
     let { newHallCapacity } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { maxCapacity: newHallCapacity } }
+      { $set: { maxCapacity: newHallCapacity } },
+      { new: true }
     );
-    res.send("Hall capacity updated");
+    return successResponse_ok(res, "Hall capacity updated", venue);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
 
@@ -348,12 +366,199 @@ module.exports.updateHallMultiday = async (req, res) => {
     let { newHallCapacity } = req.body;
     let venue = req.venue;
 
-    await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { canOrganizeMultidayEvent: newHallCapacity } }
+      { $set: { canOrganizeMultidayEvent: newHallCapacity } },
+      { new: true }
     );
-    res.send("Hall Multiday Fecility updated");
+    return successResponse_ok(res, "Hall Multiday Fecility updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall timing
+module.exports.updateHallTime = async (req, res) => {
+  try {
+    const {
+      time_1stHalf,
+      bookingPrice_1stHalf,
+      time_2ndHalf,
+      bookingPrice_2ndHalf,
+      time_fullDay,
+      bookingPrice_fullDay,
+    } = req.body;
+    const { _id } = req.venue;
+    const venue = await venueModel.findOneAndUpdate(
+      { _id },
+      {
+        $set: {
+          time_1stHalf,
+          bookingPrice_1stHalf,
+          time_2ndHalf,
+          bookingPrice_2ndHalf,
+          time_fullDay,
+          bookingPrice_fullDay,
+        },
+      },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .send({ success: true, message: "Venue details updated", data: venue });
   } catch (err) {
     res.send(err.message);
+  }
+};
+
+// Update Hall type
+module.exports.updateHallType = async (req, res) => {
+  try {
+    let { newHallType } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { hallType: newHallType } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall type updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall time (1st)
+module.exports.updateHall_1stHalfTime = async (req, res) => {
+  try {
+    let { newHall_1stHalfTime } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { time_1stHalf: newHall_1stHalfTime } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall 1st half time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall time (2nd)
+module.exports.updateHall_2ndHalfTime = async (req, res) => {
+  try {
+    let { newHall_2ndHalfTime } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { time_2ndHalf: newHall_2ndHalfTime } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall 2nd half time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall time (full day)
+module.exports.updateHall_fullDayTime = async (req, res) => {
+  try {
+    let { newHall_fullDayTime } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { time_fullDay: newHall_fullDayTime } },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall full day time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall price (1st)
+module.exports.updateHall_1stHalfPrice = async (req, res) => {
+  try {
+    let { newHall_1stHalfprice } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { bookingPrice_1stHalf: newHall_1stHalfprice } },
+      { new: true }
+    );
+    return successResponse_ok(
+      res,
+      "Hall 1st half booking price updated",
+      venue
+    );
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall price (2nd)
+module.exports.updateHall_2ndHalfPrice = async (req, res) => {
+  try {
+    let { newHall_2ndHalfprice } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { bookingPrice_2ndHalf: newHall_2ndHalfprice } },
+      { new: true }
+    );
+    return successResponse_ok(
+      res,
+      "Hall 2nd half booking price updated",
+      venue
+    );
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall price (full day)
+module.exports.updateHall_fullDayPrice = async (req, res) => {
+  try {
+    let { newHall_fullDayprice } = req.body;
+    let venue = req.venue;
+
+    venue = await venueModel.findOneAndUpdate(
+      { email: venue.email },
+      { $set: { bookingPrice_fullDay: newHall_fullDayprice } },
+      { new: true }
+    );
+    return successResponse_ok(
+      res,
+      "Hall full day booking price updated",
+      venue
+    );
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Accept event request
+module.exports.acceptEvent = async (req, res) => {
+  try {
+    const { eventId, timeslot } = req.body;
+    const event = await eventModel.findOne({ _id: eventId });
+    let venue = req.venue;
+    if (event) {
+      event.venues = [{ id: venue.id, timeslot }];
+      event.isVenueConfirmed = true;
+      await event.save();
+    }
+
+    await venueModel.findOneAndUpdate({ _id: venue._id }, {});
+
+    const { _id } = req.vneue;
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };

@@ -158,13 +158,14 @@ const CompanyPage = () => {
   }, [menuVisible]);
 
   useEffect(() => {
-    fetchCompanyDetails().then((response) => {
-      setCompany(response);
-    });
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        localStorage.setItem("company", JSON.stringify(response))
+        setCompany(response);
+      });
+    }
   }, []);
 
- 
-  
   const checkSlotConfirmation = (eventCreatedDate, slotConfirmedDate) => {
     const createdDate = new Date(eventCreatedDate);
     const confirmedDate = new Date(slotConfirmedDate);
@@ -203,12 +204,16 @@ const CompanyPage = () => {
   const [eventsCopy, seteventsCopy] = useState([]);
 
   useEffect(() => {
-    findUser().then((response) => {
-      setuserProfile(response);
-      setcreatedEvents(response.createdEvents);
-      setappliedEvents(response.appliedEvents);
-      setevents(response.createdEvents);
-    });
+    if (!user) {
+      findUser().then((response) => {
+        localStorage.setItem("user", JSON.stringify(response))
+        setUser(response)
+        setevents(response?.createdEvents)
+      })
+    } else {
+      const user = JSON.parse(localStorage.getItem("user"))
+      setevents(user?.createdEvents)
+    }
   }, []);
 
   return (
@@ -496,7 +501,6 @@ const CompanyPage = () => {
                       Update Event Details
                     </button>
                   </div>
-
                 </div>
               </div>
             ))}
