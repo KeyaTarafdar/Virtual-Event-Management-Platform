@@ -10,10 +10,11 @@ const {
   fetchAdmin,
   fetchAllVenue,
   uploadProfilePicture,
-  uploadCompanyName,
-  uploadCompanyAddress,
-  uploadCompanyContact,
-  uploadCompanyEmail,uploadCompanyDescription
+  updateCompanyName,
+  updateCompanyAddress,
+  updateCompanyContact,
+  updateCompanyEmail,
+  updateCompanyDescription,
 } = require("../controller/adminController");
 
 router.get("/", (req, res) => {
@@ -32,20 +33,24 @@ router.get("/logout", adminIsLoggedIn, logoutAdmin);
 // UPLOAD PROFILE PICTURE (USING CLOUDINARY)
 router.post("/uploadprofilepicture", adminIsLoggedIn, uploadProfilePicture);
 
-// UPLOAD PROFILE COMPANY NAME
-router.post("/uploadcompanyname", adminIsLoggedIn, uploadCompanyName);
+// UPDATE PROFILE COMPANY NAME
+router.post("/updatecompanyname", adminIsLoggedIn, updateCompanyName);
 
-// UPLOAD PROFILE COMPANY CONTACT
-router.post("/uploadcompanycontact", adminIsLoggedIn, uploadCompanyContact);
+// UPDATE PROFILE COMPANY CONTACT
+router.post("/updatecompanycontact", adminIsLoggedIn, updateCompanyContact);
 
-// UPLOAD PROFILE COMPANY EMAIL
-router.post("/uploadcompanyemail", adminIsLoggedIn, uploadCompanyEmail);
+// UPDATE PROFILE COMPANY EMAIL
+router.post("/updatecompanyemail", adminIsLoggedIn, updateCompanyEmail);
 
-// UPLOAD PROFILE COMPANY ADDRESS
-router.post("/uploadcompanyaddress", adminIsLoggedIn, uploadCompanyAddress);
+// UPDATE PROFILE COMPANY ADDRESS
+router.post("/updatecompanyaddress", adminIsLoggedIn, updateCompanyAddress);
 
-// UPLOAD PROFILE COMPANY DESCRIPTION
-router.post("/uploadcompanydescription", adminIsLoggedIn, uploadCompanyDescription);
+// UPDATE PROFILE COMPANY DESCRIPTION
+router.post(
+  "/updatecompanydescription",
+  adminIsLoggedIn,
+  updateCompanyDescription
+);
 
 // FETCH ADMIN
 router.get("/fetchadmin", adminIsLoggedIn, fetchAdmin);

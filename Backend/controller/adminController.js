@@ -143,8 +143,8 @@ module.exports.uploadProfilePicture = async (req, res) => {
   }
 };
 
-// Upload Company Name
-module.exports.uploadCompanyName = async (req, res) => {
+// Update Company Name
+module.exports.updateCompanyName = async (req, res) => {
   try {
     const { companyName } = req.body;
     let company = await companyModel.updateMany({ companyName }, { new: true });
@@ -159,8 +159,8 @@ module.exports.uploadCompanyName = async (req, res) => {
   }
 };
 
-// Upload Company Contact
-module.exports.uploadCompanyContact = async (req, res) => {
+// Update Company Contact
+module.exports.updateCompanyContact = async (req, res) => {
   try {
     const { contact } = req.body;
     let company = await companyModel.updateMany({ contact }, { new: true });
@@ -175,8 +175,8 @@ module.exports.uploadCompanyContact = async (req, res) => {
   }
 };
 
-// Upload Company Email
-module.exports.uploadCompanyEmail = async (req, res) => {
+// Update Company Email
+module.exports.updateCompanyEmail = async (req, res) => {
   try {
     const { email } = req.body;
     let company = await companyModel.updateMany({ email }, { new: true });
@@ -191,8 +191,8 @@ module.exports.uploadCompanyEmail = async (req, res) => {
   }
 };
 
-// Upload Company Address
-module.exports.uploadCompanyAddress = async (req, res) => {
+// Update Company Address
+module.exports.updateCompanyAddress = async (req, res) => {
   try {
     const { address } = req.body;
     let company = await companyModel.updateMany({ address }, { new: true });
@@ -207,8 +207,8 @@ module.exports.uploadCompanyAddress = async (req, res) => {
   }
 };
 
-// Upload Company Description
-module.exports.uploadCompanyDescription = async (req, res) => {
+// Update Company Description
+module.exports.updateCompanyDescription = async (req, res) => {
   try {
     const { description } = req.body;
     let company = await companyModel.updateMany({ description }, { new: true });
