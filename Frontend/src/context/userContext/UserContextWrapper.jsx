@@ -14,18 +14,12 @@ const UserContextWrapper = ({ children }) => {
 
     if (storedUser) {
       setUser(storedUser);
-    } else {
-      setUser(null);
     }
     if (storedVenue) {
       setVenue(storedVenue);
-    } else {
-      setVenue(null);
     }
     if (storedAdmin) {
       setAdmin(storedAdmin);
-    } else {
-      setAdmin(null);
     }
   }, []);
 
