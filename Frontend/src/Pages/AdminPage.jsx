@@ -439,7 +439,7 @@ function AdminPage() {
                         <tr key={venue._id}>
                           <td className="border-2 p-2">{index + 1}</td>
                           <td className="border-2 p-2">{venue.name}</td>
-                          <td className="border-2 p-2">{venue.owner}</td>
+                          <td className="border-2 p-2">{venue.ownerName}</td>
                           <td className="border-2 p-2">{venue.email}</td>
                           <td className="border-2 p-2">{venue.contact}</td>
                           <td className="border-2 p-2">{venue.city}</td>
