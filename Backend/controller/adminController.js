@@ -120,7 +120,7 @@ module.exports.uploadProfilePicture = async (req, res) => {
       gravity: "face",
     });
 
-    await adminModel.updateOne(
+    const admin = await adminModel.findOneAndUpdate(
       { email: req.admin.email },
       {
         $set: {
@@ -129,16 +129,25 @@ module.exports.uploadProfilePicture = async (req, res) => {
             url: result.secure_url,
           },
         },
-      }
+      },
+      { new: true }
     );
 
     if (oldImage) {
       await cloudinary.uploader.destroy(oldImage);
     }
-    res.send("File uploaded successfully");
+    return successResponse_ok(res, "File uploaded successfully", admin);
   } catch (err) {
-    console.log(err.message);
-    res.send("Internal Server Error");
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Upload Company Name
+module.exports.uploadCompanyName = async (req, res) => {
+  try {
+    const { comapanyName } = req.body;
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
   }
 };
 
