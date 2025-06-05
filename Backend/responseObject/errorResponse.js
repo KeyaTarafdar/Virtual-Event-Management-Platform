@@ -7,11 +7,11 @@ module.exports.errorResponse_unauthorized = (res) => {
 };
 
 module.exports.errorResponse_alreadyExists = (res, message) => {
-  res.status(403).send({ success: false, message });
+  res.send({ success: false, message });
 };
 
 module.exports.errorResponse_notFound = (res, message) => {
-  res.status(404).send({ success: false, message });
+  res.send({ success: false, message });
 };
 
 module.exports.errorResponse_catchError = (res, message) => {

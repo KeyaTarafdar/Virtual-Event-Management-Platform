@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { findUser, fetchSingleEvent, eventRegistration } from "../utils/utils";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -56,7 +56,6 @@ const Registrationform = () => {
               },
               { withCredentials: true }
             );
-            console.log("verifyResponse", verifyResponse);
             if (verifyResponse.data.success) {
               setLoading(true);
               eventRegistration(eventId).then((response) => {
