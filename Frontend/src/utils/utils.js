@@ -451,6 +451,85 @@ export const updateVenueHalltype = async (newHalltype) => {
   }
 };
 
+// Update Venue 1sthalf
+export const updateHallTime_1st = async (newHalltime1st) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_1st",
+      { newHalltime1st },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue 2ndhalf
+export const updateHallTime_2nd = async (newHalltime2nd) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_2nd",
+      { newHalltime2nd },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue time fullday
+export const updateHallTime_fullday = async (newHalltimefullday) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_fullday",
+      { newHalltimefullday },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue hallprice_1
+export const updateHallPrice_1st = async (newHallprice1) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_1st",
+      { newHallprice1 },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue hallPrice_2
+export const updateHallPrice_2nd = async (newHallprice2) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_2nd",
+      { newHallprice2 },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue hallPrice_fullday
+export const updateHallPrice_fullday = async (newHallpricefull) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_fullday",
+      { newHallpricefull },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 
 // Admin Login
@@ -533,6 +612,82 @@ export const fetchAllEvents = async () => {
   try {
     let { data } = await axios.get(
       "http://localhost:8000/admins/fetchallvenue",
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//company name
+export const setCompanyName = async (companyName) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanyname", {companyName},
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//company address
+export const setCompanyAdress = async (address) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanyaddress",
+      {address}
+      ,{ 
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//company email
+export const setCompanyEmail = async (email) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanyemail",
+      {email},{
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//company contact
+export const setCompanyContact = async (contact) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanycontact",{contact},
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//company description
+export const setCompanyDesc = async (description) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanydescription",{description},
       {
         withCredentials: true,
       }

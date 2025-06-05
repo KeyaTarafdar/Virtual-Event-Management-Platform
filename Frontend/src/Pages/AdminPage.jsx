@@ -11,6 +11,11 @@ import {
   fetchAllEvents,
   uploadProfilePictureAdmin,
   rejectVenue,
+  setCompanyName,
+  setCompanyAdress,
+  setCompanyDesc,
+  setCompanyContact,
+  setCompanyEmail
 } from "../utils/utils";
 import {
   faCalendarCheck,
@@ -73,7 +78,7 @@ function AdminPage() {
       const imageData = await setFileToBase(file);
 
       uploadProfilePictureAdmin(imageData).then((response) => {
-        alert(response);
+        alert(response.message);
       });
     } else {
       alert("Please Upload an Image");

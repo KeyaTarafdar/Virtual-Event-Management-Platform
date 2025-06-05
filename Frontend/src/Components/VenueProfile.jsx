@@ -621,34 +621,43 @@ function VenueProfile() {
                           : "Please Select Hall Type"}
                       </span>
                     )}
-                    <button
-                      onClick={() => {
-                        if (isEditing === "hallType") {
-                          updateVenueHalltype(newHallType).then(
-                            (response) => {
-                              if (response.success) {
-                                findVenue().then((response) => {
-                                  setVenue(response.data);
-                                  localStorage.setItem(
-                                    "venue",
-                                    JSON.stringify(response.data)
-                                  );
-                                });
-                              }
-                              setIsEditing(null);
-                            }
-                          );
-                        } else {
-                          setnewHallType(
-                            venue ? venue.hallType : null
-                          );
-                          setIsEditing("hallType");
-                        }
-                      }
+                    {/* <button
+                      onClick={() =>
+                        isEditing === "halltype"
+                          ? handleSave("halltype")
+                          : setIsEditing("halltype")
                       }
                       className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
                     >
-                      {isEditing === "hallType" ? (
+                      {isEditing === "halltype" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button> */}
+                     <button
+                      onClick={() => {
+                        if (isEditing === "halltype") {
+                          updateVenueHalltype(newHallType).then((response) => {
+                            if (response.success) {
+                              findVenue().then((response) => {
+                                setVenue(response.data);
+                                localStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              });
+                            }
+                            setIsEditing(null);
+                          });
+                        } else {
+                          setnewHallType(venue ? venue.hallType : "");
+                          setIsEditing("halltype");
+                        }
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "halltype" ? (
                         <AiOutlineCheck size={16} />
                       ) : (
                         <AiOutlineEdit size={16} />

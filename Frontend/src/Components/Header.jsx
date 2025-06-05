@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { useNavigate } from "react-router-dom";
 import { findUser } from "../utils/utils";
@@ -10,7 +10,7 @@ export default function Header() {
 
   useEffect(() => {
     findUser().then((response) => {
-      setUser(response.username ? response.username.split(" ")[0] : null);
+      setUser(response ?.username ? response.username.split(" ")[0] : null);
     });
   }, []);
 
