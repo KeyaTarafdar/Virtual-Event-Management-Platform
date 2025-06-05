@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { UserProvider } from './UserContext';
+import { useState, useEffect } from "react";
+import { UserProvider } from "./UserContext";
 
 // eslint-disable-next-line react/prop-types
 const UserContextWrapper = ({ children }) => {
@@ -14,21 +14,30 @@ const UserContextWrapper = ({ children }) => {
 
     if (storedUser) {
       setUser(storedUser);
+    } else {
+      setUser(null);
     }
     if (storedVenue) {
       setVenue(storedVenue);
+    } else {
+      setVenue(null);
     }
     if (storedAdmin) {
       setAdmin(storedAdmin);
+    } else {
+      setAdmin(null);
     }
   }, []);
 
   return (
     <UserProvider
       value={{
-        user, setUser,
-        venue, setVenue,
-        admin, setAdmin
+        user,
+        setUser,
+        venue,
+        setVenue,
+        admin,
+        setAdmin,
       }}
     >
       {children}
@@ -36,4 +45,4 @@ const UserContextWrapper = ({ children }) => {
   );
 };
 
-export default UserContextWrapper
+export default UserContextWrapper;
