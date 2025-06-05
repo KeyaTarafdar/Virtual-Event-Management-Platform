@@ -80,7 +80,7 @@ const CompanyPage = () => {
 
       uploadProfilePicture(imageData).then((response) => {
         if (response.success) {
-          localStorage.setItem("user", JSON.stringify(response.data))
+          sessionStorage.setItem("user", JSON.stringify(response.data))
           setUser(response.data)
         }
         alert(response.message);
@@ -106,7 +106,7 @@ const CompanyPage = () => {
   useEffect(() => {
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        localStorage.setItem("company", JSON.stringify(response))
+        sessionStorage.setItem("company", JSON.stringify(response))
         setCompany(response);
       });
     }
@@ -152,12 +152,12 @@ const CompanyPage = () => {
   useEffect(() => {
     if (!user) {
       findUser().then((response) => {
-        localStorage.setItem("user", JSON.stringify(response))
+        sessionStorage.setItem("user", JSON.stringify(response))
         setUser(response)
         setevents(response?.createdEvents)
       })
     } else {
-      const user = JSON.parse(localStorage.getItem("user"))
+      const user = JSON.parse(sessionStorage.getItem("user"))
       setevents(user?.createdEvents)
     }
   }, []);

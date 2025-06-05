@@ -218,7 +218,7 @@ function VenueProfile() {
                           updateVenueName(newHallName).then((response) => {
                             if (response.success) {
                               setVenue(response.data);
-                              localStorage.setItem(
+                              sessionStorage.setItem(
                                 "venue",
                                 JSON.stringify(response.data)
                               );
@@ -268,7 +268,7 @@ function VenueProfile() {
                               if (response.success) {
                                 findVenue().then((response) => {
                                   setVenue(response.data);
-                                  localStorage.setItem(
+                                  sessionStorage.setItem(
                                     "venue",
                                     JSON.stringify(response.data)
                                   );
@@ -328,7 +328,7 @@ function VenueProfile() {
                               if (response.success) {
                                 findVenue().then((response) => {
                                   setVenue(response.data);
-                                  localStorage.setItem(
+                                  sessionStorage.setItem(
                                     "venue",
                                     JSON.stringify(response.data)
                                   );
@@ -382,7 +382,7 @@ function VenueProfile() {
                             if (response.success) {
                               findVenue().then((response) => {
                                 setVenue(response.data);
-                                localStorage.setItem(
+                                sessionStorage.setItem(
                                   "venue",
                                   JSON.stringify(response.data)
                                 );
@@ -431,7 +431,7 @@ function VenueProfile() {
                             if (response.success) {
                               findVenue().then((response) => {
                                 setVenue(response.data);
-                                localStorage.setItem(
+                                sessionStorage.setItem(
                                   "venue",
                                   JSON.stringify(response.data)
                                 );
@@ -483,7 +483,7 @@ function VenueProfile() {
                               if (response.data) {
                                 findVenue().then((response) => {
                                   setVenue(response.data);
-                                  localStorage.setItem(
+                                  sessionStorage.setItem(
                                     "venue",
                                     JSON.stringify(response.data)
                                   );
@@ -560,7 +560,7 @@ function VenueProfile() {
                               if (response.success) {
                                 findVenue().then((response) => {
                                   setVenue(response.data);
-                                  localStorage.setItem(
+                                  sessionStorage.setItem(
                                     "venue",
                                     JSON.stringify(response.data)
                                   );
@@ -642,7 +642,7 @@ function VenueProfile() {
                             if (response.success) {
                               findVenue().then((response) => {
                                 setVenue(response.data);
-                                localStorage.setItem(
+                                sessionStorage.setItem(
                                   "venue",
                                   JSON.stringify(response.data)
                                 );

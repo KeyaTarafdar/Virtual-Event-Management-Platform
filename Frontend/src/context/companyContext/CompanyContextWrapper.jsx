@@ -6,7 +6,7 @@ const CompanyContextWrapper = ({ children }) => {
   const [company, setCompany] = useState(null);
 
   useEffect(() => {
-    const storedCompany = JSON.parse(localStorage.getItem("company"));
+    const storedCompany = JSON.parse(sessionStorage.getItem("company"));
 
     if (storedCompany) {
       setCompany(storedCompany);
