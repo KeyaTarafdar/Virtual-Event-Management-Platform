@@ -20,12 +20,15 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
   const { company, setCompany } = useCompany();
+  const { admin, setAdmin } = useUser();
+
 
   const handleReject = () => {
     setIsModalOpen(true);
@@ -47,6 +50,10 @@ function AdminPage() {
 
   function handleAcceptVenue(venueId) {
     acceptVenue(venueId).then((response) => {
+      if (response.success) {
+        setAdmin(response.data);
+        sessionStorage.setItem("admin",JSON.stringify(response.data));
+      }
       alert(response.message);
     });
   }
@@ -89,16 +96,14 @@ function AdminPage() {
     const input = document.querySelector(`#${type}Input`).value;
     if (input) {
       console.log(
-        `Searching for ${input} by ${
-          type === "venueName" ? "Venue Name" : "Venue Address"
+        `Searching for ${input} by ${type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
 
       document.querySelector(`#${type}Input`).value = "";
     } else {
       alert(
-        `Please enter a ${
-          type === "venueName" ? "Venue Name" : "Venue Address"
+        `Please enter a ${type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
     }
@@ -268,9 +273,8 @@ function AdminPage() {
                       eventImage={event.posterImage.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
@@ -309,9 +313,8 @@ function AdminPage() {
                       eventImage={event.posterImage.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
@@ -618,15 +621,15 @@ function AdminPage() {
     }
   };
 
-  const [admin, setadmin] = useState(null);
+  const [adminuser, setadminuser] = useState(null);
   const [venueRequests, setvenueRequests] = useState([]);
   const [allVenues, setallVenues] = useState([]);
   const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
-    if (!admin) {
+    if (!adminuser) {
       findAdmin().then((response) => {
-        setadmin(response);
+        setadminuser(response);
         setvenueRequests(response.appliedVenues);
       });
     }
@@ -673,7 +676,7 @@ function AdminPage() {
             <div className="w-full flex justify-center pt-3  ">
               <img
                 className="rounded-full h-32 w-32 border-[.4rem] border-indigo-400"
-                src={admin ? (admin.image ? admin.image.url : null) : null}
+                src={adminuser ? (adminuser.image ? adminuser.image.url : null) : null}
                 alt="admin image"
               ></img>
               <label className="mt-3 absolute top-[5.8rem] sm:top-[7.5rem] w-8 h-8 cursor-pointer flex justify-center items-center  bg-gray-600 rounded-full p-2">
@@ -697,41 +700,36 @@ function AdminPage() {
 
             <ul className="space-y-4 p-2 flex flex-col items-center">
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Home" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Home" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Home")}
               >
                 Home
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Venue Requests" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Requests" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Venue Requests")}
               >
                 Requested Venue
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Upcoming Events")}
               >
                 Upcoming Events
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Past Events" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Past Events" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Past Events")}
               >
                 Past Events
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Venue Details" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Details" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Venue Details")}
               >
                 Venue Details
