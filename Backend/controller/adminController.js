@@ -207,6 +207,22 @@ module.exports.uploadCompanyAddress = async (req, res) => {
   }
 };
 
+// Upload Company Description
+module.exports.uploadCompanyDescription = async (req, res) => {
+  try {
+    const { description } = req.body;
+    let company = await companyModel.updateMany({ description }, { new: true });
+
+    return successResponse_ok(
+      res,
+      "Company description updated successfully",
+      company[0]
+    );
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
 // Fetch Admin
 module.exports.fetchAdmin = async (req, res) => {
   try {

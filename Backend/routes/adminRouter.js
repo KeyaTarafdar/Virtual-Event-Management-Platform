@@ -13,7 +13,7 @@ const {
   uploadCompanyName,
   uploadCompanyAddress,
   uploadCompanyContact,
-  uploadCompanyEmail,
+  uploadCompanyEmail,uploadCompanyDescription
 } = require("../controller/adminController");
 
 router.get("/", (req, res) => {
@@ -44,7 +44,10 @@ router.post("/uploadcompanyemail", adminIsLoggedIn, uploadCompanyEmail);
 // UPLOAD PROFILE COMPANY ADDRESS
 router.post("/uploadcompanyaddress", adminIsLoggedIn, uploadCompanyAddress);
 
-//  FETCH ADMIN
+// UPLOAD PROFILE COMPANY DESCRIPTION
+router.post("/uploadcompanydescription", adminIsLoggedIn, uploadCompanyDescription);
+
+// FETCH ADMIN
 router.get("/fetchadmin", adminIsLoggedIn, fetchAdmin);
 
 // ACCEPT A VENUE
