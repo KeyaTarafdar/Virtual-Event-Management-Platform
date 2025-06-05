@@ -444,9 +444,9 @@ module.exports.rejectVenue = async (req, res) => {
 // Fetch All Venue
 module.exports.fetchAllVenue = async (req, res) => {
   try {
-    let events = await eventModel.find();
-    res.send(events);
+    let venues = await venueModel.find();
+    return successResponse_ok(res, "All venues fetched successfully", venues);
   } catch (err) {
-    res.send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };
