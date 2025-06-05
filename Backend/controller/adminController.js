@@ -353,7 +353,10 @@ module.exports.acceptVenue = async (req, res) => {
         </div>
     </body>`,
     });*/
-    return successResponse_ok(res, "Venue is added and email sent", null);
+    const admins = await adminModel.find();
+    const admin = admins[0];
+    await admin.populate({ path: "appliedVenues" });
+    return successResponse_ok(res, "Venue is added and email sent", admin);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
@@ -434,8 +437,10 @@ module.exports.rejectVenue = async (req, res) => {
     //     </div>
     // </body>`,
     //     });
-
-    return successResponse_ok(res, "Venue is rejected", null);
+    const admins = await adminModel.find();
+    const admin = admins[0];
+    await admin.populate({ path: "appliedVenues" });
+    return successResponse_ok(res, "Venue is rejected", admin);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
