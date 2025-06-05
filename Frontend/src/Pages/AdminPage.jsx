@@ -38,7 +38,7 @@ function AdminPage() {
 
   const handleSubmitReason = (venueId, reason) => {
     rejectVenue(venueId, reason).then((response) => {
-      alert(response);
+      alert(response.message);
     });
 
     setIsModalOpen(false);
@@ -47,7 +47,7 @@ function AdminPage() {
 
   function handleAcceptVenue(venueId) {
     acceptVenue(venueId).then((response) => {
-      alert(response);
+      alert(response.message);
     });
   }
 
@@ -655,7 +655,7 @@ function AdminPage() {
 
   useEffect(() => {
     fetchAllVenues().then((response) => {
-      setallVenues(response);
+      setallVenues(response.data);
     });
 
     fetchAllEvents().then((response) => {
