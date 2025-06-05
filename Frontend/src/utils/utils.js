@@ -625,10 +625,12 @@ export const fetchAllEvents = async () => {
 //company name
 export const updateCompanyInfo = async (company) => {
   try {
+    console.log("company", company);
     let { data } = await axios.post(
-      "http://localhost:8000/admins/updatecompanyinfo", {
-      ...company
-    },
+      "http://localhost:8000/admins/updatecompanyinfo",
+      {
+        ...company,
+      },
       {
         withCredentials: true,
       }

@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -119,32 +119,27 @@ function AdminPage() {
 
   const [editMode, setEditMode] = useState({
     companyName: false,
-    establishedYear: false,
-    companyOwner: false,
-    mainOfficeCity: false,
-    mainOfficeAddress: false,
-    mainOfficePincode: false,
+    address: false,
     email: false,
-    contactNumber: false,
+    contact: false,
+    description: false,
   });
 
   const handleEditToggle = (field) => {
+    if (editMode[field]) {
+      updateCompanyInfo(fields).then((response) => {
+        if (response.success) {
+          setCompany(response.data);
+          localStorage.setItem("company", JSON.stringify(response.data));
+        } else {
+          alert(response.message);
+        }
+      });
+    }
     setEditMode((prev) => ({
       ...prev,
       [field]: !prev[field],
     }));
-
-    if (editMode.field) {
-      // post update company info request & set the response into companycontext & localstorage
-      updateCompanyInfo(field).then((response)=>{
-        if(response.success){
-          setCompany(response.data);
-          localStorage.setItem("company",JSON.stringify(response.data));
-        }else{
-          alert(response.message);
-        }
-      })
-    }
   };
 
   const handleFieldChange = (e, field) => {

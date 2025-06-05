@@ -227,10 +227,15 @@ module.exports.uploadProfilePicture = async (req, res) => {
 module.exports.updateCompanyInfo = async (req, res) => {
   try {
     const { companyName, address, email, contact, description } = req.body;
-    let company = await companyModel.updateMany(
-      { companyName, address, email, contact, description },
-      { new: true }
-    );
+    await companyModel.updateMany({
+      companyName,
+      address,
+      email,
+      contact,
+      description,
+    });
+
+    const company = await companyModel.find();
 
     return successResponse_ok(
       res,
