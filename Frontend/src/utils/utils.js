@@ -623,10 +623,12 @@ export const fetchAllEvents = async () => {
 };
 
 //company name
-export const setCompanyName = async (companyName) => {
+export const updateCompanyInfo = async (company) => {
   try {
     let { data } = await axios.post(
-      "http://localhost:8000/admins/updatecompanyname", {companyName},
+      "http://localhost:8000/admins/updatecompanyinfo", {
+      ...company
+    },
       {
         withCredentials: true,
       }
@@ -638,62 +640,62 @@ export const setCompanyName = async (companyName) => {
 };
 
 //company address
-export const setCompanyAdress = async (address) => {
-  try {
-    let { data } = await axios.post(
-      "http://localhost:8000/admins/updatecompanyaddress",
-      {address}
-      ,{ 
-        withCredentials: true,
-      }
-    );
-    return data;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+// export const setCompanyAdress = async (address) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanyaddress",
+//       {address}
+//       ,{
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
-//company email
-export const setCompanyEmail = async (email) => {
-  try {
-    let { data } = await axios.post(
-      "http://localhost:8000/admins/updatecompanyemail",
-      {email},{
-        withCredentials: true,
-      }
-    );
-    return data;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+// //company email
+// export const setCompanyEmail = async (email) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanyemail",
+//       {email},{
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
-//company contact
-export const setCompanyContact = async (contact) => {
-  try {
-    let { data } = await axios.post(
-      "http://localhost:8000/admins/updatecompanycontact",{contact},
-      {
-        withCredentials: true,
-      }
-    );
-    return data;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+// //company contact
+// export const setCompanyContact = async (contact) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanycontact",{contact},
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
-//company description
-export const setCompanyDesc = async (description) => {
-  try {
-    let { data } = await axios.post(
-      "http://localhost:8000/admins/updatecompanydescription",{description},
-      {
-        withCredentials: true,
-      }
-    );
-    return data;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+// //company description
+// export const setCompanyDesc = async (description) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanydescription",{description},
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };

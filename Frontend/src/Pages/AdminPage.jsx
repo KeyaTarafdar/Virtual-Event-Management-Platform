@@ -12,6 +12,7 @@ import {
   uploadProfilePictureAdmin,
   rejectVenue,
   fetchCompanyDetails,
+  updateCompanyInfo,
 } from "../utils/utils";
 import {
   faCalendarCheck,
@@ -135,6 +136,14 @@ function AdminPage() {
 
     if (editMode.field) {
       // post update company info request & set the response into companycontext & localstorage
+      updateCompanyInfo(field).then((response)=>{
+        if(response.success){
+          setCompany(response.data);
+          localStorage.setItem("company",JSON.stringify(response.data));
+        }else{
+          alert(response.message);
+        }
+      })
     }
   };
 
