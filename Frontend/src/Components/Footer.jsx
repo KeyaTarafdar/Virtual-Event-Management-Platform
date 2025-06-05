@@ -12,7 +12,7 @@ export default function Footer({ menuItems1 }) {
   useEffect(() => {
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        setCompany(response.data);
+        setCompany(response);
       });
     }
   }, []);

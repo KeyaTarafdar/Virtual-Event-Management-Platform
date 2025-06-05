@@ -61,9 +61,7 @@ export default function Home() {
 
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        if (response.success) {
-          setCompany(response.data);
-        }
+        setCompany(response);
       });
     }
     setfetchingCompleted(true);

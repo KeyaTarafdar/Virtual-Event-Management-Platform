@@ -8,7 +8,14 @@ const {
   acceptVenue,
   rejectVenue,
   fetchAdmin,
-  fetchAllVenue,uploadProfilePicture
+  fetchAllVenue,
+  uploadProfilePicture,
+  // updateCompanyName,
+  // updateCompanyAddress,
+  // updateCompanyContact,
+  // updateCompanyEmail,
+  // updateCompanyDescription,
+  updateCompanyInfo,
 } = require("../controller/adminController");
 
 router.get("/", (req, res) => {
@@ -27,7 +34,25 @@ router.get("/logout", adminIsLoggedIn, logoutAdmin);
 // UPLOAD PROFILE PICTURE (USING CLOUDINARY)
 router.post("/uploadprofilepicture", adminIsLoggedIn, uploadProfilePicture);
 
-//  FETCH ADMIN
+// UPDATE PROFILE COMPANY NAME
+// router.post("/updatecompanyname", adminIsLoggedIn, updateCompanyName);
+
+// UPDATE PROFILE COMPANY CONTACT
+// router.post("/updatecompanycontact", adminIsLoggedIn, updateCompanyContact);
+
+// UPDATE PROFILE COMPANY EMAIL
+// router.post("/updatecompanyemail", adminIsLoggedIn, updateCompanyEmail);
+
+// UPDATE PROFILE COMPANY ADDRESS
+// router.post("/updatecompanyaddress", adminIsLoggedIn, updateCompanyAddress);
+
+// UPDATE PROFILE COMPANY Info
+router.post("/updatecompanyinfo", adminIsLoggedIn, updateCompanyInfo);
+
+// UPDATE PROFILE COMPANY DESCRIPTION
+// router.post("/updatecompanydescription",adminIsLoggedIn,updateCompanyDescription);
+
+// FETCH ADMIN
 router.get("/fetchadmin", adminIsLoggedIn, fetchAdmin);
 
 // ACCEPT A VENUE

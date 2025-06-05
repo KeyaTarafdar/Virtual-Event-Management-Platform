@@ -60,12 +60,10 @@ const CompanyPage = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        // setImage(reader.result);
         resolve(reader.result);
       };
     });
   };
-  // const [image, setImage] = useState();
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -86,9 +84,6 @@ const CompanyPage = () => {
           setUser(response.data)
         }
         alert(response.message);
-        // findUser().then((response) => {
-        //   setuserProfile(response);
-        // });
       });
     } else {
       alert("Please Upload an Image");
@@ -99,8 +94,6 @@ const CompanyPage = () => {
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
   };
-
-  // const [company, setCompany] = useState({});
 
   useEffect(() => {
     if (menuVisible) {
