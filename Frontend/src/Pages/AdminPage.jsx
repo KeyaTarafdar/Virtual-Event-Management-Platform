@@ -689,7 +689,7 @@ function AdminPage() {
 
             <div className="h-20 text-center flex-col justify-center ">
               <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif">
-                {admin ? admin.username : null}
+                {company ? company.companyName : null}
               </div>
             </div>
 
