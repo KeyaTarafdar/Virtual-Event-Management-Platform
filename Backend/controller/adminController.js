@@ -144,78 +144,97 @@ module.exports.uploadProfilePicture = async (req, res) => {
 };
 
 // Update Company Name
-module.exports.updateCompanyName = async (req, res) => {
-  try {
-    const { companyName } = req.body;
-    let company = await companyModel.updateMany({ companyName }, { new: true });
+// module.exports.updateCompanyName = async (req, res) => {
+//   try {
+//     const { companyName } = req.body;
+//     let company = await companyModel.updateMany({ companyName }, { new: true });
 
-    return successResponse_ok(
-      res,
-      "Company name updated successfully",
-      company[0]
-    );
-  } catch (error) {
-    return errorResponse_catchError(res, err.message);
-  }
-};
+//     return successResponse_ok(
+//       res,
+//       "Company name updated successfully",
+//       company[0]
+//     );
+//   } catch (error) {
+//     return errorResponse_catchError(res, err.message);
+//   }
+// };
 
 // Update Company Contact
-module.exports.updateCompanyContact = async (req, res) => {
-  try {
-    const { contact } = req.body;
-    let company = await companyModel.updateMany({ contact }, { new: true });
+// module.exports.updateCompanyContact = async (req, res) => {
+//   try {
+//     const { contact } = req.body;
+//     let company = await companyModel.updateMany({ contact }, { new: true });
 
-    return successResponse_ok(
-      res,
-      "Company contact updated successfully",
-      company[0]
-    );
-  } catch (error) {
-    return errorResponse_catchError(res, err.message);
-  }
-};
+//     return successResponse_ok(
+//       res,
+//       "Company contact updated successfully",
+//       company[0]
+//     );
+//   } catch (error) {
+//     return errorResponse_catchError(res, err.message);
+//   }
+// };
 
 // Update Company Email
-module.exports.updateCompanyEmail = async (req, res) => {
-  try {
-    const { email } = req.body;
-    let company = await companyModel.updateMany({ email }, { new: true });
+// module.exports.updateCompanyEmail = async (req, res) => {
+//   try {
+//     const { email } = req.body;
+//     let company = await companyModel.updateMany({ email }, { new: true });
 
-    return successResponse_ok(
-      res,
-      "Company email updated successfully",
-      company[0]
-    );
-  } catch (error) {
-    return errorResponse_catchError(res, err.message);
-  }
-};
+//     return successResponse_ok(
+//       res,
+//       "Company email updated successfully",
+//       company[0]
+//     );
+//   } catch (error) {
+//     return errorResponse_catchError(res, err.message);
+//   }
+// };
 
 // Update Company Address
-module.exports.updateCompanyAddress = async (req, res) => {
-  try {
-    const { address } = req.body;
-    let company = await companyModel.updateMany({ address }, { new: true });
+// module.exports.updateCompanyAddress = async (req, res) => {
+//   try {
+//     const { address } = req.body;
+//     let company = await companyModel.updateMany({ address }, { new: true });
 
-    return successResponse_ok(
-      res,
-      "Company address updated successfully",
-      company[0]
-    );
-  } catch (error) {
-    return errorResponse_catchError(res, err.message);
-  }
-};
+//     return successResponse_ok(
+//       res,
+//       "Company address updated successfully",
+//       company[0]
+//     );
+//   } catch (error) {
+//     return errorResponse_catchError(res, err.message);
+//   }
+// };
 
 // Update Company Description
-module.exports.updateCompanyDescription = async (req, res) => {
+// module.exports.updateCompanyDescription = async (req, res) => {
+//   try {
+//     const { description } = req.body;
+//     let company = await companyModel.updateMany({ description }, { new: true });
+
+//     return successResponse_ok(
+//       res,
+//       "Company description updated successfully",
+//       company[0]
+//     );
+//   } catch (error) {
+//     return errorResponse_catchError(res, err.message);
+//   }
+// };
+
+// Update Company Info
+module.exports.updateCompanyInfo = async (req, res) => {
   try {
-    const { description } = req.body;
-    let company = await companyModel.updateMany({ description }, { new: true });
+    const { companyName, address, email, contact, description } = req.body;
+    let company = await companyModel.updateMany(
+      { companyName, address, email, contact, description },
+      { new: true }
+    );
 
     return successResponse_ok(
       res,
-      "Company description updated successfully",
+      "Company info updated successfully",
       company[0]
     );
   } catch (error) {

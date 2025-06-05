@@ -11,17 +11,20 @@ import {
   fetchAllEvents,
   uploadProfilePictureAdmin,
   rejectVenue,
+  fetchCompanyDetails,
 } from "../utils/utils";
 import {
   faCalendarCheck,
   faGlobe,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import { useCompany } from "../context/companyContext/CompanyContext";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
+  const { company, setCompany } = useCompany();
 
   const handleReject = () => {
     setIsModalOpen(true);
@@ -106,12 +109,11 @@ function AdminPage() {
   };
 
   const [fields, setFields] = useState({
-    companyName: "Eventek Inc.",
-    mainOfficeCity: "Kolkata",
-    mainOfficeAddress: "8/41, Sahid Nagar",
-    mainOfficePincode: "700078",
-    email: "info@eventek.com",
-    contactNumber: "+1-234-567-890",
+    companyName: "",
+    address: "",
+    email: "",
+    contact: "",
+    description: "",
   });
 
   const [editMode, setEditMode] = useState({
@@ -130,6 +132,10 @@ function AdminPage() {
       ...prev,
       [field]: !prev[field],
     }));
+
+    if (editMode.field) {
+      // post update company info request & set the response into companycontext & localstorage
+    }
   };
 
   const handleFieldChange = (e, field) => {
@@ -614,10 +620,33 @@ function AdminPage() {
   const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
-    findAdmin().then((response) => {
-      setadmin(response);
-      setvenueRequests(response.appliedVenues);
-    });
+    if (!admin) {
+      findAdmin().then((response) => {
+        setadmin(response);
+        setvenueRequests(response.appliedVenues);
+      });
+    }
+
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response);
+        setFields({
+          companyName: response?.companyName,
+          email: response?.email,
+          contact: response?.contact,
+          description: response?.description,
+          address: response?.address,
+        });
+      });
+    } else {
+      setFields({
+        companyName: company?.companyName,
+        email: company?.email,
+        contact: company?.contact,
+        description: company?.description,
+        address: company?.address,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -706,7 +735,7 @@ function AdminPage() {
             </ul>
             <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center">
               <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-6 mb-4"></div>
-              &copy;Eventek2024.
+              &copy;{company?.companyName}2024.
             </div>
           </div>
 
