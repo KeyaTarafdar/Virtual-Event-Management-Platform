@@ -135,7 +135,7 @@ function AdminPage() {
       updateCompanyInfo(fields).then((response) => {
         if (response.success) {
           setCompany(response.data);
-          localStorage.setItem("company", JSON.stringify(response.data));
+          sessionStorage.setItem("company", JSON.stringify(response.data));
         } else {
           alert(response.message);
         }

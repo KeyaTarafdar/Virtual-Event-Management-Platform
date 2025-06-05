@@ -8,7 +8,7 @@ export const fetchCompanyDetails = async () => {
   try {
     let { data } = await axios.get("http://localhost:8000/fetchcompanydetails");
     if (data.success) {
-      localStorage.setItem("company", JSON.stringify(data.data));
+      sessionStorage.setItem("company", JSON.stringify(data.data));
       return data.data;
     } else {
       return {};
@@ -25,9 +25,9 @@ export const logoutUser = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      if (data.message.includes("User")) localStorage.removeItem("user");
-      else if (data.message.includes("Admin")) localStorage.removeItem("admin");
-      else if (data.message.includes("Venue")) localStorage.removeItem("venue");
+      if (data.message.includes("User")) sessionStorage.removeItem("user");
+      else if (data.message.includes("Admin")) sessionStorage.removeItem("admin");
+      else if (data.message.includes("Venue")) sessionStorage.removeItem("venue");
     } else {
       alert(data.message);
     }
@@ -137,7 +137,7 @@ export const findUser = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("user", JSON.stringify(data.data));
+      sessionStorage.setItem("user", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -300,7 +300,7 @@ export const findVenue = async () => {
       { withCredentials: true }
     );
     if (data.success) {
-      localStorage.setItem("venue", JSON.stringify(data.data));
+      sessionStorage.setItem("venue", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -553,7 +553,7 @@ export const findAdmin = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("admin", JSON.stringify(data.data));
+      sessionStorage.setItem("admin", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;

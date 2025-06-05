@@ -15,14 +15,14 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         const firstName = parsedUser?.username?.split(" ")[0];
         setUser(firstName || null);
       } catch (err) {
-        console.error("Invalid user in localStorage", err);
+        console.error("Invalid user in sessionStorage", err);
         setUser(null);
       }
     }

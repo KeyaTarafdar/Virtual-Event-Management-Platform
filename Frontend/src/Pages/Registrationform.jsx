@@ -62,7 +62,7 @@ const Registrationform = () => {
                 setLoading(false);
                 alert(response.message);
                 if (response.success) {
-                  localStorage.setItem("user", JSON.stringify(response.data));
+                  sessionStorage.setItem("user", JSON.stringify(response.data));
                   setUser(response.data);
                   navigate(`/eventpage/${eventId}`);
                 }
