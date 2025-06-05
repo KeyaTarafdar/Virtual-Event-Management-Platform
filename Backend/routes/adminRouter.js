@@ -8,7 +8,12 @@ const {
   acceptVenue,
   rejectVenue,
   fetchAdmin,
-  fetchAllVenue,uploadProfilePicture
+  fetchAllVenue,
+  uploadProfilePicture,
+  uploadCompanyName,
+  uploadCompanyAddress,
+  uploadCompanyContact,
+  uploadCompanyEmail,
 } = require("../controller/adminController");
 
 router.get("/", (req, res) => {
@@ -26,6 +31,18 @@ router.get("/logout", adminIsLoggedIn, logoutAdmin);
 
 // UPLOAD PROFILE PICTURE (USING CLOUDINARY)
 router.post("/uploadprofilepicture", adminIsLoggedIn, uploadProfilePicture);
+
+// UPLOAD PROFILE COMPANY NAME
+router.post("/uploadcompanyname", adminIsLoggedIn, uploadCompanyName);
+
+// UPLOAD PROFILE COMPANY CONTACT
+router.post("/uploadcompanycontact", adminIsLoggedIn, uploadCompanyContact);
+
+// UPLOAD PROFILE COMPANY EMAIL
+router.post("/uploadcompanyemail", adminIsLoggedIn, uploadCompanyEmail);
+
+// UPLOAD PROFILE COMPANY ADDRESS
+router.post("/uploadcompanyaddress", adminIsLoggedIn, uploadCompanyAddress);
 
 //  FETCH ADMIN
 router.get("/fetchadmin", adminIsLoggedIn, fetchAdmin);

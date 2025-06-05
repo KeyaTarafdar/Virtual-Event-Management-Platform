@@ -3,6 +3,7 @@ const {
   venueModel,
   userModel,
   eventModel,
+  companyModel,
 } = require("../models/index");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
@@ -145,7 +146,62 @@ module.exports.uploadProfilePicture = async (req, res) => {
 // Upload Company Name
 module.exports.uploadCompanyName = async (req, res) => {
   try {
-    const { comapanyName } = req.body;
+    const { companyName } = req.body;
+    let company = await companyModel.updateMany({ companyName }, { new: true });
+
+    return successResponse_ok(
+      res,
+      "Company name updated successfully",
+      company[0]
+    );
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Upload Company Contact
+module.exports.uploadCompanyContact = async (req, res) => {
+  try {
+    const { contact } = req.body;
+    let company = await companyModel.updateMany({ contact }, { new: true });
+
+    return successResponse_ok(
+      res,
+      "Company contact updated successfully",
+      company[0]
+    );
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Upload Company Email
+module.exports.uploadCompanyEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    let company = await companyModel.updateMany({ email }, { new: true });
+
+    return successResponse_ok(
+      res,
+      "Company email updated successfully",
+      company[0]
+    );
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Upload Company Address
+module.exports.uploadCompanyAddress = async (req, res) => {
+  try {
+    const { address } = req.body;
+    let company = await companyModel.updateMany({ address }, { new: true });
+
+    return successResponse_ok(
+      res,
+      "Company address updated successfully",
+      company[0]
+    );
   } catch (error) {
     return errorResponse_catchError(res, err.message);
   }
