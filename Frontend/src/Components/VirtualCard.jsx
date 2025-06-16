@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ImageLoader from "./ImageLoader2";
 
@@ -11,8 +11,10 @@ const VirtualCard = ({
   eventType,
   venue,
   posterImage,
+  lastDateOfRegistration,
 }) => {
   const navigate = useNavigate();
+  
 
   return (
     <div className="bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl shadow-lg p-6 w-80 mt-7 ml-9 text-center">
@@ -71,7 +73,7 @@ const VirtualCard = ({
 
       {/* Register Button */}
       <button
-        className="btn2 mt-4"
+        className={`btn2 mt-4`}
         onClick={() => navigate(`/eventpage/${eventId}`)}
       >
         Explore More
