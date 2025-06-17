@@ -472,7 +472,7 @@ export const updateHallTime_2nd = async (newHalltime2nd) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallTime_2nd",
-      { newHalltime2nd },
+      { newHall_2ndHalfTime: newHalltime2nd },
       { withCredentials: true }
     );
     return data;
@@ -486,7 +486,7 @@ export const updateHallTime_fullday = async (newHalltimefullday) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallTime_fullday",
-      { newHalltimefullday },
+      { newHall_fullDayTime:newHalltimefullday },
       { withCredentials: true }
     );
     return data;
@@ -514,7 +514,7 @@ export const updateHallPrice_2nd = async (newHallprice2) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallPrice_2nd",
-      { newHallprice2 },
+      { newHall_2ndHalfprice: newHallprice2 },
       { withCredentials: true }
     );
     return data;
@@ -528,7 +528,7 @@ export const updateHallPrice_fullday = async (newHallpricefull) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallPrice_fullday",
-      { newHallpricefull },
+      { newHall_fullDayprice: newHallpricefull },
       { withCredentials: true }
     );
     return data;
