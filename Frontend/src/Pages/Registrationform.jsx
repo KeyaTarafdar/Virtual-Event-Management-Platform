@@ -126,7 +126,7 @@ const Registrationform = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="w-full lg:w-full">
             <h2 className="font-serif text-3xl sm:text-3xl font-bold text-indigo-600 mb-6 sm:mb-8">
-              Register Yourself !!
+              Register Yourself
             </h2>
 
             <form className="space-y-5" onSubmit={handleSubmit}>

@@ -220,7 +220,7 @@ function VenueRegisteringPage() {
                     const value = e.target.value;
                     setFormData({ ...formData, fullAddress: value });
                   }}
-                  className="mt-1 block w-full p-2 border  rounded-md shadow-sm"
+                  className="mt-1 block w-full p-2 border rounded-md shadow-sm"
                   placeholder="Enter full address of the venue"
                   required
                 />
