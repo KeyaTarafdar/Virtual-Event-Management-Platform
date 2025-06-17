@@ -178,7 +178,7 @@ function AdminPage() {
                 <div className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
                   <div
                     key={venue._id}
-                    className="mt-[3rem] w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
+                    className="w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
                   >
                     <div className="flex flex-col md:w-3/4 sm:border-r-4 sm:border-blue-600 mr-4">
                       <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 pb-2 sm:pb-3 font-serif">

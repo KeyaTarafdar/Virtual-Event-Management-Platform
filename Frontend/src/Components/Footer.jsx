@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { AiFillVideoCamera, AiFillMail, AiFillPhone } from "react-icons/ai";
 import { Link } from "react-scroll";
@@ -7,7 +7,7 @@ import { fetchCompanyDetails } from "../utils/utils";
 import { useCompany } from "../context/companyContext/CompanyContext";
 
 export default function Footer({ menuItems1 }) {
-  const { company, setCompany } = useCompany()
+  const { company, setCompany } = useCompany();
 
   useEffect(() => {
     if (!company) {
@@ -52,7 +52,7 @@ export default function Footer({ menuItems1 }) {
         <div className="flex flex-col items-center text-center">
           <h3 className="text-lg font-semibold mb-4">Developed By</h3>
           <a
-            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+            href="#"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Jayita Bhowmick
@@ -64,12 +64,13 @@ export default function Footer({ menuItems1 }) {
             Keya Tarafdar
           </a>
           <a
-            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+            href="#"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Priya Acharjee
-          </a><a
-            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+          </a>
+          <a
+            href="https://drive.google.com/file/d/1USH3LX83vEr8ie7Iw_qxR2thUcCtG_8h/view?usp=sharing"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Shreya Kundu

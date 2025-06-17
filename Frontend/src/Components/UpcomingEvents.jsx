@@ -17,7 +17,7 @@ export default function UpcomingEvents({
   const navigate = useNavigate();
   return (
     <>
-      <div className="w-full bg-slate-900 h-[40rem] md:h-[25rem] lg:h-[30rem] sm:px-32 py-20"></div>
+      <div className="w-full bg-slate-900 h-[40rem] md:h-[25rem] lg:h-[30rem] sm:px-32 py-20 rounded-xl"></div>
       <div className="w-[80%] h-auto m-auto mt-[-35rem] md:mt-[-20rem] lg:mt-[-25rem] grid-cols-1 md:grid-cols-2 ">
         <div className="bg-gradient-to-r from-[#011936] to-[#243b55] h-[20%] py-10 text-white flex items-center md:justify-end justify-center md:pr-5 font-serif">
           <div
@@ -35,7 +35,7 @@ export default function UpcomingEvents({
           </div>
         </div>
         <div className="bg-slate-200 grid grid-cols-1 md:grid-cols-2 md:px-5 px-5 py-5 items-center text-center md:h-[20rem] lg:h-[22rem] xl:h-[27rem] 2xl:h-[30rem]">
-          <div className="mt-[-3.5rem] md:mt-[-6rem] lg:mt-[-7.5rem]">
+          <div className="mt-[-3.5rem] md:mt-[-6rem] lg:mt-[-7.5rem] border-4">
             <img
               src={poster}
               alt={name}

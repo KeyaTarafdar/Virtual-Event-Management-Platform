@@ -91,8 +91,6 @@ const Signup = () => {
             formData.agreeToTerms
           );
 
-          console.log('result', result)
-
           if (result.success) {
             if (result.message.includes("User")) {
               setUser(result.data);
