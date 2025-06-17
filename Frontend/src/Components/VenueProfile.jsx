@@ -5,17 +5,26 @@ import {
   AiOutlineCheck,
 } from "react-icons/ai";
 import {
-  findVenue,
-  updateVenueName,
-  updateVenueCity,
-  updateVenueEmail,
-  updateVenuePhone,
-  updateVenueAddress,
-  updateVenueCapacity,
-  updateVenueMultidayEvent,
-  updateVenueHalltype,
-  updateHallTime_1st,
-  updateHallPrice_1st,
+  findVenue,
+  updateVenueName,
+  updateVenueCity,
+  updateVenueEmail,
+  updateVenuePhone,
+  updateVenueAddress,
+  updateVenueCapacity,
+  updateVenueMultidayEvent,
+  updateVenueHalltype,
+  updateHallTime_1st,
+  updateHallPrice_1st,
+  updateHallTime_2nd,
+  updateHallPrice_2nd,
+  updateHallTime_fullday,
+  updateHallPrice_fullday,
+  updateVenueProjector,
+  updateVenueBroadband,
+  updateHallDescription,
+  updateOpeningTime,
+  updateClosingTime
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
 import { useUser } from "../context/userContext/UserContext";
@@ -27,26 +36,58 @@ function VenueProfile() {
   const [reason, setReason] = useState("");
   const { venue, setVenue } = useUser();
 
-  const [newHallName, setnewHallName] = useState("");
-  const [newHallCity, setnewHallCity] = useState("");
-  const [newHallEmail, setnewHallEmail] = useState("");
-  const [newHallPhone, setnewHallPhone] = useState("");
-  const [newHallAddress, setnewHallAddress] = useState("");
-  const [newHallCapacity, setnewHallCapacity] = useState("");
-  const [newHallMultiday, setnewHallMultiday] = useState(
-    venue?.canOrganizeMultidayEvent
-  );
-  const [newHallType, setnewHallType] = useState(venue?.hallType);
-  const [newHall_1stHalftime, setnewHall_1stHalftime] = useState(
-    venue?.time_1stHalf
-  );
-  const [newHall_1stHalfprice, setnewHall_1stHalfprice] = useState(
-    venue?.bookingPrice_1stHalf || null
-  );
+  const [newHallName, setnewHallName] = useState("");
+  const [newHallCity, setnewHallCity] = useState("");
+  const [newHallEmail, setnewHallEmail] = useState("");
+  const [newHallPhone, setnewHallPhone] = useState("");
+  const [newHallAddress, setnewHallAddress] = useState("");
+  const [newHallCapacity, setnewHallCapacity] = useState("");
+  const [newDescription, setnewDescription] = useState(venue?.description);
+  const [newHallMultiday, setnewHallMultiday] = useState(
+    venue?.canOrganizeMultidayEvent
+  );
+  const [newHallType, setnewHallType] = useState(venue?.hallType);
+  const [newHall_1stHalftime, setnewHall_1stHalftime] = useState(
+    venue?.time_1stHalf
+  );
+  const [newHall_1stHalfprice, setnewHall_1stHalfprice] = useState(
+    venue?.bookingPrice_1stHalf || null
+  );
 
-  const handleReject = () => {
-    setIsModalOpen(true);
-  };
+  const [newHall_2ndHalftime, setnewHall_2ndHalftime] = useState(
+    venue?.time_2ndHalf
+  );
+  const [newHall_2ndHalfprice, setnewHall_2ndHalfprice] = useState(
+    venue?.bookingPrice_2ndHalf || null
+  );
+
+  const [newHall_fulltime, setnewHall_fulltime] = useState(
+    venue?.time_fullDay
+  );
+  const [newHall_fullprice, setnewHall_fullprice] = useState(
+    venue?.bookingPrice_fullDay || null
+  );
+
+  const [newHallProjector, setnewHallProjector] = useState(
+    venue?.projector
+  );
+
+  const [newHallBroadband, setnewHallBroadband] = useState(
+    venue?.broadband
+  );
+
+  const [newOpeningTime, setnewOpeningTime] = useState(
+    venue?.openingtime
+  );
+
+  const [newClosingTime, setnewClosingTime] = useState(
+    venue?.closingtime
+  );
+
+
+  const handleReject = () => {
+    setIsModalOpen(true);
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -128,70 +169,70 @@ function VenueProfile() {
     }
   }, []);
 
-  const renderComponent = () => {
-    switch (activeMenu) {
-      case "BasicDetails":
-        return (
-          <div className="flex w-[100%]">
-            {/* Venue Image */}
-            <div className="image-section w-2/6 text-center">
-              <div className="relative inline-block">
-                <img
-                  src={
-                    venue && venue.profilepicture
-                      ? venue.profilepicture.url
-                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
-                  }
-                  alt="Company Logo"
-                  className="w-62 h-62 object-cover mx-auto"
-                />
-              </div>
-              <button
-                onClick={() => document.getElementById("logoUpload").click()}
-                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all"
-              >
-                Edit Image
-              </button>
-              <input
-                id="logoUpload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleLogoChange}
-              />
-              <div className="pt-5 flex-col text-center">
-                <div className="font-bold text-2xl">
-                  {venue ? venue.name : null}
-                </div>
-                <div className="text-sm">{venue ? venue.city : null}</div>
-              </div>
-              <div className="flex pt-2 gap-2 justify-center">
-                <div>count</div>
-                <div className="ml-2 flex text-yellow-400">
-                  {Array(5)
-                    .fill(0)
-                    .map((_, index) => (
-                      <svg
-                        key={index}
-                        className="h-5 w-5 fill-current"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <polygon points="10 15.27 16.18 19 14.54 12.81 19 8.63 12.81 8.63 10 2.5 7.19 8.63 1 8.63 5.46 12.81 3.82 19" />
-                      </svg>
-                    ))}
-                </div>
-              </div>
-              <div className="flex h-10 mt-3 pl-5">
-                <div>Completed</div>
-                <div className="ml-5 mr-5 mt-[2%] flex w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${20}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
+  const renderComponent = () => {
+    switch (activeMenu) {
+      case "BasicDetails":
+        return (
+          <div className="flex w-[100%]">
+            {/* Venue Image */}
+            <div className="image-section w-2/6 text-center">
+              <div className="relative inline-block">
+                <img
+                  src={
+                    venue && venue.profilepicture
+                      ? venue.profilepicture.url
+                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
+                  }
+                  alt="Company Logo"
+                  className="w-62 h-62 object-cover mx-auto"
+                />
+              </div>
+              <button
+                onClick={() => document.getElementById("logoUpload").click()}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all"
+              >
+                Edit Image
+              </button>
+              <input
+                id="logoUpload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleLogoChange}
+              />
+              <div className="pt-5 flex-col text-center">
+                <div className="font-bold text-2xl">
+                  {venue ? venue.name : null}
+                </div>
+                <div className="text-sm">{venue ? venue.city : null}</div>
+              </div>
+              <div className="flex pt-2 gap-2 justify-center">
+                <div>count</div>
+                <div className="ml-2 flex text-yellow-400">
+                  {Array(5)
+                    .fill(0)
+                    .map((_, index) => (
+                      <svg
+                        key={index}
+                        className="h-5 w-5 fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <polygon points="10 15.27 16.18 19 14.54 12.81 19 8.63 12.81 8.63 10 2.5 7.19 8.63 1 8.63 5.46 12.81 3.82 19" />
+                      </svg>
+                    ))}
+                </div>
+              </div>
+              <div className="flex h-10 mt-3 pl-5">
+                <div>Completed</div>
+                <div className="ml-5 mr-5 mt-[2%] flex w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-500 h-2 rounded-full"
+                    style={{ width: `${venue?.completePercentage}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
 
             <div className="w-px bg-black m-6 "></div>
 
@@ -250,120 +291,118 @@ function VenueProfile() {
                   </div>
                 </div>
 
-                {/* Hall Email */}
-                <div className="flex items-start space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Email :{" "}
-                  </span>
-                  <div className="flex flex-col w-3/5">
-                    <div className="flex items-center justify-between">
-                      {isEditing === "email" ? (
-                        <input
-                          type="text"
-                          value={newHallEmail}
-                          onChange={(e) => setnewHallEmail(e.target.value)}
-                          className={`p-2 border rounded-md w-full ${
-                            !newHallEmail.includes("@") ? "border-red-500" : ""
-                          }`}
-                        />
-                      ) : (
-                        <span className="font-bold">
-                          {venue ? venue.email : null}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (isEditing === "email") {
-                            updateVenueEmail(newHallEmail).then((response) => {
-                              if (response.success) {
-                                setVenue(response.data);
-                                sessionStorage.setItem(
-                                  "venue",
-                                  JSON.stringify(response.data)
-                                );
-                              }
-                              setIsEditing(null);
-                            });
-                          } else {
-                            setnewHallEmail(venue ? venue.email : "");
-                            setIsEditing("email");
-                          }
-                        }}
-                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                      >
-                        {isEditing === "email" ? (
-                          <AiOutlineCheck size={16} />
-                        ) : (
-                          <AiOutlineEdit size={16} />
-                        )}
-                      </button>
-                    </div>
-                    {isEditing === "email" && !newHallEmail.includes("@") && (
-                      <span className="text-red-500 text-sm mt-2">
-                        Please enter a valid email address with &quot;@&quot;
-                      </span>
-                    )}
-                  </div>
-                </div>
+                {/* Hall Email */}
+                <div className="flex items-start space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Email :{" "}
+                  </span>
+                  <div className="flex flex-col w-3/5">
+                    <div className="flex items-center justify-between">
+                      {isEditing === "email" ? (
+                        <input
+                          type="text"
+                          value={newHallEmail}
+                          onChange={(e) => setnewHallEmail(e.target.value)}
+                          className={`p-2 border rounded-md w-full ${!newHallEmail.includes("@") ? "border-red-500" : ""
+                            }`}
+                        />
+                      ) : (
+                        <span className="font-bold">
+                          {venue ? venue.email : null}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (isEditing === "email") {
+                            updateVenueEmail(newHallEmail).then((response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            });
+                          } else {
+                            setnewHallEmail(venue ? venue.email : "");
+                            setIsEditing("email");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "email" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                    {isEditing === "email" && !newHallEmail.includes("@") && (
+                      <span className="text-red-500 text-sm mt-2">
+                        Please enter a valid email address with &quot;@&quot;
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-                {/* Hall Phone Number */}
-                <div className="flex items-start space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Phone Number :
-                  </span>
-                  <div className="flex flex-col w-3/5">
-                    <div className="flex items-center justify-between">
-                      {isEditing === "phone" ? (
-                        <input
-                          type="text"
-                          value={newHallPhone}
-                          onChange={(e) => setnewHallPhone(e.target.value)}
-                          className={`p-2 border rounded-md w-full ${
-                            !/^\d{10}$/.test(newHallPhone.phone)
-                              ? "border-red-500"
-                              : ""
-                          }`}
-                        />
-                      ) : (
-                        <span className="font-bold">
-                          {venue ? venue.contact : null}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (isEditing === "phone") {
-                            updateVenuePhone(newHallPhone).then((response) => {
-                              if (response.success) {
-                                setVenue(response.data);
-                                sessionStorage.setItem(
-                                  "venue",
-                                  JSON.stringify(response.data)
-                                );
-                              }
-                              setIsEditing(null);
-                            });
-                          } else {
-                            setnewHallPhone(venue ? venue.contact : "");
-                            setIsEditing("phone");
-                          }
-                        }}
-                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                      >
-                        {isEditing === "phone" ? (
-                          <AiOutlineCheck size={16} />
-                        ) : (
-                          <AiOutlineEdit size={16} />
-                        )}
-                      </button>
-                    </div>
-                    {isEditing === "phone" &&
-                      !/^\d{10}$/.test(newHallPhone) && (
-                        <span className="text-red-500 text-sm mt-2">
-                          Please enter a valid 10-digit phone number.
-                        </span>
-                      )}
-                  </div>
-                </div>
+                {/* Hall Phone Number */}
+                <div className="flex items-start space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Phone Number :
+                  </span>
+                  <div className="flex flex-col w-3/5">
+                    <div className="flex items-center justify-between">
+                      {isEditing === "phone" ? (
+                        <input
+                          type="text"
+                          value={newHallPhone}
+                          onChange={(e) => setnewHallPhone(e.target.value)}
+                          className={`p-2 border rounded-md w-full ${!/^\d{10}$/.test(newHallPhone.phone)
+                            ? "border-red-500"
+                            : ""
+                            }`}
+                        />
+                      ) : (
+                        <span className="font-bold">
+                          {venue ? venue.contact : null}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (isEditing === "phone") {
+                            updateVenuePhone(newHallPhone).then((response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            });
+                          } else {
+                            setnewHallPhone(venue ? venue.contact : "");
+                            setIsEditing("phone");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "phone" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                    {isEditing === "phone" &&
+                      !/^\d{10}$/.test(newHallPhone) && (
+                        <span className="text-red-500 text-sm mt-2">
+                          Please enter a valid 10-digit phone number.
+                        </span>
+                      )}
+                  </div>
+                </div>
 
                 {/* Hall City */}
                 <div className="flex items-center space-x-4">
@@ -509,138 +548,136 @@ function VenueProfile() {
                   </div>
                 </div>
 
-                {/* Multi Day Hall Booking Facility */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Multi-day hall booking facility:
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "multiDayBooking" ? (
-                      <div className="flex space-x-4">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            value="yes"
-                            checked={newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(true)}
-                            className="mr-2"
-                          />
-                          Yes
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            value="no"
-                            checked={!newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(false)}
-                            className="mr-2"
-                          />
-                          No
-                        </label>
-                      </div>
-                    ) : (
-                      <span
-                        className={`${
-                          venue
-                            ? "font-bold text-lg"
-                            : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
-                        }`}
-                      >
-                        {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
-                      </span>
-                    )}
-                    <button
-                      onClick={() => {
-                        if (isEditing === "multiDayBooking") {
-                          updateVenueMultidayEvent(newHallMultiday).then(
-                            (response) => {
-                              if (response.success) {
-                                setVenue(response.data);
-                                sessionStorage.setItem(
-                                  "venue",
-                                  JSON.stringify(response.data)
-                                );
-                              }
-                              setIsEditing(null);
-                            }
-                          );
-                        } else {
-                          setnewHallMultiday(
-                            venue ? venue.canOrganizeMultidayEvent : null
-                          );
-                          setIsEditing("multiDayBooking");
-                        }
-                      }}
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "multiDayBooking" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                {/* Multi Day Hall Booking Facility */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Multi-day hall booking facility:
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "multiDayBooking" ? (
+                      <div className="flex space-x-4">
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            value="yes"
+                            checked={newHallMultiday}
+                            onChange={(e) => setnewHallMultiday(true)}
+                            className="mr-2"
+                          />
+                          Yes
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            value="no"
+                            checked={!newHallMultiday}
+                            onChange={(e) => setnewHallMultiday(false)}
+                            className="mr-2"
+                          />
+                          No
+                        </label>
+                      </div>
+                    ) : (
+                      <span
+                        className={`${venue
+                          ? "font-bold text-lg"
+                          : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "multiDayBooking") {
+                          updateVenueMultidayEvent(newHallMultiday).then(
+                            (response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else {
+                          setnewHallMultiday(
+                            venue ? venue.canOrganizeMultidayEvent : null
+                          );
+                          setIsEditing("multiDayBooking");
+                        }
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "multiDayBooking" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                {/* Hall Type */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Hall Type :
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "halltype" ? (
-                      <select
-                        value={newHallType}
-                        onChange={(e) => setnewHallType(e.target.value)}
-                        className="p-2 border rounded-md w-full"
-                      >
-                        <option value="">Select Hall Type</option>
-                        <option value="auditorium">Auditorium</option>
-                        <option value="banquetHall">Banquet Hall</option>
-                        <option value="openHalls">Open Halls</option>
-                        <option value="lawns">Lawns</option>
-                      </select>
-                    ) : (
-                      <span
-                        className={` ${
-                          venue && venue?.hallType
-                            ? "font-bold text-lg"
-                            : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
-                        }`}
-                      >
-                        {venue && venue?.hallType
-                          ? venue && venue?.hallType
-                          : "Please Select Hall Type"}
-                      </span>
-                    )}
-                    <button
-                      onClick={() => {
-                        if (isEditing === "halltype") {
-                          updateVenueHalltype(newHallType).then((response) => {
-                            if (response.success) {
-                              setVenue(response.data);
-                              sessionStorage.setItem(
-                                "venue",
-                                JSON.stringify(response.data)
-                              );
-                            }
-                            setIsEditing(null);
-                          });
-                        } else {
-                          setnewHallType(venue ? venue.hallType : "");
-                          setIsEditing("halltype");
-                        }
-                      }}
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "halltype" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                {/* Hall Type */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Hall Type :
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "halltype" ? (
+                      <select
+                        value={newHallType}
+                        onChange={(e) => setnewHallType(e.target.value)}
+                        className="p-2 border rounded-md w-full"
+                      >
+                        <option value="">Select Hall Type</option>
+                        <option value="auditorium">Auditorium</option>
+                        <option value="banquetHall">Banquet Hall</option>
+                        <option value="openHalls">Open Halls</option>
+                        <option value="lawns">Lawns</option>
+                      </select>
+                    ) : (
+                      <span
+                        className={` ${venue && venue?.hallType
+                          ? "font-bold text-lg"
+                          : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue && venue?.hallType
+                          ? venue && venue?.hallType
+                          : "Please Select Hall Type"}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "halltype") {
+                          updateVenueHalltype(newHallType).then((response) => {
+                            if (response.success) {
+                              setVenue(response.data);
+                              sessionStorage.setItem(
+                                "venue",
+                                JSON.stringify(response.data)
+                              );
+                            }
+                            setIsEditing(null);
+                          });
+                        } else {
+                          setnewHallType(venue ? venue.hallType : "");
+                          setIsEditing("halltype");
+                        }
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "halltype" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
                 {/* Time of 1st Half */}
                 <div className="flex flex-col space-y-2">
@@ -679,536 +716,740 @@ function VenueProfile() {
                             />
                           </div>
 
-                          {/* Validation Message */}
-                          {newHall_1stHalftime[0] &&
-                            newHall_1stHalftime[1] &&
-                            newHall_1stHalftime[0] >=
-                              newHall_1stHalftime[1] && (
-                              <p className="text-red-500 text-sm mt-1">
-                                **Start time must be earlier than end time
-                              </p>
-                            )}
-                        </div>
-                      ) : (
-                        <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            newHall_1stHalftime[0] && newHall_1stHalftime[1]
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
-                        >
-                          {newHall_1stHalftime[0] && newHall_1stHalftime[1]
-                            ? `${newHall_1stHalftime[0]} -- ${newHall_1stHalftime[1]}`
-                            : "Please Enter Start and End Time"}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (
-                            isEditing === "time1" &&
-                            newHall_1stHalftime[0] &&
-                            newHall_1stHalftime[1] &&
-                            newHall_1stHalftime[0] < newHall_1stHalftime[1]
-                          ) {
-                            updateHallTime_1st(newHall_1stHalftime).then(
-                              (response) => {
-                                if (response.success) {
-                                  setVenue(response.data);
-                                  sessionStorage.setItem(
-                                    "venue",
-                                    JSON.stringify(response.data)
-                                  );
-                                }
-                                setIsEditing(null);
-                              }
-                            );
-                          } else if (isEditing === "time1") {
-                            alert("Start time must be earlier than end time");
-                          } else {
-                            setIsEditing("time1");
-                          }
-                        }}
-                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                      >
-                        {isEditing === "time1" ? (
-                          <AiOutlineCheck size={16} />
-                        ) : (
-                          <AiOutlineEdit size={16} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                          {/* Validation Message */}
+                          {newHall_1stHalftime[0] &&
+                            newHall_1stHalftime[1] &&
+                            newHall_1stHalftime[0] >=
+                            newHall_1stHalftime[1] && (
+                              <p className="text-red-500 text-sm mt-1">
+                                **Start time must be earlier than end time
+                              </p>
+                            )}
+                        </div>
+                      ) : (
+                        <span
+                          className={`rounded-lg w-[90%] p-2 ${newHall_1stHalftime[0] && newHall_1stHalftime[1]
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
+                        >
+                          {newHall_1stHalftime[0] && newHall_1stHalftime[1]
+                            ? `${newHall_1stHalftime[0]} -- ${newHall_1stHalftime[1]}`
+                            : "Please Enter Start and End Time"}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (
+                            isEditing === "time1" &&
+                            newHall_1stHalftime[0] &&
+                            newHall_1stHalftime[1] &&
+                            newHall_1stHalftime[0] < newHall_1stHalftime[1]
+                          ) {
+                            updateHallTime_1st(newHall_1stHalftime).then(
+                              (response) => {
+                                if (response.success) {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                }
+                                setIsEditing(null);
+                              }
+                            );
+                          } else if (isEditing === "time1") {
+                            alert("Start time must be earlier than end time");
+                          } else {
+                            setIsEditing("time1");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "time1" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Price for 1st Half Booking */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Price for 1st Half Booking :
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "price1" ? (
-                      <input
-                        type="number"
-                        value={newHall_1stHalfprice}
-                        onChange={(e) =>
-                          setnewHall_1stHalfprice(e.target.value)
-                        }
-                        className="p-2 border rounded-md w-full"
-                        placeholder="Enter Price for 1st Half Booking "
-                      />
-                    ) : (
-                      <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          venue?.bookingPrice_1stHalf
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
-                      >
-                        {venue?.bookingPrice_1stHalf ||
-                          "Please Enter Price for 1st Half Booking "}
-                      </span>
-                    )}
-                    <button
-                      onClick={() => {
-                        if (isEditing === "price1") {
-                          updateHallPrice_1st(newHall_1stHalfprice).then(
-                            (response) => {
-                              if (response.success) {
-                                setVenue(response.data);
-                                sessionStorage.setItem(
-                                  "venue",
-                                  JSON.stringify(response.data)
-                                );
-                              }
-                              setIsEditing(null);
-                            }
-                          );
-                        } else setIsEditing("price1");
-                      }}
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "price1" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                {/* Price for 1st Half Booking */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Price for 1st Half Booking :
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "price1" ? (
+                      <input
+                        type="number"
+                        value={newHall_1stHalfprice}
+                        onChange={(e) =>
+                          setnewHall_1stHalfprice(e.target.value)
+                        }
+                        className="p-2 border rounded-md w-full"
+                        placeholder="Enter Price for 1st Half Booking "
+                      />
+                    ) : (
+                      <span
+                        className={`rounded-lg w-[90%] p-2 ${venue?.bookingPrice_1stHalf
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue?.bookingPrice_1stHalf ||
+                          "Please Enter Price for 1st Half Booking "}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "price1") {
+                          updateHallPrice_1st(newHall_1stHalfprice).then(
+                            (response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else setIsEditing("price1");
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "price1" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                {/* Time of 2nd Half */}
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center space-x-4">
-                    <span className="w-2/5 text-blue-900 font-bold">
-                      Time of 2nd Half:
-                    </span>
-                    <div className="flex items-center justify-between w-3/5">
-                      {isEditing === "time2" ? (
-                        <div className="flex flex-col w-full">
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="time"
-                              value={companyDetails.start_time2 || ""}
-                              onChange={(e) =>
-                                setCompanyDetails({
-                                  ...companyDetails,
-                                  start_time2: e.target.value,
-                                })
-                              }
-                              className="p-2 border rounded-md w-[45%]"
-                            />
-                            <span className="text-gray-500 ml-4 mr-4">
-                              &nbsp;&nbsp;TO&nbsp;&nbsp;
-                            </span>
-                            <input
-                              type="time"
-                              value={companyDetails.end_time2 || ""}
-                              onChange={(e) =>
-                                setCompanyDetails({
-                                  ...companyDetails,
-                                  end_time2: e.target.value,
-                                })
-                              }
-                              className="p-2 border rounded-md w-[45%]"
-                            />
-                          </div>
-                          {/* Validation Message */}
-                          {companyDetails.start_time2 &&
-                            companyDetails.end_time2 &&
-                            companyDetails.start_time2 >=
-                              companyDetails.end_time2 && (
-                              <p className="text-red-500 text-sm mt-1">
-                                **Start time must be earlier than end time
-                              </p>
-                            )}
-                        </div>
-                      ) : (
-                        <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time2 &&
-                            companyDetails.end_time2
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
-                        >
-                          {companyDetails.start_time2 &&
-                          companyDetails.end_time2
-                            ? `${companyDetails.start_time2} -- ${companyDetails.end_time2}`
-                            : "Please Enter Start and End Time"}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (
-                            isEditing === "time2" &&
-                            companyDetails.start_time2 &&
-                            companyDetails.end_time2 &&
-                            companyDetails.start_time2 <
-                              companyDetails.end_time2
-                          ) {
-                            handleSave("time2");
-                          } else if (isEditing === "time2") {
-                            alert("Start time must be earlier than end time");
-                          } else {
-                            setIsEditing("time2");
-                          }
-                        }}
-                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                      >
-                        {isEditing === "time2" ? (
-                          <AiOutlineCheck size={16} />
-                        ) : (
-                          <AiOutlineEdit size={16} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                {/* Time of 2nd Half */}
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center space-x-4">
+                    <span className="w-2/5 text-blue-900 font-bold">
+                      Time of 2nd Half:
+                    </span>
+                    <div className="flex items-center justify-between w-3/5">
+                      {isEditing === "time2" ? (
+                        <div className="flex flex-col w-full">
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="time"
+                              value={newHall_2ndHalftime[0] || ""}
+                              onChange={(e) => {
+                                const startTime = e.target.value;
+                                setnewHall_2ndHalftime(([_, end]) => [
+                                  startTime,
+                                  end,
+                                ]);
+                              }}
+                              className="p-2 border rounded-md w-[45%]"
+                            />
+                            <span className="text-gray-500 ml-4 mr-4">
+                              &nbsp;&nbsp;TO&nbsp;&nbsp;
+                            </span>
+                            <input
+                              type="time"
+                              value={newHall_2ndHalftime[1] || ""}
+                              onChange={(e) => {
+                                const endTime = e.target.value;
+                                setnewHall_2ndHalftime(([start]) => [
+                                  start,
+                                  endTime,
+                                ]);
+                              }}
+                              className="p-2 border rounded-md w-[45%]"
+                            />
+                          </div>
+                          {/* Validation Message */}
+                          {newHall_2ndHalftime[0] &&
+                            newHall_2ndHalftime[1] &&
+                            newHall_2ndHalftime[0] >=
+                            newHall_2ndHalftime[1] && (
+                              <p className="text-red-500 text-sm mt-1">
+                                **Start time must be earlier than end time
+                              </p>
+                            )}
+                        </div>
+                      ) : (
+                        <span
+                          className={`rounded-lg w-[90%] p-2 ${newHall_2ndHalftime[0] && newHall_2ndHalftime[1]
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
+                        >
+                          {newHall_2ndHalftime[0] && newHall_2ndHalftime[1]
+                            ? `${newHall_2ndHalftime[0]} -- ${newHall_2ndHalftime[1]}`
+                            : "Please Enter Start and End Time"}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (
+                            isEditing === "time2" &&
+                            newHall_2ndHalftime[0] &&
+                            newHall_2ndHalftime[1] &&
+                            newHall_2ndHalftime[0] < newHall_2ndHalftime[1]
+                          ) {
+                            updateHallTime_2nd(newHall_2ndHalftime).then(
+                              (response) => {
+                                if (response.success) {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                }
+                                setIsEditing(null);
+                              }
+                            );
+                          } else if (isEditing === "time2") {
+                            alert("Start time must be earlier than end time");
+                          } else {
+                            setIsEditing("time2");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "time2" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Price for 2nd Half Booking */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Price for 2nd Half Booking :
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "price2" ? (
-                      <input
-                        type="number"
-                        value={companyDetails.price2}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            price2: e.target.value,
-                          })
-                        }
-                        className="p-2 border rounded-md w-full"
-                        placeholder="Enter Price for 2nd Half Booking "
-                      />
-                    ) : (
-                      <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price2 ? "" : "text-red-500 bg-white"
-                        }`}
-                      >
-                        {companyDetails.price2 ||
-                          "Please Enter Price for 2nd Half Booking "}
-                      </span>
-                    )}
-                    <button
-                      onClick={() =>
-                        isEditing === "price2"
-                          ? handleSave("price2")
-                          : setIsEditing("price2")
-                      }
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "price2" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                {/* Price for 2nd Half Booking */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Price for 2nd Half Booking :
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "price2" ? (
+                      <input
+                        type="number"
+                        value={newHall_2ndHalfprice}
+                        onChange={(e) =>
+                          setnewHall_2ndHalfprice(e.target.value)
+                        }
+                        className="p-2 border rounded-md w-full"
+                        placeholder="Enter Price for 2nd Half Booking "
+                      />
+                    ) : (
+                      <span
+                        className={`rounded-lg w-[90%] p-2 ${venue?.bookingPrice_2ndHalf ? "" : "text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue?.bookingPrice_2ndHalf ||
+                          "Please Enter Price for 2nd Half Booking "}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "price2") {
+                          updateHallPrice_2nd(newHall_2ndHalfprice).then(
+                            (response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else setIsEditing("price2");
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "price2" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                {/* Time of full day */}
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center space-x-4">
-                    <span className="w-2/5 text-blue-900 font-bold">
-                      Time of Full Day:
-                    </span>
-                    <div className="flex items-center justify-between w-3/5">
-                      {isEditing === "time3" ? (
-                        <div className="flex flex-col w-full">
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="time"
-                              value={companyDetails.start_time3 || ""}
-                              onChange={(e) =>
-                                setCompanyDetails({
-                                  ...companyDetails,
-                                  start_time3: e.target.value,
-                                })
-                              }
-                              className="p-2 border rounded-md w-[45%]"
-                            />
-                            <span className="text-gray-500 ml-4 mr-4">
-                              &nbsp;&nbsp;TO&nbsp;&nbsp;
-                            </span>
-                            <input
-                              type="time"
-                              value={companyDetails.end_time3 || ""}
-                              onChange={(e) =>
-                                setCompanyDetails({
-                                  ...companyDetails,
-                                  end_time3: e.target.value,
-                                })
-                              }
-                              className="p-2 border rounded-md w-[45%]"
-                            />
-                          </div>
-                          {/* Validation Message */}
-                          {companyDetails.start_time3 &&
-                            companyDetails.end_time3 &&
-                            companyDetails.start_time3 >=
-                              companyDetails.end_time3 && (
-                              <p className="text-red-500 text-sm mt-1">
-                                **Start time must be earlier than end time
-                              </p>
-                            )}
-                        </div>
-                      ) : (
-                        <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time3 &&
-                            companyDetails.end_time3
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
-                        >
-                          {companyDetails.start_time3 &&
-                          companyDetails.end_time3
-                            ? `${companyDetails.start_time3} -- ${companyDetails.end_time3}`
-                            : "Please Enter Start and End Time"}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (
-                            isEditing === "time3" &&
-                            companyDetails.start_time3 &&
-                            companyDetails.end_time3 &&
-                            companyDetails.start_time3 <
-                              companyDetails.end_time3
-                          ) {
-                            handleSave("time3");
-                          } else if (isEditing === "time3") {
-                            alert("Start time must be earlier than end time");
-                          } else {
-                            setIsEditing("time3");
-                          }
-                        }}
-                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                      >
-                        {isEditing === "time3" ? (
-                          <AiOutlineCheck size={16} />
-                        ) : (
-                          <AiOutlineEdit size={16} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                {/* Time of full day */}
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center space-x-4">
+                    <span className="w-2/5 text-blue-900 font-bold">
+                      Time of Full Day:
+                    </span>
+                    <div className="flex items-center justify-between w-3/5">
+                      {isEditing === "time3" ? (
+                        <div className="flex flex-col w-full">
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="time"
+                              value={newHall_fulltime[0] || ""}
+                              onChange={(e) => {
+                                const startTime = e.target.value;
+                                setnewHall_fulltime(([_, end]) => [
+                                  startTime,
+                                  end,
+                                ]);
+                              }}
+                              className="p-2 border rounded-md w-[45%]"
+                            />
+                            <span className="text-gray-500 ml-4 mr-4">
+                              &nbsp;&nbsp;TO&nbsp;&nbsp;
+                            </span>
+                            <input
+                              type="time"
+                              value={newHall_fulltime[1] || ""}
+                              onChange={(e) => {
+                                const endTime = e.target.value;
+                                setnewHall_fulltime(([start]) => [
+                                  start,
+                                  endTime,
+                                ]);
+                              }}
+                              className="p-2 border rounded-md w-[45%]"
+                            />
+                          </div>
+                          {/* Validation Message */}
+                          {newHall_fulltime[0] &&
+                            newHall_fulltime[1] &&
+                            newHall_fulltime[0] >=
+                            newHall_fulltime[1] && (
+                              <p className="text-red-500 text-sm mt-1">
+                                **Start time must be earlier than end time
+                              </p>
+                            )}
+                        </div>
+                      ) : (
+                        <span
+                          className={`rounded-lg w-[90%] p-2 ${newHall_fulltime[0] && newHall_fulltime[1]
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
+                        >
+                          {newHall_fulltime[0] && newHall_fulltime[1]
+                            ? `${newHall_fulltime[0]} -- ${newHall_fulltime[1]}`
+                            : "Please Enter Start and End Time"}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (
+                            isEditing === "time3" &&
+                            newHall_fulltime[0] &&
+                            newHall_fulltime[1] &&
+                            newHall_fulltime[0] < newHall_fulltime[1]
+                          ) {
+                            updateHallTime_fullday(newHall_fulltime).then(
+                              (response) => {
+                                if (response.success) {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                }
+                                setIsEditing(null);
+                              }
+                            );
+                          } else if (isEditing === "time3") {
+                            alert("Start time must be earlier than end time");
+                          } else {
+                            setIsEditing("time3");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "time3" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Price for full day Booking */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Price for Full Day Booking :
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "price3" ? (
-                      <input
-                        type="number"
-                        value={companyDetails.price3}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            price3: e.target.value,
-                          })
-                        }
-                        className="p-2 border rounded-md w-full"
-                        placeholder="Enter Price for Full Day Booking "
-                      />
-                    ) : (
-                      <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price3 ? "" : "text-red-500 bg-white"
-                        }`}
-                      >
-                        {companyDetails.price3 ||
-                          "Please Enter Price for Full Day Booking "}
-                      </span>
-                    )}
-                    <button
-                      onClick={() =>
-                        isEditing === "price3"
-                          ? handleSave("price3")
-                          : setIsEditing("price3")
-                      }
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "price3" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                {/* Price for full day Booking */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Price for Full Day Booking :
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "price3" ? (
+                      <input
+                        type="number"
+                        value={newHall_fullprice}
+                        onChange={(e) =>
+                          setnewHall_fullprice(e.target.value)
+                        }
+                        className="p-2 border rounded-md w-full"
+                        placeholder="Enter Price for Full Day Booking "
+                      />
+                    ) : (
+                      <span
+                        className={`rounded-lg w-[90%] p-2 ${venue?.bookingPrice_fullDay ? "" : "text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue?.bookingPrice_fullDay ||
+                          "Please Enter Price for Full Day Booking "}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "price3") {
+                          updateHallPrice_fullday(newHall_fullprice).then(
+                            (response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else setIsEditing("price3");
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "price3" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                {/* Projector Available */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Projector Available:
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "projector" ? (
-                      <div className="flex space-x-4">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            value="yes"
-                            checked={companyDetails.projector === "yes"}
-                            onChange={(e) =>
-                              setCompanyDetails({
-                                ...companyDetails,
-                                projector: e.target.value,
-                              })
-                            }
-                            className="mr-2"
-                          />
-                          Yes
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            value="no"
-                            checked={companyDetails.projector === "no"}
-                            onChange={(e) =>
-                              setCompanyDetails({
-                                ...companyDetails,
-                                projector: e.target.value,
-                              })
-                            }
-                            className="mr-2"
-                          />
-                          No
-                        </label>
-                      </div>
-                    ) : (
-                      <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.projector
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
-                      >
-                        {companyDetails.projector
-                          ? companyDetails.projector.charAt(0).toUpperCase() +
-                            companyDetails.projector.slice(1)
-                          : "Please Select an Option"}
-                      </span>
-                    )}
-                    <button
-                      onClick={() =>
-                        isEditing === "projector"
-                          ? handleSave("projector")
-                          : setIsEditing("projector")
-                      }
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "projector" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
+                {/* Projector Available */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Projector Available:
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "projector" ? (
+                      <div className="flex space-x-4">
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            value="yes"
+                            checked={newHallProjector}
+                            onChange={(e) =>
+                              setnewHallProjector(true)
+                            }
+                            className="mr-2"
+                          />
+                          Yes
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            value="no"
+                            checked={!newHallProjector}
+                            onChange={(e) =>
+                              setnewHallProjector(false)
+                            }
+                            className="mr-2"
+                          />
+                          No
+                        </label>
+                      </div>
+                    ) : (
+                      <span
+                        className={`${venue
+                          ? "font-bold text-lg"
+                          : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue.projector ? "Yes" : "No"}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "projector") {
+                          updateVenueProjector(newHallProjector).then(
+                            (response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else {
+                          setnewHallProjector(
+                            venue ? venue.projector : null
+                          );
+                          setIsEditing("projector");
+                        }
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "projector" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                {/* Broadband Available */}
-                <div className="flex items-center space-x-4">
-                  <span className="w-2/5 text-blue-900 font-bold">
-                    Broadband Available:
-                  </span>
-                  <div className="flex items-center justify-between w-3/5">
-                    {isEditing === "broadband" ? (
-                      <div className="flex space-x-4">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            value="yes"
-                            checked={companyDetails.broadband === "yes"}
-                            onChange={(e) =>
-                              setCompanyDetails({
-                                ...companyDetails,
-                                broadband: e.target.value,
-                              })
-                            }
-                            className="mr-2"
-                          />
-                          Yes
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            value="no"
-                            checked={companyDetails.broadband === "no"}
-                            onChange={(e) =>
-                              setCompanyDetails({
-                                ...companyDetails,
-                                broadband: e.target.value,
-                              })
-                            }
-                            className="mr-2"
-                          />
-                          No
-                        </label>
-                      </div>
-                    ) : (
-                      <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.broadband
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
-                      >
-                        {companyDetails.broadband
-                          ? companyDetails.broadband.charAt(0).toUpperCase() +
-                            companyDetails.broadband.slice(1)
-                          : "Please Select an Option"}
-                      </span>
-                    )}
-                    <button
-                      onClick={() =>
-                        isEditing === "broadband"
-                          ? handleSave("broadband")
-                          : setIsEditing("broadband")
-                      }
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "broadband" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+                {/* Broadband Available */}
+                <div className="flex items-center space-x-4">
+                  <span className="w-2/5 text-blue-900 font-bold">
+                    Broadband Available:
+                  </span>
+                  <div className="flex items-center justify-between w-3/5">
+                    {isEditing === "broadband" ? (
+                      <div className="flex space-x-4">
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            value="yes"
+                            checked={newHallBroadband}
+                            onChange={(e) =>
+                              setnewHallBroadband(true)
+                            }
+                            className="mr-2"
+                          />
+                          Yes
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            value="no"
+                            checked={!newHallBroadband}
+                            onChange={(e) =>
+                              setnewHallBroadband(false)
+                            }
+                            className="mr-2"
+                          />
+                          No
+                        </label>
+                      </div>
+                    ) : (
+                      <span
+                        className={`${venue
+                          ? "font-bold text-lg"
+                          : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
+                          }`}
+                      >
+                        {venue.broadband ? "Yes" : "No"}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (isEditing === "broadband") {
+                          updateVenueBroadband(newHallBroadband).then(
+                            (response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else {
+                          setnewHallBroadband(
+                            venue ? venue.broadband : null
+                          );
+                          setIsEditing("broadband");
+                        }
+                      }}
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "broadband" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Hall Description */}
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center space-x-4">
+                    <span className="w-2/5 text-blue-900 font-bold">
+                      Hall Description:{" "}
+                    </span>
+                    <div className="flex items-center justify-between w-3/5">
+                      {isEditing === "description" ? (
+                        <textarea
+                          value={newDescription || ""}
+                          onChange={(e) => setnewDescription(e.target.value)}
+                          className="p-2 border rounded-md w-full resize-none h-24"
+                        />
+                      ) : (
+                        <span
+                          className={`rounded-lg w-[90%] p-2 ${newDescription ? "" : "text-red-500 bg-white"
+                            }`}
+                        >
+                          {newDescription ? newDescription : "Please Enter Hall Description"}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (isEditing === "description" && newDescription) {
+                            updateHallDescription(newDescription).then((response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            });
+                          } else if (isEditing === "description") {
+                            alert("Please enter a valid description");
+                          } else {
+                            setIsEditing("description");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "description" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hall Opening Time */}
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center space-x-4">
+                    <span className="w-2/5 text-blue-900 font-bold">
+                      Hall Opening Time:
+                    </span>
+                    <div className="flex items-center justify-between w-3/5">
+                      {isEditing === "openingTime" ? (
+                        <div className="w-full">
+                          <input
+                            type="time"
+                            value={newOpeningTime || ""}
+                            onChange={(e) => setnewOpeningTime(e.target.value)}
+                            className="p-2 border rounded-md w-[50%]"
+                          />
+                        </div>
+                      ) : (
+                        <span
+                          className={`rounded-lg w-[90%] p-2 ${newOpeningTime ? "" : "text-red-500 bg-white"
+                            }`}
+                        >
+                          {newOpeningTime ? newOpeningTime : "Please Enter Opening Time"}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (isEditing === "openingTime" && newOpeningTime) {
+                            updateOpeningTime(newOpeningTime).then((response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            });
+                          } else if (isEditing === "openingTime") {
+                            alert("Please enter a valid opening time");
+                          } else {
+                            setIsEditing("openingTime");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "openingTime" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hall Closing Time */}
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center space-x-4">
+                    <span className="w-2/5 text-blue-900 font-bold">
+                      Hall Closing Time:
+                    </span>
+                    <div className="flex items-center justify-between w-3/5">
+                      {isEditing === "closingTime" ? (
+                        <div className="w-full">
+                          <input
+                            type="time"
+                            value={newClosingTime || ""}
+                            onChange={(e) => setnewClosingTime(e.target.value)}
+                            className="p-2 border rounded-md w-[50%]"
+                          />
+                        </div>
+                      ) : (
+                        <span
+                          className={`rounded-lg w-[90%] p-2 ${newClosingTime ? "" : "text-red-500 bg-white"
+                            }`}
+                        >
+                          {newClosingTime ? newClosingTime : "Please Enter Closing Time"}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          if (isEditing === "closingTime" && newClosingTime) {
+                            updateClosingTime(newClosingTime).then((response) => {
+                              if (response.success) {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              }
+                              setIsEditing(null);
+                            });
+                          } else if (isEditing === "closingTime") {
+                            alert("Please enter a valid closing time");
+                          } else {
+                            setIsEditing("closingTime");
+                          }
+                        }}
+                        className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                      >
+                        {isEditing === "closingTime" ? (
+                          <AiOutlineCheck size={16} />
+                        ) : (
+                          <AiOutlineEdit size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
 
       case "Gallery":
         return (
@@ -1254,49 +1495,49 @@ function VenueProfile() {
           </>
         );
 
-      case "Booking Requests":
-        return (
-          <>
-            <div className="p-4">
-              <div className="space-y-8 ">
-                {Array.isArray(venue.bookingRequests) &&
-                  venue.bookingRequests.map((request, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col lg:flex-row items-start lg:items-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-300 p-4 border-2 border-blue-500 rounded-lg shadow-2xl hover:shadow-lg transition-all"
-                    >
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-blue-800">
-                          Event Created By :{" "}
-                          {request.id ? request.id.ownerId.username : null}
-                        </h3>
-                        <p className="text-gray-700 mt-2">
-                          <span className="font-bold">Event Name : </span>
-                          {request.id ? request.id.eventName : null}
-                        </p>
-                        <p className="text-gray-700 mt-2">
-                          <span className="font-bold">Date : </span>
-                          {request.id
-                            ? new Date(request.id.date).toLocaleDateString(
-                                "en-GB"
-                              )
-                            : null}
-                        </p>
-                        <p className="text-gray-700 mt-2">
-                          <span className="font-bold">Head Count : </span>
-                          {request.id ? request.id.headcount : null}
-                        </p>
-                        <p className="text-gray-700 mt-2">
-                          <span className="font-bold">Time : </span>
-                          {request.id ? request.id.time : null}
-                        </p>
-                        <p className="text-gray-700 mt-2">
-                          <span className="font-bold">Time Slot : </span>
-                          {request.timeslot === "1" && "1st Half"}
-                          {request.timeslot === "2" && "2nd Half"}
-                          {request.timeslot === "F" && "Full Day"}
-                        </p>
-                      </div>
+      case "Booking Requests":
+        return (
+          <>
+            <div className="p-4">
+              <div className="space-y-8 ">
+                {Array.isArray(venue.bookingRequests) &&
+                  venue.bookingRequests.map((request, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col lg:flex-row items-start lg:items-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-300 p-4 border-2 border-blue-500 rounded-lg shadow-2xl hover:shadow-lg transition-all"
+                    >
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-blue-800">
+                          Event Created By :{" "}
+                          {request.id ? request.id.ownerId.username : null}
+                        </h3>
+                        <p className="text-gray-700 mt-2">
+                          <span className="font-bold">Event Name : </span>
+                          {request.id ? request.id.eventName : null}
+                        </p>
+                        <p className="text-gray-700 mt-2">
+                          <span className="font-bold">Date : </span>
+                          {request.id
+                            ? new Date(request.id.date).toLocaleDateString(
+                              "en-GB"
+                            )
+                            : null}
+                        </p>
+                        <p className="text-gray-700 mt-2">
+                          <span className="font-bold">Head Count : </span>
+                          {request.id ? request.id.headcount : null}
+                        </p>
+                        <p className="text-gray-700 mt-2">
+                          <span className="font-bold">Time : </span>
+                          {request.id ? request.id.time : null}
+                        </p>
+                        <p className="text-gray-700 mt-2">
+                          <span className="font-bold">Time Slot : </span>
+                          {request.timeslot === "1" && "1st Half"}
+                          {request.timeslot === "2" && "2nd Half"}
+                          {request.timeslot === "F" && "Full Day"}
+                        </p>
+                      </div>
 
                       <div className="border-l-4 border-yellow-600  ml-4 h-64 ">
                         <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-12">
@@ -1397,100 +1638,95 @@ function VenueProfile() {
     }
   };
 
-  return (
-    <>
-      <div className="h-full w-[100%] flex">
-        <div className=" w-[95%]">
-          <div className="flex gap-12 items-center justify-center cursor-pointer ml-5 mt-6">
-            {/* Basic Details */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "BasicDetails"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("BasicDetails")}
-            >
-              Basic Details
-              {activeMenu === "BasicDetails" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
-            </div>
-            {/* Gallery */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Gallery" ? "text-blue-700" : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Gallery")}
-            >
-              Gallery
-              {activeMenu === "Gallery" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
-            </div>
-            {/* Booking Requests */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Booking Requests"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Booking Requests")}
-            >
-              Booking Requests
-              {activeMenu === "Booking Requests" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
-            </div>
-            {/* Upcoming Bookings */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Upcoming Bookings"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Upcoming Bookings")}
-            >
-              Upcoming Bookings
-              {activeMenu === "Upcoming Bookings" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
-            </div>
-            {/* Past Bookings */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Past Bookings"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Past Bookings")}
-            >
-              Past Bookings
-              {activeMenu === "Past Bookings" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
-            </div>
-          </div>
-          <div className="pl-10 pt-10">{renderComponent()}</div>
-        </div>
-      </div>
-    </>
-  );
+  return (
+    <>
+      <div className="h-full w-[100%] flex">
+        <div className=" w-[95%]">
+          <div className="flex gap-12 items-center justify-center cursor-pointer ml-5 mt-6">
+            {/* Basic Details */}
+            <div
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "BasicDetails"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
+              onClick={() => setActiveMenu("BasicDetails")}
+            >
+              Basic Details
+              {activeMenu === "BasicDetails" && (
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
+                       transition-all duration-300"
+                ></span>
+              )}
+            </div>
+            {/* Gallery */}
+            <div
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Gallery" ? "text-blue-700" : "text-gray-600"
+                }`}
+              onClick={() => setActiveMenu("Gallery")}
+            >
+              Gallery
+              {activeMenu === "Gallery" && (
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
+                       transition-all duration-300"
+                ></span>
+              )}
+            </div>
+            {/* Booking Requests */}
+            <div
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Booking Requests"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
+              onClick={() => setActiveMenu("Booking Requests")}
+            >
+              Booking Requests
+              {activeMenu === "Booking Requests" && (
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
+                       transition-all duration-300"
+                ></span>
+              )}
+            </div>
+            {/* Upcoming Bookings */}
+            <div
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Upcoming Bookings"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
+              onClick={() => setActiveMenu("Upcoming Bookings")}
+            >
+              Upcoming Bookings
+              {activeMenu === "Upcoming Bookings" && (
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
+                       transition-all duration-300"
+                ></span>
+              )}
+            </div>
+            {/* Past Bookings */}
+            <div
+              className={`cursor-pointer relative font-bold font-serif text-lg ${activeMenu === "Past Bookings"
+                ? "text-blue-700"
+                : "text-gray-600"
+                }`}
+              onClick={() => setActiveMenu("Past Bookings")}
+            >
+              Past Bookings
+              {activeMenu === "Past Bookings" && (
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
+                       transition-all duration-300"
+                ></span>
+              )}
+            </div>
+          </div>
+          <div className="pl-10 pt-10">{renderComponent()}</div>
+        </div>
+      </div>
+    </>
+  );
 }
 export default VenueProfile;
 
