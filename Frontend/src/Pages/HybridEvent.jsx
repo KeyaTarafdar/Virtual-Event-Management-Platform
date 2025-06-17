@@ -6,11 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import {
-  AiFillHome,
-  AiOutlineAppstore,
-  AiFillContacts,
-} from "react-icons/ai";
+import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
 
 const footerMenuItems = [
   { href: "header", label: "Header", icon: AiFillHome },
@@ -25,14 +21,14 @@ function HybridEvent() {
   useEffect(() => {
     fetchHybridEvents().then((events) => {
       if (events.success) {
-      setHybridEvents(
-        events.filter((event) => {
-          const today = new Date();
-          const currentDate = today.toISOString().split("T")[0];
-          const eventDate = new Date(event.date).toISOString().split("T")[0];
-          const registrationLastDate = new Date(event.lastDateOfRegistration)
-            .toISOString()
-            .split("T")[0];
+        setHybridEvents(
+          events.data.filter((event) => {
+            const today = new Date();
+            const currentDate = today.toISOString().split("T")[0];
+            const eventDate = new Date(event.date).toISOString().split("T")[0];
+            const registrationLastDate = new Date(event.lastDateOfRegistration)
+              .toISOString()
+              .split("T")[0];
 
             return (
               registrationLastDate >= currentDate && eventDate > currentDate
@@ -41,7 +37,6 @@ function HybridEvent() {
         );
       } else {
         alert(events.message);
-        
       }
     });
   }, []);

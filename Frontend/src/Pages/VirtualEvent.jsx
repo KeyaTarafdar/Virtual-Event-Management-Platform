@@ -16,23 +16,23 @@ const footerMenuItems = [
 
 function VirtualEvent() {
   const navigate = useNavigate();
-  const [virtualEvents, setVirtualEvents] = useState([]);
+  const [virtualEvents, setvirtualEvents] = useState([]);
 
   useEffect(() => {
     fetchVirtualEvents().then((events) => {
       if (events.success) {
-        console.log(events.data);
         setvirtualEvents(
-          events.data.filter((event) => {
-            const today = new Date();
-            const currentDate = today.toISOString().split("T")[0];
-            const eventDate = new Date(event.date).toISOString().split("T")[0];
-            const registrationLastDate = new Date(event.lastDateOfRegistration)
-              .toISOString()
-              .split("T")[0];
+          events.data
+          // events.data.filter((event) => {
+          //   const today = new Date();
+          //   const currentDate = today.toISOString().split("T")[0];
+          //   const eventDate = new Date(event.date).toISOString().split("T")[0];
+          //   const registrationLastDate = new Date(event.lastDateOfRegistration)
+          //     .toISOString()
+          //     .split("T")[0];
 
-            return eventDate >= currentDate;
-          })
+          //   return eventDate >= currentDate;
+          // })
         );
       } else {
         alert(events.message);
