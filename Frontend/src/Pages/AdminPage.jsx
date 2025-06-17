@@ -3,7 +3,6 @@ import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import {
   findAdmin,
   acceptVenue,
@@ -18,14 +17,29 @@ import {
   faCalendarCheck,
   faGlobe,
   faUsers,
+  faTimes,
+  faEllipsisV,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCompany } from "../context/companyContext/CompanyContext";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
+  const [menuVisible, setMenuVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
   const { company, setCompany } = useCompany();
+
+  const toggleMenu = () => {
+    setMenuVisible((prev) => !prev);
+  };
+  useEffect(() => {
+    if (menuVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [menuVisible]);
 
   const handleReject = () => {
     setIsModalOpen(true);
@@ -156,87 +170,103 @@ function AdminPage() {
           <>
             {venueRequests.length > 0 ? (
               venueRequests.map((venue) => (
-                <div
-                  key={venue._id}
-                  className="w-[97%] ml-5 mt-3 border-gray-300 rounded-lg shadow-md p-4 flex justify-between items-center bg-white border-4"
-                >
-                  <div className="flex flex-col">
-                    <h2 className="text-xl font-semibold text-gray-800 pb-3">
-                      <span className="font-medium">Venue Name:</span>{" "}
-                      {venue.name}
-                    </h2>
-                    <p className="text-md text-gray-600">
-                      <span className="font-medium">Email:</span> {venue.email}
-                    </p>
-                    <p className="text-md text-gray-600">
-                      <span className="font-medium">Contact:</span>{" "}
-                      {venue.contact}
-                    </p>
-                    <p className="text-md text-gray-600">
-                      <span className="font-medium">City:</span> {venue.city}
-                    </p>
-                    <p className="text-md text-gray-600">
-                      <span className="font-medium">Address:</span>{" "}
-                      {venue.address}
-                    </p>
-                    <p className="text-md text-gray-600">
-                      <span className="font-medium">Multiday Event:</span>{" "}
-                      {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
-                    </p>
-                    <p className="text-md text-gray-600">
-                      <span className="font-medium">Max Headcount:</span>{" "}
-                      {venue.maxCapacity}
-                    </p>
-                  </div>
+                <div className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
+                  <div
+                    key={venue._id}
+                    className="mt-[3rem] w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
+                  >
+                    <div className="flex flex-col md:w-3/4 sm:border-r-4 sm:border-blue-600 mr-4">
+                      <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 pb-2 sm:pb-3 font-serif">
+                        <span className="font-medium">Venue Name:</span>{" "}
+                        {venue.name}
+                      </h2>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Email:
+                        </span>{" "}
+                        {venue.email}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Contact:
+                        </span>{" "}
+                        {venue.contact}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          City:
+                        </span>{" "}
+                        {venue.city}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Address:
+                        </span>{" "}
+                        {venue.address}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Multiday Event:
+                        </span>{" "}
+                        {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Max Headcount:
+                        </span>{" "}
+                        {venue.maxCapacity}
+                      </p>
+                    </div>
 
-                  <div className="flex gap-5 mr-5 text-white">
-                    <button
-                      className="border-2 rounded-lg bg-green-500 font-bold font-serif h-10 w-32 hover:bg-green-600 hover:border-green-600 transition duration-300 ease-in-out"
-                      onClick={() => {
-                        handleAcceptVenue(venue._id);
-                      }}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="border-2 rounded-lg bg-red-500 font-bold font-serif h-10 w-32 hover:bg-red-600 hover:border-red-600 transition duration-300 ease-in-out"
-                      onClick={handleReject}
-                    >
-                      Reject
-                    </button>
+                    <div className="flex flex-col sm:flex-row md:flex-col gap-3 sm:gap-4 md:gap-5 md:mr-3 mt-4 md:mt-0 text-white md:w-1/4 w-full sm:w-auto">
+                      <button
+                        className="border-2 rounded-lg bg-green-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-green-600 hover:border-green-600 transition duration-300 ease-in-out"
+                        onClick={() => {
+                          handleAcceptVenue(venue._id);
+                        }}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="border-2 rounded-lg bg-red-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-red-600 hover:border-red-600 transition duration-300 ease-in-out"
+                        onClick={handleReject}
+                      >
+                        Reject
+                      </button>
 
-                    {isModalOpen && (
-                      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                          <h2 className="text-xl font-bold mb-4 text-gray-800">
-                            Enter Rejection Reason
-                          </h2>
-                          <textarea
-                            className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
-                            rows="4"
-                            placeholder="Enter your reason here..."
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value)}
-                          />
-                          <div className="flex justify-end mt-4 gap-2">
-                            <button
-                              className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
-                              onClick={handleCloseModal}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
-                              onClick={() => {
-                                handleSubmitReason(venue._id, reason);
-                              }}
-                            >
-                              Submit
-                            </button>
+                      {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                          <div className="bg-white p-5 sm:p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
+                            <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-800">
+                              Enter Rejection Reason
+                            </h2>
+                            <textarea
+                              className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
+                              rows="4"
+                              placeholder="Enter your reason here..."
+                              value={reason}
+                              onChange={(e) => setReason(e.target.value)}
+                            />
+                            <div className="flex justify-end mt-4 gap-2">
+                              <button
+                                className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
+                                onClick={handleCloseModal}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
+                                onClick={() => {
+                                  handleSubmitReason(venue._id, reason);
+                                }}
+                              >
+                                Submit
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               ))
@@ -254,7 +284,7 @@ function AdminPage() {
       case "Upcoming Events":
         return (
           <>
-            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
+            <div className="p-4 flex justify-center w-full min-h-screen bg-white flex-wrap gap-x-4 overflow-x-hidden mt-8">
               {Array.isArray(upcomingEvents) && upcomingEvents.length > 0 ? (
                 upcomingEvents.map((event) => (
                   <div key={event.id}>
@@ -295,7 +325,7 @@ function AdminPage() {
       case "Past Events":
         return (
           <>
-            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
+            <div className="p-4 flex justify-center  min-h-screen overflow-x-hidden w-full  flex-wrap gap-x-4 mt-8">
               {Array.isArray(pastEvents) && pastEvents.length > 0 ? (
                 pastEvents.map((event) => (
                   <div key={event.id}>
@@ -336,52 +366,60 @@ function AdminPage() {
       case "Venue Details":
         return (
           <>
-            <div className="flex items-center p-5 ">
-              {/* Search by Venue Name */}
-              <div className="flex items-center">
-                <h3 className="mr-4 font-serif font-bold">
-                  Search by Venue Name :{" "}
-                </h3>
-                <input
-                  type="text"
-                  id="venueNameInput"
-                  className="p-2 border border-gray-500 rounded-md"
-                  placeholder="Enter Venue Name"
-                />
-                <button
-                  className="ml-2 p-2 bg-blue-800 text-white rounded-md"
-                  onClick={() => handleSearch("venueName")}
-                >
-                  <AiOutlineSearch />
-                </button>
+            <div className="flex w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden ">
+              {/* Top search bar */}
+              <div className="flex items-center p-5 flex-col lg:flex-row w-full h-[20%]">
+                {/* Search by Venue Name */}
+                <div className="flex items-center flex-col sm:flex-row gap-y-4">
+                  <h3 className="mr-4 font-serif font-bold">
+                    Search by Venue Name :
+                  </h3>
+                  <div>
+                    <input
+                      type="text"
+                      id="venueNameInput"
+                      className="p-2 border border-gray-500 rounded-md"
+                      placeholder="Enter Venue Name"
+                    />
+                    <button
+                      className="ml-2 p-2 bg-blue-800 text-white rounded-md"
+                      onClick={() => handleSearch("venueName")}
+                    >
+                      <AiOutlineSearch />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="hidden lg:block lg:bg-yellow-500 lg:rounded-lg lg:w-1 lg:h-12 lg:ml-8 lg:mr-8"></div>
+                <div className="lg:hidden bg-yellow-500 rounded-lg w-[90%] mt-4 mb-4 h-1 ml-8 mr-8"></div>
+
+                {/* Search by Venue Address */}
+                <div className="flex items-center flex-col sm:flex-row gap-y-4">
+                  <h3 className="mr-4 font-serif font-bold">
+                    Search by Venue Address :
+                  </h3>
+                  <div>
+                    <input
+                      type="text"
+                      id="venueAddressInput"
+                      className="p-2 border border-gray-500 rounded-md"
+                      placeholder="Enter Venue Address"
+                    />
+                    <button
+                      className="ml-2 p-2 bg-blue-800 text-white rounded-md"
+                      onClick={() => handleSearch("venueAddress")}
+                    >
+                      <AiOutlineSearch />
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div className="bg-yellow-500 rounded-lg w-1 h-12 ml-8 mr-8"></div>
-              {/* Search by Venue Address */}
-              <div className="flex items-center">
-                <h3 className="mr-4 font-serif font-bold">
-                  Search by Venue Address :{" "}
-                </h3>
-                <input
-                  type="text"
-                  id="venueAddressInput"
-                  className="p-2 border border-gray-500 rounded-md"
-                  placeholder="Enter Venue Address"
-                />
-                <button
-                  className="ml-2 p-2 bg-blue-800 text-white rounded-md"
-                  onClick={() => handleSearch("venueAddress")}
-                >
-                  <AiOutlineSearch />
-                </button>
-              </div>
-            </div>
-
-            <div className=" max-w-[200rem] h-[92vh] text-center mt-[0.6px]">
-              <div>
-                <table className="w-full table-fixed">
-                  <thead className=" sticky top-0 bg-black text-white">
-                    <tr className="">
+              {/* Scrollable table container */}
+              <div className="w-full overflow-x-auto  px-4 ">
+                <table className="min-w-[120rem] table-fixed">
+                  <thead className="sticky top-0 bg-black text-white">
+                    <tr>
                       <th className="w-[5rem] border-2 border-white">Sl No.</th>
                       <th className="w-[15rem] border-2 border-white">
                         Venue Name
@@ -439,7 +477,7 @@ function AdminPage() {
                         <tr key={venue._id}>
                           <td className="border-2 p-2">{index + 1}</td>
                           <td className="border-2 p-2">{venue.name}</td>
-                          <td className="border-2 p-2">{venue.ownerName}</td>
+                          <td className="border-2 p-2">{venue.owner}</td>
                           <td className="border-2 p-2">{venue.email}</td>
                           <td className="border-2 p-2">{venue.contact}</td>
                           <td className="border-2 p-2">{venue.city}</td>
@@ -477,56 +515,53 @@ function AdminPage() {
 
       case "Home":
         return (
-          <>
-            <div className="bg-white">
-              <div
-                className="p-5  pl-4 shadow-inner bg-gradient-to-r from-blue-200 to-indigo-500 h-48  "
-                style={{
-                  clipPath:
-                    "polygon(100% 0%, 0% 0% , 0% 65%, 1% 64.95%, 2% 64.8%, 3% 64.6%, 4% 64.3%, 5% 63.9%, 6% 63.45%, 7% 62.9%, 8% 62.25%, 9% 61.55%, 10% 60.8%, 11% 59.95%, 12% 59.05%, 13% 58.1%, 14% 57.1%, 15% 56.05%, 16% 55%, 17% 53.9%, 18% 52.8%, 19% 51.65%, 20% 50.5%, 21% 49.35%, 22% 48.2%, 23% 47.05%, 24% 45.9%, 25% 44.8%, 26% 43.75%, 27% 42.75%, 28% 41.75%, 29% 40.8%, 30% 39.9%, 31% 39.1%, 32% 38.35%, 33% 37.65%, 34% 37.05%, 35% 36.5%, 36% 36.05%, 37% 35.65%, 38% 35.35%, 39% 35.15%, 40% 35.05%, 41% 35%, 42% 35.05%, 43% 35.2%, 44% 35.45%, 45% 35.75%, 46% 36.15%, 47% 36.65%, 48% 37.2%, 49% 37.85%, 50% 38.55%, 51% 39.35%, 52% 40.2%, 53% 41.1%, 54% 42.05%, 55% 43.05%, 56% 44.1%, 57% 45.15%, 58% 46.3%, 59% 47.4%, 60% 48.55%, 61% 49.7%, 62% 50.85%, 63% 52%, 64% 53.15%, 65% 54.25%, 66% 55.35%, 67% 56.4%, 68% 57.45%, 69% 58.4%, 70% 59.35%, 71% 60.2%, 72% 61.05%, 73% 61.8%, 74% 62.45%, 75% 63.05%, 76% 63.6%, 77% 64.05%, 78% 64.4%, 79% 64.7%, 80% 64.85%, 81% 65%, 82% 65%, 83% 64.9%, 84% 64.75%, 85% 64.5%, 86% 64.2%, 87% 63.75%, 88% 63.25%, 89% 62.7%, 90% 62.05%, 91% 61.3%, 92% 60.5%, 93% 59.65%, 94% 58.75%, 95% 57.8%, 96% 56.8%, 97% 55.75%, 98% 54.65%, 99% 53.55%, 100% 52.4%)",
-                }}
+          <div className="bg-white min-h-screen overflow-x-hidden">
+            {/* Header with clip-path */}
+            <div
+              className="p-6 bg-gradient-to-r from-blue-200 to-indigo-500 h-44 text-white"
+              style={{
+                clipPath: "polygon(100% 0%, 0% 0%, 0% 65%, 100% 52.4%)",
+              }}
+            >
+              <h1
+                className="text-5xl font-serif font-bold text-gradient2 mt-[1.7rem]"
+                style={{ fontFamily: '"quick"' }}
               >
-                <h1
-                  className="text-5xl ml-6 font-serif text-gradient2 font-bold tracking-wide flex items-center"
-                  style={{ fontFamily: '"quick"', wordSpacing: "0.2em" }}
-                >
-                  Welcome Admin...
-                </h1>
-              </div>
+                Welcome Admin...
+              </h1>
+            </div>
 
-              <div className="max-w-6xl mx-auto p-5 bg-yellow-100 shadow-2xl border-2 border-yellow-500 rounded-lg mt-[-8rem]">
-                <h2 className="text-center text-2xl font-serif font-bold mb-5 mt-5">
+            {/* Main content container */}
+            <div className="max-w-6xl mx-auto -mt-20 px-4 pb-10">
+              <div className="bg-yellow-100 border-2 border-yellow-500 rounded-lg p-6 shadow-2xl">
+                <h2 className="text-center text-2xl font-serif font-bold mb-6">
                   Company Information
                 </h2>
+
                 <div className="flex flex-col md:flex-row gap-8">
-                  <div className="flex-1 p-4 bg-white shadow-2xl border-2 border-gray-400 rounded-md mt-[2rem]">
-                    {/* Company Details Section */}
-                    <h3 className="text-lg text-center font-serif font-semibold">
+                  {/* Company details */}
+                  <div className="flex-1 bg-white p-4 border-2 border-gray-400 rounded-md shadow-2xl">
+                    <h3 className="text-center text-lg font-serif font-semibold mb-4">
                       Company Details
                     </h3>
-                    <div className="space-y-[2.5rem] pl-8 pr-8 mt-6">
+                    <div className="space-y-6">
                       {Object.entries(fields).map(([key, value]) => (
                         <div
                           key={key}
-                          className="flex items-center justify-between border-4 p-3 bg-gray-200 rounded-lg shadow-lg"
+                          className="flex justify-between items-center bg-gray-200 p-3 rounded shadow"
                         >
                           {editMode[key] ? (
                             <input
                               type="text"
                               value={value}
                               onChange={(e) => handleFieldChange(e, key)}
-                              className="flex-1 p-1 border border-gray-300 rounded-md"
+                              className="flex-1 p-1 border rounded"
                             />
                           ) : (
-                            <p className="text-base">
-                              <span className="font-medium">
-                                {key
-                                  .replace(/([A-Z])/g, " $1")
-                                  .replace(/^./, (str) =>
-                                    str.toUpperCase()
-                                  )}{" "}
-                                :{" "}
-                              </span>
+                            <p>
+                              <span className="font-medium capitalize">
+                                {key.replace(/([A-Z])/g, " $1")}:
+                              </span>{" "}
                               {value}
                             </p>
                           )}
@@ -545,67 +580,54 @@ function AdminPage() {
                     </div>
                   </div>
 
-                  {/* Company Analytics */}
-                  <div className="flex-1 ">
-                    <h2 className="text-center text-xl font-serif font-bold mt-8 ">
+                  {/* Analytics */}
+                  <div className="flex-1">
+                    <h3 className="text-center text-lg font-serif font-semibold mb-4 mt-4 md:mt-0">
                       Company Analytics
-                    </h2>
-                    <div className="flex-1 mt-4 flex flex-col items-center gap-4 ">
-                      <div className="bg-white w-[100%] p-4 flex flex-col items-center rounded-lg shadow-xl border-2 border-gray-400">
-                        <div className="flex gap-4 w-[95%] h-36">
-                          {/* Red box */}
-                          <div className="bg-red-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                            <FontAwesomeIcon
-                              icon={faCalendarCheck}
-                              style={{ color: "#000000" }}
-                            />
-                            <div className=" text-2xl font-bold flex ">
-                              100,000+
-                            </div>
-                            <div className="text-md">Events</div>
-                          </div>
-                          {/* Yellow box */}
-                          <div className="bg-yellow-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                            <FontAwesomeIcon
-                              icon={faCalendarCheck}
-                              style={{ color: "#000000" }}
-                            />
-                            <div className="text-2xl font-bold">50,000+</div>
-                            <div className="text-md">Event Planner</div>
-                          </div>
-                        </div>
-                        <div className="flex gap-4 w-[95%] h-36">
-                          {/* GREEN   BOX */}
-                          <div className="bg-green-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                            <FontAwesomeIcon
-                              icon={faGlobe}
-                              style={{ color: "#000000" }}
-                            />
-                            <div className="text-2xl font-bold">100+</div>
-                            <div className="text-md">Countries</div>
-                          </div>
-                          {/* Blue  Box */}
-                          <div className="bg-blue-200 h-28 w-[90%] shadow-xl rounded-lg p-4">
-                            <FontAwesomeIcon
-                              icon={faUsers}
-                              style={{ color: "#000000" }}
-                            />
-                            <div className=" text-2xl font-bold">100k+</div>
-                            <div className="text-md">Attendees</div>
-                          </div>
-                        </div>
-                      </div>
+                    </h3>
+                    <div className="space-y-6">
+                      {/* Stats */}
+                      <div className="bg-white border-2 border-gray-400 p-4 rounded shadow-xl flex flex-wrap justify-center gap-4">
+                        {[
+                          { color: "red", label: "Events", value: "100,000+" },
+                          {
+                            color: "yellow",
+                            label: "Event Planner",
+                            value: "50,000+",
+                          },
+                          { color: "green", label: "Countries", value: "100+" },
+                          { color: "blue", label: "Attendees", value: "100k+" },
+                        ].map(({ color, label, value }, i) => {
+                          const bgColorClass = {
+                            red: "bg-red-200",
+                            yellow: "bg-yellow-200",
+                            green: "bg-green-200",
+                            blue: "bg-blue-200",
+                          }[color];
 
-                      <div className="flex gap-4 bg-white w-[98%] rounded-lg shadow-xl border-2 border-gray-400 mt-12">
+                          return (
+                            <div
+                              key={i}
+                              className={`${bgColorClass} h-28 w-[45%] p-4 rounded shadow`}
+                            >
+                              <FontAwesomeIcon icon={faCalendarCheck} />
+                              <div className="text-xl font-bold">{value}</div>
+                              <div className="text-sm">{label}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {/* Charts */}
+                      <div className="flex justify-center gap-4 bg-white border-2 border-gray-400 p-4 rounded shadow-xl">
                         <img
                           src="https://r-charts.com/en/part-whole/donut-chart_files/figure-html/donut-chart-hole-fill.png"
-                          alt="Image 1"
-                          className="w-[45%] rounded-md"
+                          alt="Chart 1"
+                          className="w-[45%] rounded"
                         />
                         <img
                           src="https://www.nobledesktop.com/images/tableaucolorfig8.png"
-                          alt="Image 2"
-                          className="w-[45%] rounded-md"
+                          alt="Chart 2"
+                          className="w-[45%] rounded"
                         />
                       </div>
                     </div>
@@ -613,7 +635,7 @@ function AdminPage() {
                 </div>
               </div>
             </div>
-          </>
+          </div>
         );
     }
   };
@@ -678,18 +700,23 @@ function AdminPage() {
 
   return (
     <>
-      <div className="h-screen">
+      <div className="min-h-screen">
         <Navbar menuItems={[]} />
-        <div className="h-[91.7vh] flex m-0 p-0 overflow-hidden">
+        <div className="flex">
           {/* side bar */}
-          <div className="w-[13rem] min-w-[13rem] rounded-r-2xl bg-[#081647] text-white p-4 h-[91%] fixed top-[4rem] left-0 z-10">
-            <div className="w-full flex justify-center pt-3  ">
+          <div
+            className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${
+              menuVisible ? "translate-x-0" : "-translate-x-full"
+            } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
+            style={{ height: "calc(100vh - 4rem)" }}
+          >
+            <div className="w-full flex justify-center pt-3">
               <img
-                className="rounded-full h-32 w-32 border-[.4rem] border-indigo-400"
+                className="rounded-full h-24 w-24 border-4 border-indigo-400"
                 src={admin ? (admin.image ? admin.image.url : null) : null}
                 alt="admin image"
               ></img>
-              <label className="mt-3 absolute top-[5.8rem] sm:top-[7.5rem] w-8 h-8 cursor-pointer flex justify-center items-center  bg-gray-600 rounded-full p-2">
+              <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
                 <FontAwesomeIcon icon={faEdit} className="text-white" />
                 <input
                   type="file"
@@ -700,64 +727,54 @@ function AdminPage() {
               </label>
             </div>
 
-            <div className="h-20 text-center flex-col justify-center ">
-              <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif">
-                {company ? company.companyName : null}
-              </div>
+            <div className="h-20 text-center pt-5 font-bold font-serif text-lg">
+              {/* <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif"> */}
+              {company ? company.companyName : null}
+              {/* </div> */}
             </div>
 
-            <div className="w-[100%] h-1 border-b-4 border-yellow-400 rounded-2xl  mb-2"></div>
+            <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
 
-            <ul className="space-y-4 p-2 flex flex-col items-center">
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Home" ? "bg-gray-600" : ""
-                }`}
-                onClick={() => setActiveMenu("Home")}
-              >
-                Home
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Venue Requests" ? "bg-gray-600" : ""
-                }`}
-                onClick={() => setActiveMenu("Venue Requests")}
-              >
-                Requested Venue
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
-                }`}
-                onClick={() => setActiveMenu("Upcoming Events")}
-              >
-                Upcoming Events
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Past Events" ? "bg-gray-600" : ""
-                }`}
-                onClick={() => setActiveMenu("Past Events")}
-              >
-                Past Events
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Venue Details" ? "bg-gray-600" : ""
-                }`}
-                onClick={() => setActiveMenu("Venue Details")}
-              >
-                Venue Details
-              </li>
+            <ul className="space-y-3 text-center text-sm">
+              {[
+                "Home",
+                "Venue Requests",
+                "Upcoming Events",
+                "Past Events",
+                "Venue Details",
+              ].map((item) => (
+                <li
+                  key={item}
+                  onClick={() => setActiveMenu(item)}
+                  className={`cursor-pointer p-2 rounded ${
+                    activeMenu === item ? "bg-gray-600" : ""
+                  }`}
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
-            <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center">
-              <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-6 mb-4"></div>
+            {/* <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center"> */}
+            <div className="mt-10 text-xs text-center border-t pt-2">
               &copy;{company?.companyName}2024.
             </div>
+            {/* </div> */}
           </div>
-
+          {/* Toggle button for small screens */}
+          <div className="lg:hidden fixed top-[4.5rem] left-4 z-50">
+            <button
+              onClick={toggleMenu}
+              className="p-2 h-8 w-8 rounded-full text-red-500 flex items-center justify-center font-bold border-4 border-red-500"
+            >
+              <FontAwesomeIcon icon={menuVisible ? faTimes : faEllipsisV} />
+            </button>
+          </div>
           {/* Main content */}
-          <div className="w-[100%] ml-[13rem] overflow-y-auto">
+          <div
+            className={`flex-1 w-full lg:ml-[18rem] transition-all overflow-x-hidden ${
+              menuVisible ? "blur-sm lg:blur-none" : ""
+            }`}
+          >
             {renderComponent()}
           </div>
         </div>
@@ -778,7 +795,7 @@ const BookingCard = ({
   platform,
 }) => {
   return (
-    <div className="w-[20rem] mt-[4rem] h-[18rem] rounded-md shadow-xl overflow-hidden z-[100] relative cursor-pointer snap-start shrink-0 px-4 bg-blue-200 flex flex-col items-center justify-center transition-all duration-300 group gap-5">
+    <div className="w-[20rem] mt-[4rem] h-[18rem] rounded-md shadow-xl overflow-hidden relative cursor-pointer snap-start shrink-0 px-4 bg-blue-200 flex flex-col items-center justify-center transition-all duration-300 group gap-5">
       <div className="para uppercase text-center leading-none z-40">
         <p
           style={{
