@@ -511,6 +511,17 @@ module.exports.fetchAllVenue = async (req, res) => {
   }
 };
 
+// Fetch Single Venue
+module.exports.fetchSingleVenue = async (req, res) => {
+  try {
+    const { venueId } = req.body;
+    const venue = await venueModel.findOne({ _id: venueId });
+    return successResponse_ok(res, "Venues fetched", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
 // Comment on a particular event
 module.exports.commentOnAnEvent = async (req, res) => {
   try {

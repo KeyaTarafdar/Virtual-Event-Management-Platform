@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const Venue_card = ({ name, location, navigateTo = "/venuedetails" }) => {
+const Venue_card = ({ id, name, location }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +16,9 @@ const Venue_card = ({ name, location, navigateTo = "/venuedetails" }) => {
       <div className="pt-2 pb-2 flex justify-center">
         <button
           className="btn2 px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 flex items-center gap-2"
-          onClick={() => navigate(navigateTo)}
+          onClick={() => {
+            navigate(`/venuedetails/${id}`);
+          }}
         >
           Show
           <svg

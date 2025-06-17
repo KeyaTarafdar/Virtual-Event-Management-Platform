@@ -176,6 +176,20 @@ export const fetchAllVenues = async () => {
   }
 };
 
+// Find Single Venue
+export const findSingleVenue = async (venueId) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/users/fetchsinglevenue",
+      { venueId },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // Fetch Virtual Events
 export const fetchVirtualEvents = async () => {
   try {

@@ -8,12 +8,15 @@ const venueSchema = new mongoose.Schema({
   contact: String,
   ownerName: String,
   hallType: String,
+  description: String,
 
   address: String,
   city: String,
 
   maxCapacity: Number,
   canOrganizeMultidayEvent: Boolean,
+  projector: Boolean,
+  broadband: Boolean,
 
   time_1stHalf: [String],
   bookingPrice_1stHalf: Number,
@@ -53,7 +56,7 @@ const venueSchema = new mongoose.Schema({
 
   completePercentage: {
     type: Number,
-    default: 37,
+    default: 40,
   },
 
   bookedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "event" }],

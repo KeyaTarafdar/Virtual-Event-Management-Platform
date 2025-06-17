@@ -23,6 +23,11 @@ const {
   updateHall_1stHalfPrice,
   updateHall_2ndHalfPrice,
   updateHall_fullDayPrice,
+  updateHallOpeningTime,
+  updateHallClosingTime,
+  updateHallDescription,
+  updateHallProjector,
+  updateHallBroadband,
 } = require("../controller/venueController");
 
 router.get("/", (req, res) => {
@@ -54,6 +59,9 @@ router.get("/fetchvenueuser", venueIsLoggedIn, fetchVenueUser);
 // UPDATE HALL NAME
 router.post("/updatehallname", venueIsLoggedIn, updateHallName);
 
+// UPDATE HALL DESCRIPTION
+router.post("/updatehalldescription", venueIsLoggedIn, updateHallDescription);
+
 // UPDATE HALL City
 router.post("/updatehallcity", venueIsLoggedIn, updateHallCity);
 
@@ -72,8 +80,20 @@ router.post("/updatehallcapacity", venueIsLoggedIn, updateHallCapacity);
 //UPDATE HALL Multiday
 router.post("/updatehallmultiday", venueIsLoggedIn, updateHallMultiday);
 
+//UPDATE HALL Projector
+router.post("/updatehallprojector", venueIsLoggedIn, updateHallProjector);
+
+//UPDATE HALL Broadband
+router.post("/updatehallbroadband", venueIsLoggedIn, updateHallBroadband);
+
 //UPDATE HALL Type
 router.post("/updatehalltype", venueIsLoggedIn, updateHallType);
+
+//UPDATE HALL OPENING TIME
+router.post("/updatehallopeningtime", venueIsLoggedIn, updateHallOpeningTime);
+
+//UPDATE HALL CLOSING TIME
+router.post("/updatehallclosingtime", venueIsLoggedIn, updateHallClosingTime);
 
 //UPDATE HALL Time (1st)
 router.post("/updatehallTime_1st", venueIsLoggedIn, updateHall_1stHalfTime);
@@ -91,7 +111,11 @@ router.post("/updatehallPrice_1st", venueIsLoggedIn, updateHall_1stHalfPrice);
 router.post("/updatehallPrice_2nd", venueIsLoggedIn, updateHall_2ndHalfPrice);
 
 //UPDATE HALL Price (full day)
-router.post("/updatehallPrice_fullday", venueIsLoggedIn, updateHall_fullDayPrice);
+router.post(
+  "/updatehallPrice_fullday",
+  venueIsLoggedIn,
+  updateHall_fullDayPrice
+);
 
 //UPDATE HALL TIME
 router.put("/updatehalltiming", venueIsLoggedIn, updateHallTime);
