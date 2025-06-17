@@ -91,16 +91,18 @@ const Signup = () => {
             formData.agreeToTerms
           );
 
+          console.log('result', result)
+
           if (result.success) {
             if (result.message.includes("User")) {
               setUser(result.data);
-              localStorage.setItem("user", JSON.stringify(result.data));
+              sessionStorage.setItem("user", JSON.stringify(result.data));
             } else if (result.message.includes("Admin")) {
               setAdmin(result.data);
-              localStorage.setItem("admin", JSON.stringify(result.data));
+              sessionStorage.setItem("admin", JSON.stringify(result.data));
             } else if (result.message.includes("Venue")) {
               setVenue(result.data);
-              localStorage.setItem("venue", JSON.stringify(result.data));
+              sessionStorage.setItem("venue", JSON.stringify(result.data));
             }
             navigate("/");
           } else {

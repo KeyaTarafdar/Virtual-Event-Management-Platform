@@ -32,23 +32,30 @@ function VenueUserPage() {
   };
 
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const maxSizeInKB = 30;
-      if (file.size > maxSizeInKB * 1024) {
-        alert(`File size should be less than ${maxSizeInKB} KB.`);
+      const file = e.target.files[0];
+  
+      if (file) {
+        const maxSizeInKB = 30;
+  
+        if (file.size > maxSizeInKB * 1024) {
+          alert(`File size should be less than ${maxSizeInKB} KB.`);
+          return;
+        }
+  
+        const imageData = await setFileToBase(file);
+  
+        uploadVenueProfilePicture(imageData).then((response) => {
+          alert(response.message);
+          findVenue().then((response) => {
+            setVenue(response);
+          });
+        });
+  
+      } else {
+        alert("Please Upload an Image");
         return;
       }
-      const imageData = await setFileToBase(file);
-      uploadVenueProfilePicture(imageData).then((response) => {
-        alert(response);
-        findVenue().then((response) => {
-          setVenue(response);
-        });
-      });
-    } else {
-      alert("Please Upload an Image");
-    }
+     
   };
 
   const renderComponent = () => {

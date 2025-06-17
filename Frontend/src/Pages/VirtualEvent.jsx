@@ -21,7 +21,8 @@ function VirtualEvent() {
   useEffect(() => {
     fetchVirtualEvents().then((events) => {
       if (events.success) {
-        setVirtualEvents(
+        console.log(events.data);
+        setvirtualEvents(
           events.data.filter((event) => {
             const today = new Date();
             const currentDate = today.toISOString().split("T")[0];
@@ -30,7 +31,7 @@ function VirtualEvent() {
               .toISOString()
               .split("T")[0];
 
-            return registrationLastDate >= currentDate && eventDate > currentDate;
+            return eventDate >= currentDate;
           })
         );
       } else {
@@ -131,6 +132,11 @@ function VirtualEvent() {
                   organizer={item.ownerId ? item.ownerId.username : null}
                   platform={item.platform ? item.platform : null}
                   posterImage={item.posterImage ? item.posterImage.url : null}
+                  lastDateOfRegistration={
+                    item.lastDateOfRegistration
+                      ? item.lastDateOfRegistration
+                      : null
+                  }
                 />
               ))}
           </div>

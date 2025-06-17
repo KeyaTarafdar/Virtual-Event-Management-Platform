@@ -8,7 +8,7 @@ export const fetchCompanyDetails = async () => {
   try {
     let { data } = await axios.get("http://localhost:8000/fetchcompanydetails");
     if (data.success) {
-      localStorage.setItem("company", JSON.stringify(data.data));
+      sessionStorage.setItem("company", JSON.stringify(data.data));
       return data.data;
     } else {
       return {};
@@ -25,9 +25,9 @@ export const logoutUser = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      if (data.message.includes("User")) localStorage.removeItem("user");
-      else if (data.message.includes("Admin")) localStorage.removeItem("admin");
-      else if (data.message.includes("Venue")) localStorage.removeItem("venue");
+      if (data.message.includes("User")) sessionStorage.removeItem("user");
+      else if (data.message.includes("Admin")) sessionStorage.removeItem("admin");
+      else if (data.message.includes("Venue")) sessionStorage.removeItem("venue");
     } else {
       alert(data.message);
     }
@@ -137,7 +137,7 @@ export const findUser = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("user", JSON.stringify(data.data));
+      sessionStorage.setItem("user", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -155,7 +155,6 @@ export const createEvent = async (formData) => {
       { ...formData },
       { withCredentials: true }
     );
-
     return data;
   } catch (err) {
     console.log(err.message);
@@ -169,7 +168,6 @@ export const fetchAllVenues = async () => {
       "http://localhost:8000/users/getallvenue",
       { withCredentials: true }
     );
-
     return data;
   } catch (err) {
     console.log(err.message);
@@ -302,7 +300,7 @@ export const findVenue = async () => {
       { withCredentials: true }
     );
     if (data.success) {
-      localStorage.setItem("venue", JSON.stringify(data.data));
+      sessionStorage.setItem("venue", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -315,14 +313,14 @@ export const findVenue = async () => {
 // Upload venue Profile Picture
 export const uploadVenueProfilePicture = async (imageData) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/uploadvenueprofilepicture",
       { image: imageData },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -358,12 +356,12 @@ export const updateVenueName = async (newHallName) => {
 // Update Venue City
 export const updateVenueCity = async (newHallCity) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallcity",
       { newHallCity },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -372,12 +370,12 @@ export const updateVenueCity = async (newHallCity) => {
 // Update Venue Email
 export const updateVenueEmail = async (newHallEmail) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallemail",
       { newHallEmail },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -386,12 +384,12 @@ export const updateVenueEmail = async (newHallEmail) => {
 // Update Venue Phone
 export const updateVenuePhone = async (newHallPhone) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallphone",
       { newHallPhone },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -400,12 +398,12 @@ export const updateVenuePhone = async (newHallPhone) => {
 // Update Venue Address
 export const updateVenueAddress = async (newHallAddress) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehalladdress",
       { newHallAddress },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -414,12 +412,12 @@ export const updateVenueAddress = async (newHallAddress) => {
 // Update Venue MaxCapacity
 export const updateVenueCapacity = async (newHallCapacity) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallcapacity",
       { newHallCapacity },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -428,17 +426,110 @@ export const updateVenueCapacity = async (newHallCapacity) => {
 // Update Venue Multiday
 export const updateVenueMultidayEvent = async (newHallMultiday) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallmultiday",
       { newHallMultiday },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
 };
 
+// Update Venue halltype
+export const updateVenueHalltype = async (newHalltype) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehalltype",
+      { newHalltype },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue 1sthalf
+export const updateHallTime_1st = async (newHalltime1st) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_1st",
+      { newHalltime1st },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue 2ndhalf
+export const updateHallTime_2nd = async (newHalltime2nd) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_2nd",
+      { newHalltime2nd },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue time fullday
+export const updateHallTime_fullday = async (newHalltimefullday) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_fullday",
+      { newHalltimefullday },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue hallprice_1
+export const updateHallPrice_1st = async (newHallprice1) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_1st",
+      { newHallprice1 },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue hallPrice_2
+export const updateHallPrice_2nd = async (newHallprice2) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_2nd",
+      { newHallprice2 },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Update Venue hallPrice_fullday
+export const updateHallPrice_fullday = async (newHallpricefull) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_fullday",
+      { newHallpricefull },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 
 // Admin Login
@@ -462,7 +553,7 @@ export const findAdmin = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("admin", JSON.stringify(data.data));
+      sessionStorage.setItem("admin", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -520,7 +611,7 @@ export const rejectVenue = async (venueId, reason) => {
 export const fetchAllEvents = async () => {
   try {
     let { data } = await axios.get(
-      "http://localhost:8000/admins/fetchallvenue",
+      "http://localhost:8000/admins/fetchallevents",
       {
         withCredentials: true,
       }
@@ -531,4 +622,82 @@ export const fetchAllEvents = async () => {
   }
 };
 
+//company name
+export const updateCompanyInfo = async (company) => {
+  try {
+    console.log("company", company);
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanyinfo",
+      {
+        ...company,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
+//company address
+// export const setCompanyAdress = async (address) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanyaddress",
+//       {address}
+//       ,{
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
+
+// //company email
+// export const setCompanyEmail = async (email) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanyemail",
+//       {email},{
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
+
+// //company contact
+// export const setCompanyContact = async (contact) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanycontact",{contact},
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
+
+// //company description
+// export const setCompanyDesc = async (description) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanydescription",{description},
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };

@@ -13,6 +13,7 @@ import {
   updateVenueAddress,
   updateVenueCapacity,
   updateVenueMultidayEvent,
+  updateVenueHalltype,
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
 import { useUser } from "../context/userContext/UserContext";
@@ -31,6 +32,7 @@ function VenueProfile() {
   const [newHallAddress, setnewHallAddress] = useState("");
   const [newHallCapacity, setnewHallCapacity] = useState("");
   const [newHallMultiday, setnewHallMultiday] = useState();
+  const [newHallType, setnewHallType] = useState();
 
   const handleReject = () => {
     setIsModalOpen(true);
@@ -229,9 +231,13 @@ function VenueProfile() {
                       onClick={() => {
                         if (isEditing === "name") {
                           updateVenueName(newHallName).then((response) => {
-                            findVenue().then((response) => {
-                              setVenue(response);
-                            });
+                            if (response.success) {
+                              setVenue(response.data);
+                              sessionStorage.setItem(
+                                "venue",
+                                JSON.stringify(response.data)
+                              );
+                            }
                             setIsEditing(null);
                           });
                         } else {
@@ -262,9 +268,8 @@ function VenueProfile() {
                           type="text"
                           value={newHallEmail}
                           onChange={(e) => setnewHallEmail(e.target.value)}
-                          className={`p-2 border rounded-md w-full ${
-                            !newHallEmail.includes("@") ? "border-red-500" : ""
-                          }`}
+                          className={`p-2 border rounded-md w-full ${!newHallEmail.includes("@") ? "border-red-500" : ""
+                            }`}
                         />
                       ) : (
                         <span className="font-bold">
@@ -275,9 +280,15 @@ function VenueProfile() {
                         onClick={() => {
                           if (isEditing === "email") {
                             updateVenueEmail(newHallEmail).then((response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             });
                           } else {
@@ -315,11 +326,10 @@ function VenueProfile() {
                           type="text"
                           value={newHallPhone}
                           onChange={(e) => setnewHallPhone(e.target.value)}
-                          className={`p-2 border rounded-md w-full ${
-                            !/^\d{10}$/.test(newHallPhone.phone)
-                              ? "border-red-500"
-                              : ""
-                          }`}
+                          className={`p-2 border rounded-md w-full ${!/^\d{10}$/.test(newHallPhone.phone)
+                            ? "border-red-500"
+                            : ""
+                            }`}
                         />
                       ) : (
                         <span className="font-bold">
@@ -330,9 +340,15 @@ function VenueProfile() {
                         onClick={() => {
                           if (isEditing === "phone") {
                             updateVenuePhone(newHallPhone).then((response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             });
                           } else {
@@ -378,9 +394,15 @@ function VenueProfile() {
                       onClick={() => {
                         if (isEditing === "city") {
                           updateVenueCity(newHallCity).then((response) => {
-                            findVenue().then((response) => {
-                              setvenue(response);
-                            });
+                            if (response.success) {
+                              findVenue().then((response) => {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              });
+                            }
                             setIsEditing(null);
                           });
                         } else {
@@ -420,13 +442,18 @@ function VenueProfile() {
                     <button
                       onClick={() => {
                         if (isEditing === "address") {
-                          updateVenueAddress(newHallAddress).then(
-                            (response) => {
+                          updateVenueAddress(newHallAddress).then((response) => {
+                            if (response.success) {
                               findVenue().then((response) => {
-                                setvenue(response);
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
                               });
-                              setIsEditing(null);
                             }
+                            setIsEditing(null);
+                          }
                           );
                         } else {
                           setnewHallAddress(venue ? venue.address : "");
@@ -468,9 +495,15 @@ function VenueProfile() {
                         if (isEditing === "seat") {
                           updateVenueCapacity(newHallCapacity).then(
                             (response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
+                              if (response.data) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
                               setIsEditing(null);
                             }
                           );
@@ -531,24 +564,59 @@ function VenueProfile() {
                       </div>
                     ) :(
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.multiDayBooking
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
+// className={`rounded-lg w-[90%] p-2 ${
+//                           companyDetails.multiDayBooking
+//                             ? ""
+//                             : "text-red-500 bg-white"
+//                         }`}
+//                       >
+//                         {companyDetails.multiDayBooking
+//                           ? companyDetails.multiDayBooking.charAt(0).toUpperCase() +
+//                             companyDetails.multiDayBooking.slice(1)
+
+
+                        className={`rounded-lg w-[90%] p-2 ${venue && venue.canOrganizeMultidayEvent
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
                       >
-                        {companyDetails.multiDayBooking
-                          ? companyDetails.multiDayBooking.charAt(0).toUpperCase() +
-                            companyDetails.multiDayBooking.slice(1)
+                        {venue && venue.canOrganizeMultidayEvent
+                          ? venue.canOrganizeMultidayEvent
+                            .charAt(0)
+                            .toUpperCase() +
+                          venue.canOrganizeMultidayEvent.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}
                     <button
-                      onClick={() =>
-                        isEditing === "multiDayBooking"
-                          ? handleSave("multiDayBooking")
-                          : setIsEditing("multiDayBooking")
-                      }
+                    // onClick={() =>
+                    //     isEditing === "multiDayBooking"
+                    //       ? handleSave("multiDayBooking")
+                    //       : setIsEditing("multiDayBooking")
+                    //   }
+                      onClick={() => {
+                        if (isEditing === "multiDayBooking") {
+                          updateVenueMultidayEvent(newHallMultiday).then(
+                            (response) => {
+                              if (response.success) {
+                                findVenue().then((response) => {
+                                  setVenue(response.data);
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response.data)
+                                  );
+                                });
+                              }
+                              setIsEditing(null);
+                            }
+                          );
+                        } else {
+                          setnewHallMultiday(
+                            venue ? venue.canOrganizeMultidayEvent : null
+                          );
+                          setIsEditing("multiDayBooking");
+                        }
+                      }}
                       className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
                     >
                       {isEditing === "multiDayBooking" ? (
@@ -585,22 +653,49 @@ function VenueProfile() {
                       </select>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.halltype ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.halltype ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.halltype
                           ? companyDetails.halltype.charAt(0).toUpperCase() +
-                            companyDetails.halltype.slice(1)
+                          companyDetails.halltype.slice(1)
                           : "Please Select Hall Type"}
                       </span>
                     )}
-                    <button
+                    {/* <button
                       onClick={() =>
                         isEditing === "halltype"
                           ? handleSave("halltype")
                           : setIsEditing("halltype")
                       }
+                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
+                    >
+                      {isEditing === "halltype" ? (
+                        <AiOutlineCheck size={16} />
+                      ) : (
+                        <AiOutlineEdit size={16} />
+                      )}
+                    </button> */}
+                     <button
+                      onClick={() => {
+                        if (isEditing === "halltype") {
+                          updateVenueHalltype(newHallType).then((response) => {
+                            if (response.success) {
+                              findVenue().then((response) => {
+                                setVenue(response.data);
+                                sessionStorage.setItem(
+                                  "venue",
+                                  JSON.stringify(response.data)
+                                );
+                              });
+                            }
+                            setIsEditing(null);
+                          });
+                        } else {
+                          setnewHallType(venue ? venue.hallType : "");
+                          setIsEditing("halltype");
+                        }
+                      }}
                       className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
                     >
                       {isEditing === "halltype" ? (
@@ -652,7 +747,7 @@ function VenueProfile() {
                           {companyDetails.start_time &&
                             companyDetails.end_time &&
                             companyDetails.start_time >=
-                              companyDetails.end_time && (
+                            companyDetails.end_time && (
                               <p className="text-red-500 text-sm mt-1">
                                 **Start time must be earlier than end time
                               </p>
@@ -660,11 +755,10 @@ function VenueProfile() {
                         </div>
                       ) : (
                         <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time && companyDetails.end_time
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
+                          className={`rounded-lg w-[90%] p-2 ${companyDetails.start_time && companyDetails.end_time
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
                         >
                           {companyDetails.start_time && companyDetails.end_time
                             ? `${companyDetails.start_time} -- ${companyDetails.end_time}`
@@ -719,9 +813,8 @@ function VenueProfile() {
                       />
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price1 ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.price1 ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.price1 ||
                           "Please Enter Price for 1st Half Booking "}
@@ -784,7 +877,7 @@ function VenueProfile() {
                           {companyDetails.start_time2 &&
                             companyDetails.end_time2 &&
                             companyDetails.start_time2 >=
-                              companyDetails.end_time2 && (
+                            companyDetails.end_time2 && (
                               <p className="text-red-500 text-sm mt-1">
                                 **Start time must be earlier than end time
                               </p>
@@ -792,15 +885,14 @@ function VenueProfile() {
                         </div>
                       ) : (
                         <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time2 &&
+                          className={`rounded-lg w-[90%] p-2 ${companyDetails.start_time2 &&
                             companyDetails.end_time2
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
                         >
                           {companyDetails.start_time2 &&
-                          companyDetails.end_time2
+                            companyDetails.end_time2
                             ? `${companyDetails.start_time2} -- ${companyDetails.end_time2}`
                             : "Please Enter Start and End Time"}
                         </span>
@@ -812,7 +904,7 @@ function VenueProfile() {
                             companyDetails.start_time2 &&
                             companyDetails.end_time2 &&
                             companyDetails.start_time2 <
-                              companyDetails.end_time2
+                            companyDetails.end_time2
                           ) {
                             handleSave("time2");
                           } else if (isEditing === "time2") {
@@ -854,9 +946,8 @@ function VenueProfile() {
                       />
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price2 ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.price2 ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.price2 ||
                           "Please Enter Price for 2nd Half Booking "}
@@ -919,7 +1010,7 @@ function VenueProfile() {
                           {companyDetails.start_time3 &&
                             companyDetails.end_time3 &&
                             companyDetails.start_time3 >=
-                              companyDetails.end_time3 && (
+                            companyDetails.end_time3 && (
                               <p className="text-red-500 text-sm mt-1">
                                 **Start time must be earlier than end time
                               </p>
@@ -927,15 +1018,14 @@ function VenueProfile() {
                         </div>
                       ) : (
                         <span
-                          className={`rounded-lg w-[90%] p-2 ${
-                            companyDetails.start_time3 &&
+                          className={`rounded-lg w-[90%] p-2 ${companyDetails.start_time3 &&
                             companyDetails.end_time3
-                              ? ""
-                              : "text-red-500 bg-white"
-                          }`}
+                            ? ""
+                            : "text-red-500 bg-white"
+                            }`}
                         >
                           {companyDetails.start_time3 &&
-                          companyDetails.end_time3
+                            companyDetails.end_time3
                             ? `${companyDetails.start_time3} -- ${companyDetails.end_time3}`
                             : "Please Enter Start and End Time"}
                         </span>
@@ -947,7 +1037,7 @@ function VenueProfile() {
                             companyDetails.start_time3 &&
                             companyDetails.end_time3 &&
                             companyDetails.start_time3 <
-                              companyDetails.end_time3
+                            companyDetails.end_time3
                           ) {
                             handleSave("time3");
                           } else if (isEditing === "time3") {
@@ -989,9 +1079,8 @@ function VenueProfile() {
                       />
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.price3 ? "" : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.price3 ? "" : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.price3 ||
                           "Please Enter Price for Full Day Booking "}
@@ -1055,15 +1144,14 @@ function VenueProfile() {
                       </div>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.projector
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.projector
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.projector
                           ? companyDetails.projector.charAt(0).toUpperCase() +
-                            companyDetails.projector.slice(1)
+                          companyDetails.projector.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}
@@ -1125,15 +1213,14 @@ function VenueProfile() {
                       </div>
                     ) : (
                       <span
-                        className={`rounded-lg w-[90%] p-2 ${
-                          companyDetails.broadband
-                            ? ""
-                            : "text-red-500 bg-white"
-                        }`}
+                        className={`rounded-lg w-[90%] p-2 ${companyDetails.broadband
+                          ? ""
+                          : "text-red-500 bg-white"
+                          }`}
                       >
                         {companyDetails.broadband
                           ? companyDetails.broadband.charAt(0).toUpperCase() +
-                            companyDetails.broadband.slice(1)
+                          companyDetails.broadband.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}

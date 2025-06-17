@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -43,7 +43,7 @@ function AdminPage() {
 
   const handleSubmitReason = (venueId, reason) => {
     rejectVenue(venueId, reason).then((response) => {
-      alert(response);
+      alert(response.message);
     });
 
     setIsModalOpen(false);
@@ -87,7 +87,7 @@ function AdminPage() {
       const imageData = await setFileToBase(file);
 
       uploadProfilePictureAdmin(imageData).then((response) => {
-        alert(response);
+        alert(response.message);
       });
     } else {
       alert("Please Upload an Image");
@@ -303,12 +303,13 @@ function AdminPage() {
           </>
       );
 
+
     case "Past Events":
-      return (
+        return (
           <>
-            <div className="p-4 flex justify-center  min-h-screen overflow-x-hidden w-full  flex-wrap gap-x-4 mt-8">
-              {Array.isArray(allEvents) && allEvents.length > 0 ? (
-                allEvents.map((event) => (
+            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden scrollbar-hide w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
+              {Array.isArray(pastEvents) && pastEvents.length > 0 ? (
+                pastEvents.map((event) => (
                   <div key={event.id}>
                     <BookingCard
                       eventName={event.eventName}
@@ -317,16 +318,15 @@ function AdminPage() {
                         event.eventEndDate ? event.eventEndDate : null
                       }
                       eventTime={event.time}
-                      eventImage={event.posterImage.url}
+                      eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
-                        event.eventType === "virtual" || "hybrid"
+                        event.eventType === "virtual" || event.eventType ==="hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -342,80 +342,110 @@ function AdminPage() {
               )}
             </div>
           </>
-      );
+        );
+                
 
-    case "Venue Details":
-      return (
-            <>
-              <div className="flex w-full  flex-wrap gap-x-4 overflow-x-hidden ">
-                  {/* Top search bar */}
-                  <div className="flex items-center p-5 flex-col lg:flex-row w-full h-[20%] ">
-                        {/* Search by Venue Name */}
-                        <div className="flex items-center flex-col sm:flex-row gap-y-4">
-                          <h3 className="mr-4 font-serif font-bold">Search by Venue Name :</h3>
-                            <div>
-                              <input
-                                type="text"
-                                id="venueNameInput"
-                                className="p-2 border border-gray-500 rounded-md"
-                                placeholder="Enter Venue Name"
-                              />
-                              <button
-                                className="ml-2 p-2 bg-blue-800 text-white rounded-md"
-                                onClick={() => handleSearch("venueName")}
-                              >
-                                <AiOutlineSearch />
-                              </button>
-                            </div>  
-                        </div>
+      case "Venue Details":
+        return (
+          <>
+            <div className="flex items-center p-5 ">
+              {/* Search by Venue Name */}
+              <div className="flex items-center">
+                <h3 className="mr-4 font-serif font-bold">
+                  Search by Venue Name :{" "}
+                </h3>
+                <input
+                  type="text"
+                  id="venueNameInput"
+                  className="p-2 border border-gray-500 rounded-md"
+                  placeholder="Enter Venue Name"
+                />
+                <button
+                  className="ml-2 p-2 bg-blue-800 text-white rounded-md"
+                  onClick={() => handleSearch("venueName")}
+                >
+                  <AiOutlineSearch />
+                </button>
+              </div>
 
-                        <div className="hidden lg:block lg:bg-yellow-500 lg:rounded-lg lg:w-1 lg:h-12 lg:ml-8 lg:mr-8"></div>
-                        <div className="lg:hidden bg-yellow-500 rounded-lg w-[90%] mt-4 mb-4 h-1 ml-8 mr-8"></div>
+              <div className="bg-yellow-500 rounded-lg w-1 h-12 ml-8 mr-8"></div>
+              {/* Search by Venue Address */}
+              <div className="flex items-center">
+                <h3 className="mr-4 font-serif font-bold">
+                  Search by Venue Address :{" "}
+                </h3>
+                <input
+                  type="text"
+                  id="venueAddressInput"
+                  className="p-2 border border-gray-500 rounded-md"
+                  placeholder="Enter Venue Address"
+                />
+                <button
+                  className="ml-2 p-2 bg-blue-800 text-white rounded-md"
+                  onClick={() => handleSearch("venueAddress")}
+                >
+                  <AiOutlineSearch />
+                </button>
+              </div>
+            </div>
 
-                        {/* Search by Venue Address */}
-                        <div className="flex items-center flex-col sm:flex-row gap-y-4">
-                          <h3 className="mr-4 font-serif font-bold">Search by Venue Address :</h3>
-                            <div>
-                              <input
-                                type="text"
-                                id="venueAddressInput"
-                                className="p-2 border border-gray-500 rounded-md"
-                                placeholder="Enter Venue Address"
-                              />
-                              <button
-                                className="ml-2 p-2 bg-blue-800 text-white rounded-md"
-                                onClick={() => handleSearch("venueAddress")}
-                              >
-                                <AiOutlineSearch />
-                              </button>
-                            </div>  
-                        </div>
-                  </div>
+            <div className=" max-w-[200rem] h-[92vh] text-center mt-[0.6px]">
+              <div>
+                <table className="w-full table-fixed">
+                  <thead className=" sticky top-0 bg-black text-white">
+                    <tr className="">
+                      <th className="w-[5rem] border-2 border-white">Sl No.</th>
+                      <th className="w-[15rem] border-2 border-white">
+                        Venue Name
+                      </th>
+                      <th className="w-[15rem] border-2 border-white">
+                        Venue Owner
+                      </th>
+                      <th className="w-[15rem] border-2 border-white">
+                        Venue Email
+                      </th>
+                      <th className="w-[7rem] border-2 border-white">
+                        Venue Contact
+                      </th>
+                      <th className="w-[7rem] border-2 border-white">
+                        Venue City
+                      </th>
+                      <th className="w-[20rem] border-2 border-white">
+                        Venue Address
+                      </th>
+                      <th className="w-[10rem] border-2 border-white">
+                        Able to Organize Multiday Event
+                      </th>
+                      <th className="w-[5rem] border-2 border-white">
+                        Max Capacity
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        Opening Time
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        Closing Time
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        1st Half Timing
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        Booking Price (1st Half)
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        2nd Half Timing
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        Booking Price (2nd Half)
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        Full Day Timing
+                      </th>
+                      <th className="w-[8rem] border-2 border-white">
+                        Booking Price (Full Day)
+                      </th>
+                    </tr>
+                  </thead>
 
-                  {/* Scrollable table container */}
-                  <div className="w-full overflow-x-auto  px-4">
-                    <table className="min-w-[120rem] table-fixed">
-                      <thead className="sticky top-0 bg-black text-white">
-                        <tr>
-                          <th className="w-[5rem] border-2 border-white">Sl No.</th>
-                          <th className="w-[15rem] border-2 border-white">Venue Name</th>
-                          <th className="w-[15rem] border-2 border-white">Venue Owner</th>
-                          <th className="w-[15rem] border-2 border-white">Venue Email</th>
-                          <th className="w-[7rem] border-2 border-white">Venue Contact</th>
-                          <th className="w-[7rem] border-2 border-white">Venue City</th>
-                          <th className="w-[20rem] border-2 border-white">Venue Address</th>
-                          <th className="w-[10rem] border-2 border-white">Able to Organize Multiday Event</th>
-                          <th className="w-[5rem] border-2 border-white">Max Capacity</th>
-                          <th className="w-[8rem] border-2 border-white">Opening Time</th>
-                          <th className="w-[8rem] border-2 border-white">Closing Time</th>
-                          <th className="w-[8rem] border-2 border-white">1st Half Timing</th>
-                          <th className="w-[8rem] border-2 border-white">Booking Price (1st Half)</th>
-                          <th className="w-[8rem] border-2 border-white">2nd Half Timing</th>
-                          <th className="w-[8rem] border-2 border-white">Booking Price (2nd Half)</th>
-                          <th className="w-[8rem] border-2 border-white">Full Day Timing</th>
-                          <th className="w-[8rem] border-2 border-white">Booking Price (Full Day)</th>
-                        </tr>
-                      </thead>
                       <tbody>
                         {Array.isArray(allVenues) &&
                           allVenues.map((venue, index) => (
@@ -557,77 +587,245 @@ function AdminPage() {
  
 
 
+  useEffect(() => {
+    if (!admin) {
+      findAdmin().then((response) => {
+        setadmin(response);
+        setvenueRequests(response.appliedVenues);
+      });
+    }
+
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response);
+        setFields({
+          companyName: response?.companyName,
+          email: response?.email,
+          contact: response?.contact,
+          description: response?.description,
+          address: response?.address,
+        });
+      });
+    } else {
+      setFields({
+        companyName: company?.companyName,
+        email: company?.email,
+        contact: company?.contact,
+        description: company?.description,
+        address: company?.address,
+      });
+    }
+  }, []);
+
+  const [upcomingEvents, setupcomingEvents] = useState([]);
+  const [pastEvents, setpastEvents] = useState([]);
 
   useEffect(() => {
     fetchAllVenues().then((response) => {
-      setallVenues(response);
+      setallVenues(response.data);
     });
 
     fetchAllEvents().then((response) => {
-      setallEvents(response);
+      setallEvents(response.data);
+      const today = new Date();
+      const upcoming = response.data.filter(
+        (event) => new Date(event.date) > today
+      );
+      setupcomingEvents(upcoming);
+
+      const pastEvents = response.data.filter(
+        (event) => new Date(event.date) < today
+      );
+      setpastEvents(pastEvents);
     });
   }, []);
 
+  // return (
+  //   <>
+  //     <div className="min-h-screen">
+  //       <Navbar menuItems={[]} />
+  //       {/* BODY */}
+  //       <div className="flex ">
+  //               {/* Sidebar */}
+  //               <div
+  //                 className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${
+  //                   menuVisible ? "translate-x-0" : "-translate-x-full"
+  //                 } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
+  //                 style={{ height: "calc(100vh - 4rem)" }}
+  //               >
+  //                 <div className="w-full flex justify-center pt-3">
+  //                   <img
+  //                     className="rounded-full h-24 w-24 border-4 border-indigo-400"
+  //                     src={admin?.image?.url || ""}
+  //                     alt="admin"
+  //                   />
+  //                   <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
+  //                     <FontAwesomeIcon icon={faEdit} className="text-white" />
+  //                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+  //                   </label>
+  //                 </div>
+  //                 <div className="h-20 text-center pt-5 font-bold font-serif text-lg">{admin?.username}</div>
+  //                 <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
+  //                 <ul className="space-y-3 text-center text-sm">
+  //                   {["Home", "Venue Requests", "Upcoming Events", "Past Events", "Venue Details"].map((item) => (
+  //                     <li
+  //                       key={item}
+  //                       onClick={() => setActiveMenu(item)}
+  //                       className={`cursor-pointer p-2 rounded ${
+  //                         activeMenu === item ? "bg-gray-600" : ""
+  //                       }`}
+  //                     >
+  //                       {item}
+  //                     </li>
+  //                   ))}
+  //                 </ul>
+  //                 <div className="mt-10 text-xs text-center border-t pt-2">&copy; Eventek 2024</div>
+  //               </div>
+
+  //           <div className="h-20 text-center flex-col justify-center ">
+  //             <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif">
+  //               {company ? company.companyName : null}
+  //             </div>
+  //           </div>
+
+  //           <div className="w-[100%] h-1 border-b-4 border-yellow-400 rounded-2xl  mb-2"></div>
+
+  //           <ul className="space-y-4 p-2 flex flex-col items-center">
+  //             <li
+  //               className={`cursor-pointer p-2 rounded w-full text-center ${
+  //                 activeMenu === "Home" ? "bg-gray-600" : ""
+  //               }`}
+  //               onClick={() => setActiveMenu("Home")}
+  //             >
+  //               Home
+  //             </li>
+  //             <li
+  //               className={`cursor-pointer p-2 rounded w-full text-center ${
+  //                 activeMenu === "Venue Requests" ? "bg-gray-600" : ""
+  //               }`}
+  //               onClick={() => setActiveMenu("Venue Requests")}
+  //             >
+  //               Requested Venue
+  //             </li>
+  //             <li
+  //               className={`cursor-pointer p-2 rounded w-full text-center ${
+  //                 activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
+  //               }`}
+  //               onClick={() => setActiveMenu("Upcoming Events")}
+  //             >
+  //               Upcoming Events
+  //             </li>
+  //             <li
+  //               className={`cursor-pointer p-2 rounded w-full text-center ${
+  //                 activeMenu === "Past Events" ? "bg-gray-600" : ""
+  //               }`}
+  //               onClick={() => setActiveMenu("Past Events")}
+  //             >
+  //               Past Events
+  //             </li>
+  //             <li
+  //               className={`cursor-pointer p-2 rounded w-full text-center ${
+  //                 activeMenu === "Venue Details" ? "bg-gray-600" : ""
+  //               }`}
+  //               onClick={() => setActiveMenu("Venue Details")}
+  //             >
+  //               Venue Details
+  //             </li>
+  //           </ul>
+  //           <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center">
+  //             <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-6 mb-4"></div>
+  //             &copy;{company?.companyName}2024.
+  //           </div>
+  //         </div>
+
+  //         {/* Main content */}
+  //         <div className="w-[100%] ml-[13rem] overflow-y-auto">
+  //           {renderComponent()}
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </>
+  // );
+  
   return (
     <>
-      <div className="min-h-screen">
+      <div className="h-screen">
         <Navbar menuItems={[]} />
-        {/* BODY */}
-        <div className="flex">
-                {/* Sidebar */}
-                <div
-                  className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${
-                    menuVisible ? "translate-x-0" : "-translate-x-full"
-                  } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
-                  style={{ height: "calc(100vh - 4rem)" }}
-                >
-                  <div className="w-full flex justify-center pt-3">
-                    <img
-                      className="rounded-full h-24 w-24 border-4 border-indigo-400"
-                      src={admin?.image?.url || ""}
-                      alt="admin"
-                    />
-                    <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
-                      <FontAwesomeIcon icon={faEdit} className="text-white" />
-                      <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-                    </label>
-                  </div>
-                  <div className="h-20 text-center pt-5 font-bold font-serif text-lg">{admin?.username}</div>
-                  <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
-                  <ul className="space-y-3 text-center text-sm">
-                    {["Home", "Venue Requests", "Upcoming Events", "Past Events", "Venue Details"].map((item) => (
-                      <li
-                        key={item}
-                        onClick={() => setActiveMenu(item)}
-                        className={`cursor-pointer p-2 rounded ${
-                          activeMenu === item ? "bg-gray-600" : ""
-                        }`}
-                      >
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-10 text-xs text-center border-t pt-2">&copy; Eventek 2024</div>
-                </div>
+        <div className="h-[91.7vh] flex m-0 p-0 overflow-hidden">
+          {/* side bar */}
+          <div className="w-[13rem] min-w-[13rem] rounded-r-2xl bg-[#081647] text-white p-4 h-[91%] fixed top-[4rem] left-0 z-10">
+            <div className="w-full flex justify-center pt-3  ">
+              <img
+                className="rounded-full h-32 w-32 border-[.4rem] border-indigo-400"
+                src={adminuser ? (adminuser.image ? adminuser.image.url : null) : null}
+                alt="admin image"
+              ></img>
+              <label className="mt-3 absolute top-[5.8rem] sm:top-[7.5rem] w-8 h-8 cursor-pointer flex justify-center items-center  bg-gray-600 rounded-full p-2">
+                <FontAwesomeIcon icon={faEdit} className="text-white" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
 
-                {/* Toggle button for small screens */}
-                <div className="lg:hidden fixed top-[4.5rem] left-4 z-50">
-                  <button
-                    onClick={toggleMenu}
-                    className="p-2 h-8 w-8 rounded-full text-red-500 flex items-center justify-center font-bold border-4 border-red-500"
-                  >
-                    <FontAwesomeIcon icon={menuVisible ? faTimes : faEllipsisV} />
-                  </button>
-                </div>
+            <div className="h-20 text-center flex-col justify-center ">
+              <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif">
+                {company ? company.companyName : null}
+              </div>
+            </div>
 
-                {/* Main content */}
-                <div
-                  className={`flex-1 w-full lg:ml-[18rem] transition-all overflow-x-hidden ${
-                    menuVisible ? "blur-sm lg:blur-none" : ""
+            <div className="w-[100%] h-1 border-b-4 border-yellow-400 rounded-2xl  mb-2"></div>
+
+            <ul className="space-y-4 p-2 flex flex-col items-center">
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Home" ? "bg-gray-600" : ""
                   }`}
-                >
-                   {renderComponent()}
-                </div>
+                onClick={() => setActiveMenu("Home")}
+              >
+                Home
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Requests" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Venue Requests")}
+              >
+                Requested Venue
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Upcoming Events")}
+              >
+                Upcoming Events
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Past Events" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Past Events")}
+              >
+                Past Events
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Details" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Venue Details")}
+              >
+                Venue Details
+              </li>
+            </ul>
+            <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center">
+              <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-6 mb-4"></div>
+              &copy;{company?.companyName}2024.
+            </div>
+          </div>
+
+          {/* Main content */}
+          <div className="w-[100%] ml-[13rem] overflow-y-auto scrollbar-hide">
+            {renderComponent()}
+          </div>
         </div>
       </div>
     </>

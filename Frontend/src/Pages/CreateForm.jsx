@@ -162,8 +162,8 @@ const CreateForm = () => {
   useEffect(() => {
     setFormData({ ...formData, eventType });
     fetchAllVenues().then((response) => {
-      setallVenues(response);
-      setallVenuesCopy(response);
+      setallVenues(response.data);
+      setallVenuesCopy(response.data);
     });
   }, []);
 
