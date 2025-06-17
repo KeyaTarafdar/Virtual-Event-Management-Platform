@@ -52,7 +52,7 @@ function AdminPage() {
     acceptVenue(venueId).then((response) => {
       if (response.success) {
         setAdmin(response.data);
-        sessionStorage.setItem("admin",JSON.stringify(response.data));
+        sessionStorage.setItem("admin", JSON.stringify(response.data));
       }
       alert(response.message);
     });
@@ -259,7 +259,7 @@ function AdminPage() {
       case "Upcoming Events":
         return (
           <>
-            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
+            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 scrollbar-hide flex-wrap gap-x-4">
               {Array.isArray(upcomingEvents) && upcomingEvents.length > 0 ? (
                 upcomingEvents.map((event) => (
                   <div key={event.id}>
@@ -272,13 +272,13 @@ function AdminPage() {
                       eventTime={event.time}
                       eventImage={event?.posterImage?.url}
                       venue={
-                        event.eventType === "in_person" || "hybrid"
+                        event.eventType === "in_person" || event.eventType === "hybrid"
                           ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
                           }`
                           : null
                       }
                       platform={
-                        event.eventType === "virtual" || "hybrid"
+                        event.eventType === "virtual" || event.eventType === "hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -299,7 +299,7 @@ function AdminPage() {
       case "Past Events":
         return (
           <>
-            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
+            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden scrollbar-hide w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
               {Array.isArray(pastEvents) && pastEvents.length > 0 ? (
                 pastEvents.map((event) => (
                   <div key={event.id}>
@@ -755,7 +755,7 @@ function AdminPage() {
           </div>
 
           {/* Main content */}
-          <div className="w-[100%] ml-[13rem] overflow-y-auto">
+          <div className="w-[100%] ml-[13rem] overflow-y-auto scrollbar-hide">
             {renderComponent()}
           </div>
         </div>
