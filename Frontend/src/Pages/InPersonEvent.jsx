@@ -21,32 +21,25 @@ function InPersonEvent() {
 
   useEffect(() => {
     fetchIn_PersonEvents().then((events) => {
-      if (events.success) {
-        setin_personEvents(
-          events.data.filter((event) => {
-            const today = new Date();
-            const currentDate = today.toISOString().split("T")[0];
-            const currentTime = today.toTimeString().split(" ")[0];
-            const eventDate = new Date(event.date).toISOString().split("T")[0];
-            const registrationLastDate = new Date(event.lastDateOfRegistration)
-              .toISOString()
-              .split("T")[0];
+      setin_personEvents(
+        events.filter((event) => {
+          const today = new Date();
+          const currentDate = today.toISOString().split("T")[0];
+          const eventDate = new Date(event.date).toISOString().split("T")[0];
+          const registrationLastDate = new Date(event.lastDateOfRegistration)
+            .toISOString()
+            .split("T")[0];
 
-            return (
-              registrationLastDate >= currentDate && eventDate > currentDate
-            );
-          })
-        );
-      } else {
-        alert(events.message);
-      }
+          return registrationLastDate >= currentDate && eventDate > currentDate;
+        })
+      );
     });
   }, []);
 
   const headerMenuItems = [
     { label: "Home", to: "/" },
     { label: "About", to: "/" },
-    { label: "Upcoming  Events", href: "upcoming" },
+    { label: "Upcoming Events", href: "upcoming" },
     { label: "Contact", href: "contact" },
   ];
 
@@ -56,12 +49,9 @@ function InPersonEvent() {
         {/* Header Section */}
         <Navbar menuItems={headerMenuItems} />
 
-        {/* Virtual Meeting Section */}
+        {/* Main Section */}
         <section className="text-center my-8 px-4 sm:px-8">
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif"
-            style={{ fontFamily: "quick" }}
-          >
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif" style={{ fontFamily: "quick" }}>
             In-Person Events
           </h1>
 
@@ -134,6 +124,7 @@ function InPersonEvent() {
                   item.eventType === "hybrid") &&
                   item.isVanueConfirmed) ? (
                   <VirtualCard
+                    key={item._id}
                     eventType={item.eventType}
                     eventId={item._id}
                     name={item.eventName}
@@ -148,6 +139,7 @@ function InPersonEvent() {
         </section>
       </div>
 
+      {/* Footer */}
       <div className="m-0 p-0" id="contact">
         <Footer menuItems1={footerMenuItems} />
       </div>

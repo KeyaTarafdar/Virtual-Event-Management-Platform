@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
@@ -8,6 +6,7 @@ import {
   faXmark,
   faCaretDown,
   faCaretUp,
+  faMagnifyingGlass,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -35,9 +34,8 @@ export default function Navbar({ menuItems }) {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [isClosingDropdown, setIsClosingDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // eslint-disable-next-line no-unused-vars
   const [isMdOrLarger, setIsMdOrLarger] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState(null);
 
   const handleLogInClick = () => {
     navigate("/login");
@@ -133,8 +131,7 @@ export default function Navbar({ menuItems }) {
           className="h-16 flex items-center px-4 justify-between w-full text-[16px] bg-black text-white fixed top-0 z-50"
         >
           {/* Logo */}
-          <div
-            className="text-gradient2 font-serif text-5xl w-[50%] sm:w-[20%] md:w-[30%] lg:w-[20%] xl:w-[20%] 2xl:w-[20%] lg:pl-5 xl:pl-8"
+          <div className="text-gradient2 font-serif text-5xl w-[50%] sm:w-[20%] md:w-[30%] lg:w-[20%] xl:w-[20%] 2xl:w-[20%] lg:pl-5 xl:pl-8"
             style={{ fontFamily: '"quick"' }}
           >
             {company?.companyName}
@@ -211,7 +208,7 @@ export default function Navbar({ menuItems }) {
             ) : (
               <>
                 {/* Login Button */}
-                <div className="w-full lg:w-[55%] flex items-center justify-center px-[3px] sm:px-8 pr-4 md:px-1 lg:pr-24 xl:px-2 2xl:px-1">
+                <div className="w-full lg:w-[55%] flex items-center justify-center px-[3px] sm:px-8 pr-4 lg:pr-16  md:px-1 lg:pr-24 xl:px-2 2xl:px-1">
                   <div className=" w-full flex justify-center items-center">
                     <button
                       onClick={handleLogInClick}
@@ -226,7 +223,7 @@ export default function Navbar({ menuItems }) {
 
             {/* Hamburger Icon */}
             {!isMdOrLarger && (
-              <div className="block md:hidden">
+              <div className="block md:hidden ">
                 <FontAwesomeIcon
                   icon={hamburgerMenuClicked ? faXmark : faBars}
                   style={{ color: "#ffffff" }}

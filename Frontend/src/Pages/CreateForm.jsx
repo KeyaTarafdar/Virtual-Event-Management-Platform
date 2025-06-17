@@ -124,19 +124,26 @@ const CreateForm = () => {
       const result = await createEvent(formData);
       setTimeout(async () => {
         setLoading(false);
-        alert(result.message);
-        if (result.success) {
-          if (formData.eventType === "virtual") {
-            navigate("/virtualevent");
-          }
-          if (formData.eventType === "hybrid") {
-            navigate("/hybridevent");
-          }
-          if (formData.eventType === "in_person") {
-            navigate("/inpersonevent");
-          }
+        alert(result);
+        if (
+          formData.eventType === "virtual" &&
+          result === "Event created successfully!"
+        ) {
+          navigate("/virtualevent");
         }
-      }, 1000);
+        if (
+          formData.eventType === "hybrid" &&
+          result === "Event created successfully!"
+        ) {
+          navigate("/hybridevent");
+        }
+        if (
+          formData.eventType === "in_person" &&
+          result === "Event created successfully!"
+        ) {
+          navigate("/inpersonevent");
+        }
+      }, 3000);
     } catch (error) {
       alert("An error occurred while creating the event. Please try again.");
     }
@@ -186,7 +193,7 @@ const CreateForm = () => {
                   onChange={(e) => {
                     const value = e.target.value;
                     const maxWords = 20;
-                    const regex = /^[A-Za-z][A-Za-z\s]{0,}$/; // Starts with letters, only spaces allowed, no special chars or digits.
+                    const regex = /^[A-Za-z][A-Za-z\s]{0,}$/; 
                     const wordCount = value.trim().split(/\s+/).length;
 
                     const errorMessage = !regex.test(value)

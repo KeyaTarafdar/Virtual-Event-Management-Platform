@@ -22,6 +22,7 @@ const {
   createRazorpayOrder,
   verifyRazorpayPayment,
   fetchAllVenueBasedOnCity,
+  fetchSingleVenue,
 } = require("../controller/userController");
 
 router.get("/", (req, res) => {
@@ -79,6 +80,9 @@ router.post(
 
 // GET ALL VENUE
 router.get("/getallvenue", commonIsLoggedIn, fetchAllVenue);
+
+// GET SINGLE VENUE
+router.post("/fetchsinglevenue", commonIsLoggedIn, fetchSingleVenue);
 
 // Get All Venues in a particular city
 router.get("/get-all-venue-city", userIsLoggedIn, fetchAllVenueBasedOnCity);

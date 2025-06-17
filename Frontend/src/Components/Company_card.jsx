@@ -54,7 +54,7 @@ const companiesData = [
     rating: 3,
   },
   {
-    logo: "https://animationvisarts.com/wp-content/uploads/2016/10/tata-logo-design.jpg",
+    logo: 'https://animationvisarts.com/wp-content/uploads/2016/10/tata-logo-design.jpg',
     rating: 2,
   },
   {

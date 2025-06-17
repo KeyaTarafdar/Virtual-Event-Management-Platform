@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { changePassword, changePasswordVenue } from "../utils/utils";
 
-const Resetpassword = ({ email }) => {
+const Resetpassword = (email) => {
   const navigate = useNavigate();
   const { venueId } = useParams();
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { changePasswordRequest } from "../utils/utils";
 import Resetpassword from "./Resetpassword";
 
@@ -37,10 +37,10 @@ const Forgetpassword = () => {
     const isValid = validateForm();
     if (isValid) {
       changePasswordRequest(formData.email).then((response) => {
-        if (response.success) {
+        if (response) {
           setReset(true);
         } else {
-          alert(response.message);
+          alert("Account does't exists!");
         }
       });
     } else {

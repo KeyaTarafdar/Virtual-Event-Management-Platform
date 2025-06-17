@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
-import { useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { AiFillVideoCamera, AiFillMail, AiFillPhone } from "react-icons/ai";
 import { Link } from "react-scroll";
@@ -14,8 +14,8 @@ export default function Footer({ menuItems1 }) {
       fetchCompanyDetails().then((response) => {
         setCompany(response);
       });
-    }
-  }, []);
+    }
+  },[]);
 
   return (
     <footer className="bg-gradient-to-r from-blue-950 to-cyan-900 text-white py-8 px-6">
