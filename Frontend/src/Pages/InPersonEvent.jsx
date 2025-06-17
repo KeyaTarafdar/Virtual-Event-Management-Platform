@@ -21,18 +21,21 @@ function InPersonEvent() {
 
   useEffect(() => {
     fetchIn_PersonEvents().then((events) => {
-      setin_personEvents(
-        events.filter((event) => {
-          const today = new Date();
-          const currentDate = today.toISOString().split("T")[0];
-          const eventDate = new Date(event.date).toISOString().split("T")[0];
-          const registrationLastDate = new Date(event.lastDateOfRegistration)
-            .toISOString()
-            .split("T")[0];
+      if (events.success)
+        setin_personEvents(
+          events.data.filter((event) => {
+            const today = new Date();
+            const currentDate = today.toISOString().split("T")[0];
+            const eventDate = new Date(event.date).toISOString().split("T")[0];
+            const registrationLastDate = new Date(event.lastDateOfRegistration)
+              .toISOString()
+              .split("T")[0];
 
-          return registrationLastDate >= currentDate && eventDate > currentDate;
-        })
-      );
+            return (
+              registrationLastDate >= currentDate && eventDate > currentDate
+            );
+          })
+        );
     });
   }, []);
 
@@ -51,7 +54,10 @@ function InPersonEvent() {
 
         {/* Main Section */}
         <section className="text-center my-8 px-4 sm:px-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif" style={{ fontFamily: "quick" }}>
+          <h1
+            className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif"
+            style={{ fontFamily: "quick" }}
+          >
             In-Person Events
           </h1>
 
