@@ -15,6 +15,8 @@ import {
   faPlus,
   faTowerBroadcast,
   faUsers,
+  faPen,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -80,6 +82,7 @@ const CompanyPage = () => {
   const [selectedTab, setSelectedTab] = useState("created");
   const { company, setCompany } = useCompany();
   const { user, setUser } = useUser();
+  const [isTrackModalVisible, setIsTrackModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
   const handleCreateEventClick = () => {
@@ -95,13 +98,21 @@ const CompanyPage = () => {
     setIsModalVisible(false);
   };
 
+  const closeUpdateModal = () => {
+    setIsUpdateModalVisible(false);
+  };
+
   const openUpdateModal = (event) => {
     setSelectedEvent(event);
     setIsUpdateModalVisible(true);
   };
 
-  const closeUpdateModal = () => {
-    setIsUpdateModalVisible(false);
+  const openTrackModal = (event) => {
+    setSelectedEvent(event);
+    setIsTrackModalVisible(true);
+  };
+  const closeTrackModal = () => {
+    setIsTrackModalVisible(false);
   };
 
   const handleOutsideClick = (e) => {
@@ -490,7 +501,7 @@ const CompanyPage = () => {
                       Track Event
                     </button>
 
-                     <button
+                    <button
                       className="btn1 mt-4 h-12 px-4 bg-indigo-600 text-white font-bold rounded-md w-full sm:w-auto text-sm"
                       onClick={() => openUpdateModal(event)}
                     >
@@ -503,7 +514,7 @@ const CompanyPage = () => {
         </div>
 
         {/* Modal */}
-        {isModalVisible && selectedEvent && (
+        {isTrackModalVisible && selectedEvent && (
           <div
             id="modal-overlay"
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -778,7 +789,7 @@ const CompanyPage = () => {
               <div className="space-y-2">
                 <label className="block font-semibold">Poster Image</label>
                 <img
-                  src={image || selectedEvent.posterImage?.url}
+                  src={selectedEvent.posterImage?.url}
                   alt="Event Poster"
                   className="w-40 h-auto rounded"
                 />
