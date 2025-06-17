@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navabar from "../Components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,16 +15,17 @@ import {
   faTowerBroadcast,
   faUsers,
   faPen,
-  faCheck,
+  faCheck
 } from "@fortawesome/free-solid-svg-icons";
+import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
+
 import { useNavigate } from "react-router-dom";
 import {
   findUser,
   fetchCompanyDetails,
   uploadProfilePicture,
 } from "../utils/utils";
-import { useCompany } from "../context/companyContext/CompanyContext";
-import { useUser } from "../context/userContext/UserContext";
 
 const headerMenuItems = [{ label: "Home", to: "/" }];
 
@@ -38,60 +38,61 @@ const EditableField = ({ label, value, onSave, type }) => {
     setEditMode(false);
   };
 
-  return (
-    <div className="flex flex-wrap md:flex-nowrap items-start md:items-center gap-3 w-full">
-      <label className="w-full md:w-56 font-semibold text-sm md:text-base">
-        {label} :-{" "}
-      </label>
+return (
+  <div className="flex flex-wrap md:flex-nowrap items-start md:items-center gap-3 w-full">
+    <label className="w-full md:w-56 font-semibold text-sm md:text-base">{label} :- </label>
 
-      {!editMode ? (
-        <>
-          <p className="w-[90%] md:w-[60%] text-green-700 font-bold shadow-[0_4px_10px_#e4f868] bg-blue-200 rounded-lg p-2 md:pl-8 border-blue-800 border-2 text-sm md:text-base break-words">
-            {fieldValue}
-          </p>
-          <FontAwesomeIcon
-            icon={faPen}
-            className="cursor-pointer text-blue-600 text-base md:text-lg"
-            onClick={() => setEditMode(true)}
-          />
-        </>
-      ) : (
-        <>
-          <input
-            type={type}
-            className="flex-1 min-w-0 px-2 py-1 border rounded text-sm md:text-base"
-            value={fieldValue}
-            onChange={(e) => setFieldValue(e.target.value)}
-          />
-          <FontAwesomeIcon
-            icon={faCheck}
-            className="cursor-pointer font-bold text-green-600 text-base md:text-lg"
-            onClick={handleSave}
-          />
-        </>
-      )}
-    </div>
-  );
+    {!editMode ? (
+      <>
+        <p className="w-[90%] md:w-[60%] text-green-700 font-bold shadow-[0_4px_10px_#e4f868] bg-blue-200 rounded-lg p-2 md:pl-8 border-blue-800 border-2 text-sm md:text-base break-words">
+          {fieldValue}
+        </p>
+        <FontAwesomeIcon
+          icon={faPen}
+          className="cursor-pointer text-blue-600 text-base md:text-lg"
+          onClick={() => setEditMode(true)}
+        />
+      </>
+    ) : (
+      <>
+        <input
+          type={type}
+          className="flex-1 min-w-0 px-2 py-1 border rounded text-sm md:text-base"
+          value={fieldValue}
+          onChange={(e) => setFieldValue(e.target.value)}
+        />
+        <FontAwesomeIcon
+          icon={faCheck}
+          className="cursor-pointer font-bold text-green-600 text-base md:text-lg"
+          onClick={handleSave}
+        />
+      </>
+    )}
+  </div>
+);
 };
 
 const CompanyPage = () => {
   const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedTab, setSelectedTab] = useState("created");
-  const { company, setCompany } = useCompany();
-  const { user, setUser } = useUser();
   const [isTrackModalVisible, setIsTrackModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const { company, setCompany } = useCompany();
+  const { user, setUser } = useUser();
 
   const handleCreateEventClick = () => {
     navigate("/createform");
   };
 
-  const openModal = (event) => {
+  const handleUpdateEventClick = () => {
+    navigate("/rough");
+  };
+
+  const openTrackModal = (event) => {
     setSelectedEvent(event);
-    setIsModalVisible(true);
+    setIsTrackModalVisible(true);
   };
 
   const closeModal = () => {
@@ -106,11 +107,7 @@ const CompanyPage = () => {
     setSelectedEvent(event);
     setIsUpdateModalVisible(true);
   };
-
-  const openTrackModal = (event) => {
-    setSelectedEvent(event);
-    setIsTrackModalVisible(true);
-  };
+  
   const closeTrackModal = () => {
     setIsTrackModalVisible(false);
   };
@@ -130,6 +127,7 @@ const CompanyPage = () => {
       };
     });
   };
+  const [image, setImage] = useState();
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -156,6 +154,7 @@ const CompanyPage = () => {
       return;
     }
   };
+
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
@@ -398,7 +397,7 @@ const CompanyPage = () => {
           <hr className="border-0 h-[2px] bg-gray-500 my-6"></hr>
 
           {Array.isArray(events) &&
-            events.map((event, index) => (
+            events.map((event, event1, index) => (
               <div
                 key={index}
                 className="border-2 border-black mt-4 lg:ml-32 w-[100%] lg:w-[80%] h-auto bg-gray-200 shadow-lg rounded-lg p-4 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4"
@@ -464,9 +463,7 @@ const CompanyPage = () => {
                         icon={faTowerBroadcast}
                         className="mr-2 text-indigo-800"
                       />
-                      {event.eventType === "in_person" && (
-                        <span>In Person</span>
-                      )}
+                      {event.eventType === "in_person" && <span>In Person</span>}
                       {event.eventType === "virtual" && <span>Virtual</span>}
                       {event.eventType === "hybrid" && <span>Hybrid</span>}
                     </div>
@@ -490,6 +487,7 @@ const CompanyPage = () => {
                       <span>{event.tillNowTotalRegistration}</span>
                     </div>
                   </div>
+                  
                   <div className="flex flex-col sm:flex-row sm:gap-10">
                     <button
                       className="btn1 mt-4 h-12 px-4 bg-indigo-600 text-white font-bold rounded-md w-full sm:w-auto text-sm"
@@ -509,6 +507,7 @@ const CompanyPage = () => {
               </div>
             ))}
         </div>
+
 
         {/* Modal */}
         {isTrackModalVisible && selectedEvent && (
@@ -549,140 +548,113 @@ const CompanyPage = () => {
                     </span>
                   </div>
 
-                  {/* Venue Confirmation (Only for in-person or hybrid) */}
-                  {(selectedEvent.type === "in-person" ||
-                    selectedEvent.type === "hybrid") && (
-                    <>
-                      <div
-                        className={`w-1 h-16 ${
-                          selectedEvent.venueConfirmed
-                            ? "bg-blue-600"
-                            : "bg-gray-400"
-                        }`}
-                        style={{
-                          marginLeft: "0.35rem",
-                          marginRight: "1.5rem",
-                          marginTop: "-3.5rem",
-                        }}
-                      ></div>
-
-                      <div className="flex items-center">
+                    {/* Venue Confirmation (Only for in-person or hybrid) */}
+                    {(selectedEvent.type === "in-person" || selectedEvent.type === "hybrid") && (
+                      <>
                         <div
-                          className={`w-4 h-4 rounded-full ${
+                          className={`w-1 h-16 ${
+                            selectedEvent.venueConfirmed ? "bg-blue-600" : "bg-gray-400"
+                          }`}
+                          style={{
+                            marginLeft: "0.35rem",
+                            marginRight: "1.5rem",
+                            marginTop: "-3.5rem",
+                          }}
+                        ></div>
+
+                        <div className="flex items-center">
+                          <div
+                            className={`w-4 h-4 rounded-full ${
+                              selectedEvent.venueConfirmed ? "bg-blue-600" : "bg-gray-400"
+                            } mr-2`}
+                          ></div>
+                          <span className="text-xs xds:text-lg font-bold">
+                            Venue Confirmation
+                          </span>
+                        </div>
+                        <p
+                          className={`text-sm ml-6 font-bold ${
                             selectedEvent.venueConfirmed
+                              ? "text-green-500"
+                              : selectedEvent.venueRejected
+                              ? "text-red-500"
+                              : "text-yellow-500"
+                          }`}
+                        >
+                          {selectedEvent.venueConfirmed
+                            ? "Venue has been confirmed"
+                            : selectedEvent.venueRejected
+                            ? "Venue confirmation failed"
+                            : "Venue is not yet confirmed"}
+                        </p>
+
+                        <div className="flex items-center ml-6 mt-2">
+                          <FontAwesomeIcon
+                            icon={faCalendarAlt}
+                            className="mr-2 text-gray-500"
+                          />
+                          :
+                          <span className="text-gray-500 text-sm ml-2">
+                            {selectedEvent.venueConfirmationDate || "N/A"}
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Line to Slot Confirmation */}
+                    <div
+                      className={`w-1 h-16 ${
+                        selectedEvent.slotConfirmedDate ? "bg-blue-600" : "bg-gray-400"
+                      }`}
+                      style={{
+                        marginLeft: "0.35rem",
+                        marginRight: "1.5rem",
+                        marginTop: "-3.5rem",
+                      }}
+                    ></div>
+
+                    {/* Slot Confirmation */}
+                    <div className="flex items-center">
+                      <div
+                        className={`w-4 h-4 rounded-full ${
+                          selectedEvent.slotConfirmedDate
+                            ? isSlotConfirmed
                               ? "bg-blue-600"
                               : "bg-gray-400"
-                          } mr-2`}
-                        ></div>
-                        <span className="text-xs xds:text-lg font-bold">
-                          Venue Confirmation
-                        </span>
-                      </div>
-                      <p
-                        className={`text-sm ml-6 font-bold ${
-                          selectedEvent.venueConfirmed
-                            ? "text-green-500"
-                            : selectedEvent.venueRejected
-                            ? "text-red-500"
-                            : "text-yellow-500"
-                        }`}
-                      >
-                        {selectedEvent.venueConfirmed
-                          ? "Venue has been confirmed"
-                          : selectedEvent.venueRejected
-                          ? "Venue confirmation failed"
-                          : "Venue is not yet confirmed"}
-                      </p>
-
-                      <div className="flex items-center ml-6 mt-2">
-                        <FontAwesomeIcon
-                          icon={faCalendarAlt}
-                          className="mr-2 text-gray-500"
-                        />
-                        :
-                        <span className="text-gray-500 text-sm ml-2">
-                          {selectedEvent.venueConfirmationDate || "N/A"}
-                        </span>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Line to Slot Confirmation */}
-                  <div
-                    className={`w-1 h-16 ${
-                      selectedEvent.slotConfirmedDate
-                        ? "bg-blue-600"
-                        : "bg-gray-400"
-                    }`}
-                    style={{
-                      marginLeft: "0.35rem",
-                      marginRight: "1.5rem",
-                      marginTop: "-3.5rem",
-                    }}
-                  ></div>
-
-                  {/* Slot Confirmation */}
-                  <div className="flex items-center">
-                    <div
-                      className={`w-4 h-4 rounded-full ${
-                        selectedEvent.slotConfirmedDate
-                          ? isSlotConfirmed
-                            ? "bg-blue-600"
                             : "bg-gray-400"
-                          : "bg-gray-400"
-                      } mr-2`}
-                    ></div>
-                    <span className="text-xs xds:text-lg font-bold">
-                      Slot Confirmation
-                    </span>
-                  </div>
-                  {!selectedEvent.slotConfirmedDate ? (
-                    <p className="text-yellow-500 text-sm ml-6 font-bold">
-                      Slot not yet Confirmed
-                    </p>
-                  ) : !isSlotConfirmed && selectedEvent.createdDate ? (
-                    <p className="text-red-500 text-sm ml-6 font-bold">
-                      Slot Confirmation failed
-                    </p>
-                  ) : (
-                    <p className="text-green-500 text-sm ml-6 font-bold">
-                      Slot has been successfully scheduled!
-                    </p>
-                  )}
+                        } mr-2`}
+                      ></div>
+                      <span className="text-xs xds:text-lg font-bold">
+                        Slot Confirmation
+                      </span>
+                    </div>
+                    {!selectedEvent.slotConfirmedDate ? (
+                      <p className="text-yellow-500 text-sm ml-6 font-bold">
+                        Slot not yet Confirmed
+                      </p>
+                    ) : !isSlotConfirmed && selectedEvent.createdDate ? (
+                      <p className="text-red-500 text-sm ml-6 font-bold">
+                        Slot Confirmation failed
+                      </p>
+                    ) : (
+                      <p className="text-green-500 text-sm ml-6 font-bold">
+                        Slot has been successfully scheduled!
+                      </p>
+                    )}
+                    <div className="flex items-center ml-6 mt-2">
+                      <FontAwesomeIcon
+                        icon={faCalendarAlt}
+                        className="mr-2 text-gray-500"
+                      />
+                      :
+                      <span className="text-gray-500 text-sm ml-2">
+                        {selectedEvent.slotConfirmedDate || "N/A"}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center ml-6 mt-2">
-                    <FontAwesomeIcon
-                      icon={faCalendarAlt}
-                      className="mr-2 text-gray-500"
-                    />
-                    :
-                    <span className="text-gray-500 text-sm ml-2">
-                      {selectedEvent.slotConfirmedDate || "N/A"}
-                    </span>
-                  </div>
-
-                  {/* Line to Completion */}
-                  <div
-                    className={`w-1 h-16 ${
-                      checkEventCompletion(
-                        selectedEvent.date,
-                        selectedEvent.slotConfirmedDate,
-                        selectedEvent.createdDate
-                      )
-                        ? "bg-blue-600"
-                        : "bg-gray-400"
-                    }`}
-                    style={{
-                      marginLeft: "0.35rem",
-                      marginRight: "1.5rem",
-                      marginTop: "-3.5rem",
-                    }}
-                  ></div>
-
-                  {/* Event Done */}
-                  <div className="flex items-center">
+                    {/* Line to Completion */}
                     <div
-                      className={`w-4 h-4 rounded-full ${
+                      className={`w-1 h-16 ${
                         checkEventCompletion(
                           selectedEvent.date,
                           selectedEvent.slotConfirmedDate,
@@ -690,79 +662,90 @@ const CompanyPage = () => {
                         )
                           ? "bg-blue-600"
                           : "bg-gray-400"
-                      } mr-2`}
+                      }`}
+                      style={{
+                        marginLeft: "0.35rem",
+                        marginRight: "1.5rem",
+                        marginTop: "-3.5rem",
+                      }}
                     ></div>
-                    <span className="text-xs xds:text-lg font-bold">
-                      Event Completion
-                    </span>
-                  </div>
-                  {checkEventCompletion(
-                    selectedEvent.date,
-                    selectedEvent.slotConfirmedDate,
-                    selectedEvent.createdDate
-                  ) ? (
-                    <p className="text-green-500 text-sm ml-6 font-bold">
-                      Event completed successfully
-                    </p>
-                  ) : (
-                    <p className="text-red-500 text-sm ml-6 font-bold">
-                      Event is not yet complete
-                    </p>
-                  )}
-                </div>
-              </div>
 
-              <button
-                className="mt-8 px-4 py-2 bg-red-600 text-white font-bold rounded-md w-full"
-                onClick={closeTrackModal}
-              >
-                Close
-              </button>
+                    {/* Event Completion */}
+                    <div className="flex items-center">
+                      <div
+                        className={`w-4 h-4 rounded-full ${
+                          checkEventCompletion(
+                            selectedEvent.date,
+                            selectedEvent.slotConfirmedDate,
+                            selectedEvent.createdDate
+                          )
+                            ? "bg-blue-600"
+                            : "bg-gray-400"
+                        } mr-2`}
+                      ></div>
+                      <span className="text-xs xds:text-lg font-bold">
+                        Event Completion
+                      </span>
+                    </div>
+                    {checkEventCompletion(
+                      selectedEvent.date,
+                      selectedEvent.slotConfirmedDate,
+                      selectedEvent.createdDate
+                    ) ? (
+                      <p className="text-green-500 text-sm ml-6 font-bold">
+                        Event completed successfully
+                      </p>
+                    ) : (
+                      <p className="text-red-500 text-sm ml-6 font-bold">
+                        Event is not yet complete
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  className="mt-8 px-4 py-2 bg-red-600 text-white font-bold rounded-md w-full"
+                  onClick={closeTrackModal}
+                >
+                  Close
+                </button>
+              </div>
             </div>
-          </div>
         )}
 
         {isUpdateModalVisible && selectedEvent && (
           <div
             id="modal-overlay"
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center "
-            onClick={(e) =>
-              e.target.id === "modal-overlay" && closeUpdateModal()
-            }
+            onClick={(e) => e.target.id === "modal-overlay" && closeUpdateModal()}
           >
             <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[75%] lg:w-[50%] space-y-6">
               <h2
-                className="text-gradient1 text-4xl font-bold text-center mb-6"
-                style={{ fontFamily: '"quick"' }}
+                  className="text-gradient1 text-4xl font-bold text-center mb-6"
+                  style={{ fontFamily: '"quick"' }}
               >
-                Update Event Details
+                  Update Event Details
               </h2>
 
               {/* Event Name Field */}
               <EditableField
                 label="Event Name"
                 value={selectedEvent.eventName}
-                onSave={(val) =>
-                  setSelectedEvent({ ...selectedEvent, eventName: val })
-                }
+                onSave={(val) => setSelectedEvent({ ...selectedEvent, eventName: val })}
               />
 
               {/* Speaker Name Field */}
               <EditableField
                 label="Speaker Name"
                 value={selectedEvent.speaker || ""}
-                onSave={(val) =>
-                  setSelectedEvent({ ...selectedEvent, speaker: val })
-                }
+                onSave={(val) => setSelectedEvent({ ...selectedEvent, speaker: val })}
               />
 
               {/* Description Field */}
               <EditableField
                 label="Description"
                 value={selectedEvent.description || ""}
-                onSave={(val) =>
-                  setSelectedEvent({ ...selectedEvent, description: val })
-                }
+                onSave={(val) => setSelectedEvent({ ...selectedEvent, description: val })}
               />
 
               {/* Last Date of Registration */}
@@ -775,10 +758,7 @@ const CompanyPage = () => {
                 }
                 type="date"
                 onSave={(val) =>
-                  setSelectedEvent({
-                    ...selectedEvent,
-                    lastDateOfRegistration: val,
-                  })
+                  setSelectedEvent({ ...selectedEvent, lastDateOfRegistration: val })
                 }
               />
 
@@ -803,16 +783,17 @@ const CompanyPage = () => {
               </div>
 
               <div className="flex  justify-center">
-                <button
-                  className="px-4 py-2 bg-red-600 text-white font-bold rounded-md w-[50%]"
-                  onClick={closeUpdateModal}
-                >
-                  Close
-                </button>
-              </div>
+                  <button
+                    className="px-4 py-2 bg-red-600 text-white font-bold rounded-md w-[50%]"
+                    onClick={closeUpdateModal}
+                  >
+                    Close
+                  </button>
+                </div>
             </div>
           </div>
         )}
+
       </div>
     </>
   );

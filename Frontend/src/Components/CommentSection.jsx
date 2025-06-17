@@ -58,9 +58,7 @@ const CommentTemplate = ({
 
             {/* Reply Input Box */}
             {replyBoxOpen && (
-              <div
-                className={`mt-4 flex flex-col sm:flex-row gap-3 ${paddingLeft}`}
-              >
+              <div className={`mt-4 flex flex-col sm:flex-row gap-3 ${paddingLeft}`}>
                 <div className="w-full sm:w-[95%]">
                   <input
                     type="text"
@@ -85,10 +83,7 @@ const CommentTemplate = ({
                   onClick={() => setrepliesShow(!repliesShow)}
                   className="hover:text-lg"
                 />
-                <span
-                  onClick={() => setrepliesShow(!repliesShow)}
-                  className="hover:underline"
-                >
+                <span onClick={() => setrepliesShow(!repliesShow)} className="hover:underline">
                   {replies.length} Replies
                 </span>
               </div>

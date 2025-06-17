@@ -6,22 +6,22 @@ const BookingCard = ({
   headcount,
   additionalInfo,
 }) => {
-  return (
-    <div className="product-card w-full max-w-[260px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[360px] rounded-md shadow-xl overflow-hidden  relative cursor-pointer snap-start shrink-0 py-8 px-4 bg-blue-200 flex flex-col items-center justify-center gap-3 transition-all duration-300 group">
-      <div className="para uppercase text-center leading-none ">
-        <p
-          style={{
-            WebkitTextStroke: "1px #1e90ff",
-            WebkitTextFillColor: "transparent",
-            textShadow: "1px 1px rgba(0, 0, 0, 0.8)",
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            padding: "0 4px",
-            borderRadius: "4px",
-          }}
-          className="z-10 font-bold text-lg -mb-5 tracking-wider text-blue-800"
-        >
-          {eventName}
-        </p>
+    return (
+        <div className="product-card w-full max-w-[260px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[360px] rounded-md shadow-xl overflow-hidden  relative cursor-pointer snap-start shrink-0 py-8 px-4 bg-blue-200 flex flex-col items-center justify-center gap-3 transition-all duration-300 group">
+            <div className="para uppercase text-center leading-none ">
+                <p
+                    style={{
+                        WebkitTextStroke: "1px #1e90ff",
+                        WebkitTextFillColor: "transparent",
+                        textShadow: "1px 1px rgba(0, 0, 0, 0.8)",
+                        backgroundColor: "rgba(255, 255, 255, 0.7)",
+                        padding: "0 4px",
+                        borderRadius: "4px",
+                    }}
+                    className="z-10 font-bold text-lg -mb-5 tracking-wider text-blue-800"
+                >
+                    {eventName}
+                </p>
 
         <p className="font-bold text-xl font-serif tracking-wider mt-5 text-[#181868] z-30">
           {eventDate}

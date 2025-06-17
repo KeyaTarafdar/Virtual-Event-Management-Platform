@@ -16,7 +16,7 @@ const footerMenuItems = [
 
 function VirtualEvent() {
   const navigate = useNavigate();
-  const [virtualEvents, setvirtualEvents] = useState([]);
+  const [virtualEvents, setVirtualEvents] = useState([]);
 
   useEffect(() => {
     fetchVirtualEvents().then((events) => {
@@ -43,24 +43,26 @@ function VirtualEvent() {
   const headerMenuItems = [
     { label: "Home", to: "/" },
     { label: "About", to: "/" },
-    { label: "Upcoming  Events", href: "upcoming" },
+    { label: "Upcoming Events", href: "upcoming" },
     { label: "Contact", href: "contact" },
   ];
 
   return (
     <>
       <div className="App">
-        {/* Header Section */}
-
+        {/* Header */}
         <Navbar menuItems={headerMenuItems} />
 
-        {/* Virtual Meeting Section */}
+        {/* Main Section */}
         <section className="text-center my-8 px-4 sm:px-6 md:px-8">
           <h1
-            className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif" style={{ fontFamily: "quick" }}
+            className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif"
+            style={{ fontFamily: "quick" }}
           >
             Virtual Events
           </h1>
+
+          {/* Text + Image Section */}
           <div className="flex flex-col-reverse lg:flex-row items-center justify-center mt-8">
             <p className="text-slate-500 text-sm sm:text-base md:text-lg lg:text-xl mt-4 lg:mt-6 font-serif px-2 sm:px-4 md:px-8 lg:w-[66%] text-center lg:text-left">
               Join our virtual events to connect with industry experts, explore
@@ -85,7 +87,7 @@ function VirtualEvent() {
             </div>
           </div>
 
-          {/* search div for md and sm screen------------------------- */}
+          {/* Search Bar (visible only on mobile/tablet) */}
           <div className="w-full max-w-md mx-auto mt-6 px-2 lg:hidden">
             <div className="relative w-full h-12">
               <input
@@ -96,13 +98,13 @@ function VirtualEvent() {
               <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-slate-900 rounded-full w-10 h-10 flex items-center justify-center">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
-                 className="text-white text-sm sm:text-base"                
+                  className="text-white text-sm sm:text-base"
                 />
               </button>
             </div>
           </div>
 
-           {/* CTA Button */}
+          {/* CTA Button */}
           <div className="mt-10">
             <p className="text-lg sm:text-xl md:text-2xl font-bold font-serif text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-950">
               WANT TO CREATE A VIRTUAL MEETING?
@@ -116,7 +118,7 @@ function VirtualEvent() {
           </div>
         </section>
 
-        {/* Upcoming Events Section */}
+        {/* Upcoming Events */}
         <section className="text-center mb-8 px-4" id="upcoming">
           <h2 className="text-2xl sm:text-3xl font-serif font-semibold">
             Our upcoming events
@@ -143,6 +145,7 @@ function VirtualEvent() {
         </section>
       </div>
 
+      {/* Footer */}
       <div className="m-0 p-0" id="contact">
         <Footer menuItems1={footerMenuItems} />
       </div>

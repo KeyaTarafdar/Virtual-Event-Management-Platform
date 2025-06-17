@@ -15,6 +15,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/forgetpassword" element={<Forgetpassword />} />
             <Route path="/resetpassword/:venueId" element={<Resetpassword />} />
+            {/* <Route path="/rough" element={<Rough/>}/> */}
             <Route path="/virtualevent" element={<VirtualEvent />} />
             <Route path="/inpersonevent" element={<InPersonEvent />} />
             <Route path="/hybridevent" element={<HybridEvent />} />

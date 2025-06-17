@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   findUser,
@@ -34,9 +33,7 @@ function EventPage() {
     },
     {
       label: "Date & Time",
-      value: `${new Date(event.date).toLocaleDateString("en-GB")}, ${
-        event.time
-      }`,
+      value: `${new Date(event.date).toLocaleDateString("en-GB")}, ${event.time}`,
     },
     { label: "Speaker", value: event.speaker },
     {
@@ -142,7 +139,10 @@ function EventPage() {
           )}
           <div className="mt-6 lg:mt-0 lg:ml-8 w-full lg:w-1/2">
             {eventTags.map((item, index) => (
-              <p key={index} className="text-base sm:text-lg font-medium mb-1">
+              <p
+                key={index}
+                className="text-base sm:text-lg font-medium mb-1"
+              >
                 {item.label} :{" "}
                 <span className="font-light break-words">{item.value}</span>
               </p>
@@ -173,9 +173,11 @@ function EventPage() {
         <div className="w-full max-w-4xl mt-8 px-4 sm:px-6">
           {descriptionTags.map((item, index) =>
             (event.eventType === "virtual" && item.label === "Venue") ||
-            (event.eventType === "in_person" &&
-              item.label === "Platform") ? null : (
-              <p key={index} className="text-base sm:text-lg font-medium mb-1">
+            (event.eventType === "in_person" && item.label === "Platform") ? null : (
+              <p
+                key={index}
+                className="text-base sm:text-lg font-medium mb-1"
+              >
                 {item.label} :{" "}
                 <span className="font-light break-words">{item.value}</span>
               </p>

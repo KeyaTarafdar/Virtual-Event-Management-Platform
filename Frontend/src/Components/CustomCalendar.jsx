@@ -77,40 +77,42 @@ const CustomCalendar = () => {
   };
 
   return (
-    <div className="calendar-container">
-      <div className="calendar-header">
-        <button className="nav-btn" onClick={prevMonth}>&lt;</button>
-        <span className="month-display">
-          {currentDate.toLocaleString('default', { month: 'long' })}{' '}
-          {currentDate.getFullYear()}
-        </span>
-        <button className="nav-btn" onClick={nextMonth}>&gt;</button>
-      </div>
+    <div className="flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-8">
+      <div className="calendar-container w-full max-w-md sm:max-w-lg lg:max-w-2xl">
+        <div className="calendar-header">
+          <button className="nav-btn" onClick={prevMonth}>&lt;</button>
+          <span className="month-display">
+            {currentDate.toLocaleString('default', { month: 'long' })}{' '}
+            {currentDate.getFullYear()}
+          </span>
+          <button className="nav-btn" onClick={nextMonth}>&gt;</button>
+        </div>
 
-      <div className="calendar-grid">
-        {daysOfWeek.map((day, index) => (
-          <div key={index} className="day-header">{day}</div>
-        ))}
-        {blankDays.map((_, index) => (
-          <div key={index} className="day-cell blank"></div>
-        ))}
-        {Array.from({ length: daysInMonth }).map((_, index) => {
-          const day = index + 1;
-          const event = getEventForDate(day);
-          return (
-            <div
-              key={day}
-              className={`day-cell ${isToday(day) ? "current-day" : ""} ${event ? "event-day" : ""}`}
-              onMouseEnter={() => setHoveredEvent(event)}
-              onMouseLeave={() => setHoveredEvent(null)}
-            >
-              {day}
-              {hoveredEvent && hoveredEvent.date.startsWith(formatDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), day))) && (
-                <div className="tooltip">{formatTime(hoveredEvent.time)}</div>
-              )}
-            </div>
-          );
-        })}
+        <div className="calendar-grid">
+          {daysOfWeek.map((day, index) => (
+            <div key={index} className="day-header">{day}</div>
+          ))}
+          {blankDays.map((_, index) => (
+            <div key={index} className="day-cell blank"></div>
+          ))}
+          {Array.from({ length: daysInMonth }).map((_, index) => {
+            const day = index + 1;
+            const event = getEventForDate(day);
+            return (
+              <div
+                key={day}
+                className={`day-cell ${isToday(day) ? "current-day" : ""} ${event ? "event-day" : ""}`}
+                onMouseEnter={() => setHoveredEvent(event)}
+                onMouseLeave={() => setHoveredEvent(null)}
+              >
+                {day}
+                {hoveredEvent && hoveredEvent.date.startsWith(formatDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), day))) && (
+                  <div className="tooltip">{formatTime(hoveredEvent.time)}</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

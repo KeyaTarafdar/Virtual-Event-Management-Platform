@@ -6,7 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
+import {
+  AiFillHome,
+  AiOutlineAppstore,
+  AiFillContacts,
+} from "react-icons/ai";
 
 const footerMenuItems = [
   { href: "header", label: "Header", icon: AiFillHome },
@@ -16,20 +20,19 @@ const footerMenuItems = [
 
 function HybridEvent() {
   const navigate = useNavigate();
-
-  const [hybridEvents, sethybridEvents] = useState([]);
+  const [hybridEvents, setHybridEvents] = useState([]);
 
   useEffect(() => {
     fetchHybridEvents().then((events) => {
       if (events.success) {
-        sethybridEvents(
-          events.filter((event) => {
-            const today = new Date();
-            const currentDate = today.toISOString().split("T")[0];
-            const eventDate = new Date(event.date).toISOString().split("T")[0];
-            const registrationLastDate = new Date(event.lastDateOfRegistration)
-              .toISOString()
-              .split("T")[0];
+      setHybridEvents(
+        events.filter((event) => {
+          const today = new Date();
+          const currentDate = today.toISOString().split("T")[0];
+          const eventDate = new Date(event.date).toISOString().split("T")[0];
+          const registrationLastDate = new Date(event.lastDateOfRegistration)
+            .toISOString()
+            .split("T")[0];
 
             return (
               registrationLastDate >= currentDate && eventDate > currentDate
@@ -46,7 +49,7 @@ function HybridEvent() {
   const headerMenuItems = [
     { label: "Home", to: "/" },
     { label: "About", to: "/" },
-    { label: "Upcoming  Events", href: "upcoming" },
+    { label: "Upcoming Events", href: "upcoming" },
     { label: "Contact", href: "contact" },
   ];
 
@@ -55,7 +58,7 @@ function HybridEvent() {
       <div className="App">
         <Navbar menuItems={headerMenuItems} />
 
-        {/* Hybrid Meeting Section */}
+        {/* Hybrid Event Section */}
         <section className="text-center my-8 px-4 sm:px-6 lg:px-8">
           <h1
             className="text-4xl sm:text-6xl lg:text-7xl text-blue-600 font-bold font-serif mb-6"
@@ -133,14 +136,16 @@ function HybridEvent() {
                   name={item.eventName}
                   date={item.date}
                   organizer={item.ownerId ? item.ownerId.username : null}
-                  platform={item.platform ? item.platform : null}
-                  venue={item.venue ? item.venue : null}
+                  platform={item.platform}
+                  venue={item.venue}
                   posterImage={item.posterImage ? item.posterImage.url : null}
                 />
               ))}
           </div>
         </section>
       </div>
+
+      {/* Footer */}
       <div className="m-0 p-0" id="contact">
         <Footer menuItems1={footerMenuItems} />
       </div>

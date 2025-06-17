@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
@@ -10,8 +10,8 @@ const footerMenuItems = [
   { href: "features", label: "Features", icon: AiOutlineAppstore },
   { href: "contact", label: "Contact", icon: AiFillContacts },
 ];
-function Venue() {
 
+function Venue() {
   const headerMenuItems = [
     { label: "Home", to: "/" },
     { label: "About", to: "/" },
@@ -54,26 +54,29 @@ function Venue() {
             width: "100%",
           }}
         >
-          <div className="text-7xl text-orange-950 font-bold font-serif flex items-center justify-center h-[40vh]">
+          <div className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-orange-950 font-bold font-serif flex items-center justify-center h-[40vh] text-center px-2">
             Venue Details!!
           </div>
         </div>
       </div>
 
-      { /* Venue Details */}
-      <div className="py-3 flex flex-col items-center justify-center pb-10">
-        <h1 className="text-lg md:text-2xl lg:text-3xl font-bold mb-6 text-center text-black pt-6 pb-2">
+      {/* Venue Details */}
+      <div className="py-3 flex flex-col items-center justify-center pb-10 px-4 sm:px-6 md:px-10">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center text-black pt-6 pb-2">
           DETAILS OF THE VENUE!!
-          <div className="w-[100%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-4"></div>
+          <div className="w-full h-1 border-b-4 border-yellow-400 mt-2 mb-4 rounded-2xl"></div>
         </h1>
 
-        <div className="h-auto px-8 rounded-[2rem] text-center mt-8 lg:mt-0 ml-12 mr-12">
-          <div className="flex flex-wrap justify-center items-center gap-5">
-            {Array.isArray(allVenues) && 
-            allVenues.map((venue) => (
-              <Venue_card
-                key={venue._id} name={venue.name} location={venue.city} />
-            ))}
+        <div className="w-full rounded-[2rem] text-center mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-2 sm:px-4">
+            {Array.isArray(allVenues) &&
+              allVenues.map((venue) => (
+                <Venue_card
+                  key={venue._id}
+                  name={venue.name}
+                  location={venue.city}
+                />
+              ))}
           </div>
         </div>
       </div>

@@ -21,19 +21,22 @@ function VenueUserPage() {
         return <VenueProfile />;
       default:
         return (
-          venue && venue.completePercentage < 100 && (
+          venue &&
+          venue.completePercentage < 100 && (
             <div
               style={{
-                backgroundImage: "url(https://media.istockphoto.com/id/1264684053/photo/abstract-blur-image-background-of-shopping-mall-department-store.jpg?s=612x612&w=0&k=20&c=21gEfKy8-MTYLVvHSvsHexJ4R25ZL1tujMpACxK9zaw=)",
+                backgroundImage:
+                  "url(https://media.istockphoto.com/id/1264684053/photo/abstract-blur-image-background-of-shopping-mall-department-store.jpg?s=612x612&w=0&k=20&c=21gEfKy8-MTYLVvHSvsHexJ4R25ZL1tujMpACxK9zaw=)",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
               className="fixed inset-0 flex items-center justify-center"
-
             >
               <div className="w-[90%] sm:w-[50%] text-center ">
                 <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
-                <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">Please complete your profile 100%!</div>
+                <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
+                  Please complete your profile 100%!
+                </div>
               </div>
             </div>
           )
@@ -81,7 +84,6 @@ function VenueUserPage() {
           setvenue(response);
         });
       });
-
     } else {
       alert("Please Upload an Image");
       return;
@@ -112,27 +114,33 @@ function VenueUserPage() {
           )}
         </div>
         {/* SIDE BAR */}
-        <div className={`
+        <div
+          className={`
             ${sidebarOpen ? "block" : "hidden"} 
-            lg:block fixed z-40 bg-[#081647] text-white p-4 rounded-r-2xl transition-transform ease-in-out duration-300
+            lg:block fixed z-40 bg-[#081647] text-white rounded-r-2xl transition-transform ease-in-out duration-300
             left-0 shadow-2xl p-4 lg:translate-x-0 w-[50%] sm:w-[70%] md:w-[50%] lg:w-[18rem]  
           `}
-          style={{ height: "calc(100vh - 4rem)" }}>
+          style={{ height: "calc(100vh - 4rem)" }}
+        >
           <div className="h-40 text-center flex flex-col items-center justify-center relative">
             <div className="relative inline-block">
               <img
                 src={
-                  venue && venue.profilepicture ? venue.profilepicture.url : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
+                  venue && venue.profilepicture
+                    ? venue.profilepicture.url
+                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
                 }
                 alt="Venue Profile"
                 className="rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
               />
-              <label className="
+              <label
+                className="
                   absolute bottom-0 right-0 
                   w-7 h-7 sm:w-8 sm:h-8 
                   cursor-pointer flex justify-center items-center 
                   bg-gray-600 rounded-full
-                ">
+                "
+              >
                 <FontAwesomeIcon icon={faEdit} className="text-white text-sm" />
                 <input
                   type="file"
@@ -143,7 +151,9 @@ function VenueUserPage() {
               </label>
             </div>
 
-            <div className="mt-2 text-base sm:text-xl font-serif font-extrabold">{venue ? venue.name.split(" ")[0] : null}</div>
+            <div className="mt-2 text-base sm:text-xl font-serif font-extrabold">
+              {venue ? venue.name.split(" ")[0] : null}
+            </div>
             <div className="h-8 flex items-center justify-center text-xs sm:text-sm">
               {venue && (
                 <>
@@ -157,8 +167,9 @@ function VenueUserPage() {
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-10 mb-2"></div>
           <ul className="space-y-4 flex flex-col items-center p-2">
             <li
-              className={`cursor-pointer p-2 rounded ${activeMenu === "Calendar" ? "bg-gray-600" : ""
-                }`}
+              className={`cursor-pointer p-2 rounded ${
+                activeMenu === "Calendar" ? "bg-gray-600" : ""
+              }`}
               onClick={() => {
                 setActiveMenu("Calendar");
                 setSidebarOpen(false);
@@ -167,8 +178,9 @@ function VenueUserPage() {
               Event Calender
             </li>
             <li
-              className={`cursor-pointer  p-2 rounded ${activeMenu === "Profile" ? "bg-gray-600" : ""
-                }`}
+              className={`cursor-pointer  p-2 rounded ${
+                activeMenu === "Profile" ? "bg-gray-600" : ""
+              }`}
               onClick={() => {
                 setActiveMenu("Profile");
                 setSidebarOpen(false);
@@ -187,7 +199,10 @@ function VenueUserPage() {
           className={`
             flex-1 w-full  lg:ml-[15%] mt-[3.5rem] lg:mt-0
             overflow-y-auto transition-all duration-300
-            ${sidebarOpen && "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "}
+            ${
+              sidebarOpen &&
+              "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
+            }
           `}
         >
           {renderComponent()}
