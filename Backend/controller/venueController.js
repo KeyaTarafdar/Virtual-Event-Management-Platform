@@ -266,7 +266,7 @@ module.exports.updateHallDescription = async (req, res) => {
           description: newHallDescription,
           completePercentage: oldVenue.description
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -402,6 +402,54 @@ module.exports.updateHallMultiday = async (req, res) => {
   }
 };
 
+// Update Hall Projector Facility
+module.exports.updateHallProjector = async (req, res) => {
+  try {
+    let { newHallProjector } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          projector: newHallProjector,
+          completePercentage: oldVenue.projector
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall Projector Facility updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Broadband Facility
+module.exports.updateHallBroadband = async (req, res) => {
+  try {
+    let { newHallBroadband } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          broadband: newHallBroadband,
+          completePercentage: oldVenue.broadband
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall Broadband Facility updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
 // Update Hall timing
 module.exports.updateHallTime = async (req, res) => {
   try {
@@ -450,7 +498,7 @@ module.exports.updateHallType = async (req, res) => {
           hallType: newHalltype,
           completePercentage: oldVenue.hallType
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -474,7 +522,7 @@ module.exports.updateHallOpeningTime = async (req, res) => {
           openingtime: newOpeningTime,
           completePercentage: oldVenue.openingtime
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -498,7 +546,7 @@ module.exports.updateHallClosingTime = async (req, res) => {
           closingtime: newClosingTime,
           completePercentage: oldVenue.closingtime
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -522,7 +570,7 @@ module.exports.updateHall_1stHalfTime = async (req, res) => {
           time_1stHalf: newHall_1stHalfTime,
           completePercentage: oldVenue.time_1stHalf
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -546,7 +594,7 @@ module.exports.updateHall_2ndHalfTime = async (req, res) => {
           time_2ndHalf: newHall_2ndHalfTime,
           completePercentage: oldVenue.time_2ndHalf
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -570,7 +618,7 @@ module.exports.updateHall_fullDayTime = async (req, res) => {
           time_fullDay: newHall_fullDayTime,
           completePercentage: oldVenue.time_fullDay
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -594,7 +642,7 @@ module.exports.updateHall_1stHalfPrice = async (req, res) => {
           bookingPrice_1stHalf: newHall_1stHalfprice,
           completePercentage: oldVenue.bookingPrice_1stHalf
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -622,7 +670,7 @@ module.exports.updateHall_2ndHalfPrice = async (req, res) => {
           bookingPrice_2ndHalf: newHall_2ndHalfprice,
           completePercentage: oldVenue.bookingPrice_2ndHalf
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }
@@ -650,7 +698,7 @@ module.exports.updateHall_fullDayPrice = async (req, res) => {
           bookingPrice_fullDay: newHall_fullDayprice,
           completePercentage: oldVenue.bookingPrice_fullDay
             ? oldVenue.completePercentage
-            : oldVenue.completePercentage + 5,
+            : oldVenue.completePercentage + 10,
         },
       },
       { new: true }

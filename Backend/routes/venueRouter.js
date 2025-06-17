@@ -26,6 +26,8 @@ const {
   updateHallOpeningTime,
   updateHallClosingTime,
   updateHallDescription,
+  updateHallProjector,
+  updateHallBroadband,
 } = require("../controller/venueController");
 
 router.get("/", (req, res) => {
@@ -77,6 +79,12 @@ router.post("/updatehallcapacity", venueIsLoggedIn, updateHallCapacity);
 
 //UPDATE HALL Multiday
 router.post("/updatehallmultiday", venueIsLoggedIn, updateHallMultiday);
+
+//UPDATE HALL Projector
+router.post("/updatehallprojector", venueIsLoggedIn, updateHallProjector);
+
+//UPDATE HALL Broadband
+router.post("/updatehallbroadband", venueIsLoggedIn, updateHallBroadband);
 
 //UPDATE HALL Type
 router.post("/updatehalltype", venueIsLoggedIn, updateHallType);
