@@ -68,7 +68,7 @@ function Venue_Details() {
             <div className="md:w-1/3 w-full flex justify-center md:justify-end px-4 md:px-0">
               <img
                 className="h-52 sm:h-60 md:h-72 w-auto object-cover"
-                src="https://media.istockphoto.com/id/1344107024/photo/a-beautiful-cityscape-of-kolkata-showing-maa-flyover-and-itc-royal-bengal-hotel.jpg?s=1024x1024&w=is&k=20&c=OpHe6wBIW3a-LajbSkTkcTKNcn6gZyvEDu0yK-aH_5E="
+                src={venue?.profilepicture?.url}
                 alt="venuedetails"
               />
             </div>
@@ -79,10 +79,7 @@ function Venue_Details() {
         <section className="bg-white rounded-md p-6 mx-4 sm:mx-auto max-w-4xl w-full mt-6">
           <h2 className="text-lg sm:text-xl font-semibold">About the Hall</h2>
           <p className="mt-2 text-gray-700 text-sm sm:text-base">
-            Our hotel is one of the premium hotels and boasts luxury and comfort
-            for all our guests. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Curabitur non libero vitae nisi tincidunt
-            facilisis.
+            {venue?.description}
           </p>
         </section>
       </div>
