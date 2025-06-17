@@ -290,7 +290,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        let updatedVenue = { ...venue, email: newHallEmail };
+        let updatedVenue = { ...response, email: newHallEmail };
         let token = generateToken(updatedVenue);
 
         res.cookie("token", token, {
@@ -300,7 +300,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        return successResponse_ok(res, "Hall Email updated", updatedVenue);
+        return successResponse_ok(res, "Hall Email updated", updatedVenue._doc);
       })
       .catch((err) => {
         res.send(err.message);
@@ -416,12 +416,12 @@ module.exports.updateHallTime = async (req, res) => {
 // Update Hall type
 module.exports.updateHallType = async (req, res) => {
   try {
-    let { newHallType } = req.body;
+    let { newHalltype } = req.body;
     let venue = req.venue;
 
     venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { hallType: newHallType } },
+      { $set: { hallType: newHalltype } },
       { new: true }
     );
     return successResponse_ok(res, "Hall type updated", venue);
