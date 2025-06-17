@@ -68,11 +68,11 @@ function Venue() {
         </h1>
 
         <div className="h-auto px-8 rounded-[2rem] text-center mt-8 lg:mt-0 ml-12 mr-12">
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+          <div className="flex flex-wrap justify-center items-center gap-5">
             {Array.isArray(allVenues) && 
             allVenues.map((venue) => (
               <Venue_card
-                key={venue._id} name={venue.name} location={venue.address} />
+                key={venue._id} name={venue.name} location={venue.city} />
             ))}
           </div>
         </div>

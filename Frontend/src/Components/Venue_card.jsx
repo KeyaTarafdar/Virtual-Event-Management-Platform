@@ -4,7 +4,7 @@ const Venue_card = ({ name, location, navigateTo = "/venuedetails" }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="pb-1 bg-gradient-to-br from-blue-400 to-blue-900 overflow-hidden rounded-lg shadow-lg">
+    <div className="pb-1  bg-gradient-to-br from-blue-400 to-blue-900 overflow-hidden rounded-lg shadow-lg">
       <div className="p-3">
         <h2 className="text-2xl font-medium text-center font-serif text-white">
           {name}

@@ -312,13 +312,13 @@ function AdminPage() {
                       eventTime={event.time}
                       eventImage={event?.posterImage?.url}
                       venue={
-                        event.eventType === "in_person" || "hybrid"
+                        event.eventType === "in_person" ||event.eventType === "hybrid"
                           ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
                           }`
                           : null
                       }
                       platform={
-                        event.eventType === "virtual" || "hybrid"
+                        event.eventType === "virtual" || event.eventType === "hybrid"
                           ? `${event.platform}`
                           : null
                       }
