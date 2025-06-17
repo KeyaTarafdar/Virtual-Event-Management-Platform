@@ -1,7 +1,30 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AdminPage, CompanyPage, Home, Signup, Login, Forgetpassword, Resetpassword, VirtualEvent, InPersonEvent, HybridEvent, CreateForm, Registrationform, EventPage, Venue, VenueRegisteringPage, VenueUserPage, Venue_Details } from './Pages'
-import { Event_card, CustomCalendar, Venue_card, ScrollToTop } from './Components'
+import {
+  AdminPage,
+  CompanyPage,
+  Home,
+  Signup,
+  Login,
+  Forgetpassword,
+  Resetpassword,
+  VirtualEvent,
+  InPersonEvent,
+  HybridEvent,
+  CreateForm,
+  Registrationform,
+  EventPage,
+  Venue,
+  VenueRegisteringPage,
+  VenueUserPage,
+  Venue_Details,
+} from "./Pages";
+import {
+  Event_card,
+  CustomCalendar,
+  Venue_card,
+  ScrollToTop,
+} from "./Components";
 
 function App() {
   return (

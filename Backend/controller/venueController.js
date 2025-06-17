@@ -417,14 +417,69 @@ module.exports.updateHallTime = async (req, res) => {
 module.exports.updateHallType = async (req, res) => {
   try {
     let { newHalltype } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { hallType: newHalltype } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          hallType: newHalltype,
+          completePercentage: oldVenue.hallType
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall type updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Opening Time
+module.exports.updateHallOpeningTime = async (req, res) => {
+  try {
+    let { newOpeningTime } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          openingtime: newOpeningTime,
+          completePercentage: oldVenue.openingtime
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall opening time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Closing Time
+module.exports.updateHallClosingTime = async (req, res) => {
+  try {
+    let { newClosingTime } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          closingtime: newClosingTime,
+          completePercentage: oldVenue.closingtime
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall closing time updated", venue);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
@@ -434,11 +489,18 @@ module.exports.updateHallType = async (req, res) => {
 module.exports.updateHall_1stHalfTime = async (req, res) => {
   try {
     let { newHall_1stHalfTime } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { time_1stHalf: newHall_1stHalfTime } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          time_1stHalf: newHall_1stHalfTime,
+          completePercentage: oldVenue.time_1stHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall 1st half time updated", venue);
@@ -451,11 +513,18 @@ module.exports.updateHall_1stHalfTime = async (req, res) => {
 module.exports.updateHall_2ndHalfTime = async (req, res) => {
   try {
     let { newHall_2ndHalfTime } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { time_2ndHalf: newHall_2ndHalfTime } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          time_2ndHalf: newHall_2ndHalfTime,
+          completePercentage: oldVenue.time_2ndHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall 2nd half time updated", venue);
@@ -468,11 +537,18 @@ module.exports.updateHall_2ndHalfTime = async (req, res) => {
 module.exports.updateHall_fullDayTime = async (req, res) => {
   try {
     let { newHall_fullDayTime } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { time_fullDay: newHall_fullDayTime } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          time_fullDay: newHall_fullDayTime,
+          completePercentage: oldVenue.time_fullDay
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall full day time updated", venue);
@@ -485,11 +561,18 @@ module.exports.updateHall_fullDayTime = async (req, res) => {
 module.exports.updateHall_1stHalfPrice = async (req, res) => {
   try {
     let { newHall_1stHalfprice } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { bookingPrice_1stHalf: newHall_1stHalfprice } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          bookingPrice_1stHalf: newHall_1stHalfprice,
+          completePercentage: oldVenue.bookingPrice_1stHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(
@@ -506,11 +589,18 @@ module.exports.updateHall_1stHalfPrice = async (req, res) => {
 module.exports.updateHall_2ndHalfPrice = async (req, res) => {
   try {
     let { newHall_2ndHalfprice } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { bookingPrice_2ndHalf: newHall_2ndHalfprice } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          bookingPrice_2ndHalf: newHall_2ndHalfprice,
+          completePercentage: oldVenue.bookingPrice_2ndHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(
@@ -527,11 +617,18 @@ module.exports.updateHall_2ndHalfPrice = async (req, res) => {
 module.exports.updateHall_fullDayPrice = async (req, res) => {
   try {
     let { newHall_fullDayprice } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
     venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { bookingPrice_fullDay: newHall_fullDayprice } },
+      { email: oldVenue.email },
+      {
+        $set: {
+          bookingPrice_fullDay: newHall_fullDayprice,
+          completePercentage: oldVenue.bookingPrice_fullDay
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(

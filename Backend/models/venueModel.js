@@ -53,7 +53,7 @@ const venueSchema = new mongoose.Schema({
 
   completePercentage: {
     type: Number,
-    default: 37,
+    default: 55,
   },
 
   bookedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "event" }],
