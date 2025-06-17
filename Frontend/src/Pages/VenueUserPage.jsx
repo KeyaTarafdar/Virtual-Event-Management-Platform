@@ -1,24 +1,58 @@
 import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
-import { findVenue, uploadVenueProfilePicture } from "../utils/utils";
+import { findVenue } from "../utils/utils";
 import CustomCalendar from "../Components/CustomCalendar";
 import VenueProfile from "../Components/VenueProfile";
 import { AiOutlineEnvironment } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { uploadVenueProfilePicture } from "../utils/utils";
 import { HiDotsVertical, HiX } from "react-icons/hi";
 
 function VenueUserPage() {
   const [activeMenu, setActiveMenu] = useState("");
-  const [venue, setVenue] = useState(null);
-  const [image, setImage] = useState();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const renderComponent = () => {
+    switch (activeMenu) {
+      case "Calendar":
+        return <CustomCalendar />;
+      case "Profile":
+        return <VenueProfile />;
+      default:
+        return (
+          venue &&
+          venue.completePercentage < 100 && (
+            <div
+              style={{
+                backgroundImage:
+                  "url(https://media.istockphoto.com/id/1264684053/photo/abstract-blur-image-background-of-shopping-mall-department-store.jpg?s=612x612&w=0&k=20&c=21gEfKy8-MTYLVvHSvsHexJ4R25ZL1tujMpACxK9zaw=)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className="fixed inset-0 flex items-center justify-center"
+            >
+              <div className="w-[90%] sm:w-[50%] text-center ">
+                <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
+                <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
+                  Please complete your profile 100%!
+                </div>
+              </div>
+            </div>
+          )
+        );
+    }
+  };
+
+  const [venue, setvenue] = useState(null);
 
   useEffect(() => {
     findVenue().then((response) => {
-      setVenue(response);
+      setvenue(response);
     });
   }, []);
+
+  const [image, setImage] = useState();
 
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
@@ -32,95 +66,58 @@ function VenueUserPage() {
   };
 
   const handleImageChange = async (e) => {
-      const file = e.target.files[0];
-  
-      if (file) {
-        const maxSizeInKB = 30;
-  
-        if (file.size > maxSizeInKB * 1024) {
-          alert(`File size should be less than ${maxSizeInKB} KB.`);
-          return;
-        }
-  
-        const imageData = await setFileToBase(file);
-  
-        uploadVenueProfilePicture(imageData).then((response) => {
-          alert(response.message);
-          findVenue().then((response) => {
-            setVenue(response);
-          });
-        });
-  
-      } else {
-        alert("Please Upload an Image");
+    const file = e.target.files[0];
+
+    if (file) {
+      const maxSizeInKB = 30;
+
+      if (file.size > maxSizeInKB * 1024) {
+        alert(`File size should be less than ${maxSizeInKB} KB.`);
         return;
       }
-     
-  };
 
-  const renderComponent = () => {
-    console.log("Venue:", venue);
-    switch (activeMenu) {
-      case "Calendar":
-        return <CustomCalendar />;
-      case "Profile":
-        return <VenueProfile />;
-      default:
-        return (
-          venue &&
-          venue.completePercentage < 100 && (
-           <div
-              style={{
-                backgroundImage:
-                  "url(https://media.istockphoto.com/id/1264684053/photo/abstract-blur-image-background-of-shopping-mall-department-store.jpg?s=612x612&w=0&k=20&c=21gEfKy8-MTYLVvHSvsHexJ4R25ZL1tujMpACxK9zaw=)",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-              className="fixed inset-0 flex items-center justify-center"
-            >
-              <div className="w-[90%] sm:w-[50%] text-center">
-                <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
-                <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
-                  Please complete your profile 100%!
-                </div>
-              </div>
-            </div>
+      const imageData = await setFileToBase(file);
 
-          )
-        );
+      uploadVenueProfilePicture(imageData).then((response) => {
+        alert(response.message);
+        findVenue().then((response) => {
+          setvenue(response);
+        });
+      });
+    } else {
+      alert("Please Upload an Image");
+      return;
     }
   };
 
   return (
     <>
       <Navbar menuItems={[]} />
-
       <div className="flex m-0 p-0 relative">
-      {/* Toggle button */}
-            <div className="sm:block lg:hidden relative z-50 ml-4 mt-2 ">
-              {!sidebarOpen ? (
-                <button
-                  onClick={() => setSidebarOpen(true)}
-                  className="text-4xl text-red-700"
-                  aria-label="Open sidebar"
-                >
-                  <HiDotsVertical />
-                </button>
-              ) : (
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="text-4xl text-red-700"
-                  aria-label="Close sidebar"
-                >
-                  <HiX />
-                </button>
-              )}
-            </div>
-        {/* Sidebar */}
+        <div className="sm:block lg:hidden relative z-50 ml-4 mt-2 ">
+          {!sidebarOpen ? (
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="text-4xl text-red-700"
+              aria-label="Open sidebar"
+            >
+              <HiDotsVertical />
+            </button>
+          ) : (
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="text-4xl text-red-700"
+              aria-label="Close sidebar"
+            >
+              <HiX />
+            </button>
+          )}
+        </div>
+        {/* SIDE BAR */}
         <div
           className={`
             ${sidebarOpen ? "block" : "hidden"} 
-            lg:block fixed z-40 bg-[#081647] text-white p-4 rounded-r-2xl transition-transform ease-in-out duration-300
+            lg:block fixed z-40 bg-[#081647] text-white rounded-r-2xl transition-transform ease-in-out duration-300
             left-0 shadow-2xl p-4 lg:translate-x-0 w-[50%] sm:w-[70%] md:w-[50%] lg:w-[18rem]  
           `}
           style={{ height: "calc(100vh - 4rem)" }}
@@ -129,8 +126,9 @@ function VenueUserPage() {
             <div className="relative inline-block">
               <img
                 src={
-                  venue?.profilepicture?.url ||
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
+                  venue && venue.profilepicture
+                    ? venue.profilepicture.url
+                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
                 }
                 alt="Venue Profile"
                 className="rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
@@ -154,9 +152,8 @@ function VenueUserPage() {
             </div>
 
             <div className="mt-2 text-base sm:text-xl font-serif font-extrabold">
-              {venue ? venue.name.split(" ")[0] : ""}
+              {venue ? venue.name.split(" ")[0] : null}
             </div>
-
             <div className="h-8 flex items-center justify-center text-xs sm:text-sm">
               {venue && (
                 <>
@@ -168,7 +165,6 @@ function VenueUserPage() {
           </div>
 
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-10 mb-2"></div>
-
           <ul className="space-y-4 flex flex-col items-center p-2">
             <li
               className={`cursor-pointer p-2 rounded ${
@@ -179,10 +175,10 @@ function VenueUserPage() {
                 setSidebarOpen(false);
               }}
             >
-              Event Calendar
+              Event Calender
             </li>
             <li
-              className={`cursor-pointer p-2 rounded ${
+              className={`cursor-pointer  p-2 rounded ${
                 activeMenu === "Profile" ? "bg-gray-600" : ""
               }`}
               onClick={() => {
@@ -193,19 +189,20 @@ function VenueUserPage() {
               Venue Profile
             </li>
           </ul>
-
           <div className="mt-10 w-full flex flex-col text-xs items-center">
             <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl"></div>
-            &copy; Eventek 2024.
+            &copy;Eventek2024.
           </div>
         </div>
-
-        {/* Main Content */}
+        {/* MAIN  CONTENT */}
         <div
           className={`
             flex-1 w-full  lg:ml-[15%] mt-[3.5rem] lg:mt-0
             overflow-y-auto transition-all duration-300
-            ${sidebarOpen && "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "}
+            ${
+              sidebarOpen &&
+              "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
+            }
           `}
         >
           {renderComponent()}
@@ -216,10 +213,3 @@ function VenueUserPage() {
 }
 
 export default VenueUserPage;
-
-
-
-
-
-
-

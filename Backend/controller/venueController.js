@@ -242,7 +242,7 @@ module.exports.updateHallName = async (req, res) => {
     let { newHallName } = req.body;
     let venue = req.venue;
 
-    venue = await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
       { $set: { name: newHallName } },
       { new: true }
@@ -259,7 +259,7 @@ module.exports.updateHallCity = async (req, res) => {
     let { newHallCity } = req.body;
     let venue = req.venue;
 
-    venue = await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
       { $set: { city: newHallCity } },
       { new: true }
@@ -279,7 +279,8 @@ module.exports.updateHallEmail = async (req, res) => {
     venueModel
       .findOneAndUpdate(
         { email: venue.email },
-        { $set: { email: newHallEmail } }
+        { $set: { email: newHallEmail } },
+        { new: true }
       )
       .then((response) => {
         res.cookie("token", "", {
@@ -289,7 +290,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        let updatedVenue = { ...venue, email: newHallEmail };
+        let updatedVenue = { ...response, email: newHallEmail };
         let token = generateToken(updatedVenue);
 
         res.cookie("token", token, {
@@ -299,7 +300,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        return successResponse_ok(res, "Hall Email updated", updatedVenue);
+        return successResponse_ok(res, "Hall Email updated", updatedVenue._doc);
       })
       .catch((err) => {
         res.send(err.message);
@@ -363,12 +364,12 @@ module.exports.updateHallCapacity = async (req, res) => {
 // Update Hall Multiday
 module.exports.updateHallMultiday = async (req, res) => {
   try {
-    let { newHallCapacity } = req.body;
+    let { newHallMultiday } = req.body;
     let venue = req.venue;
 
     venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { canOrganizeMultidayEvent: newHallCapacity } },
+      { $set: { canOrganizeMultidayEvent: newHallMultiday } },
       { new: true }
     );
     return successResponse_ok(res, "Hall Multiday Fecility updated", venue);
@@ -415,12 +416,12 @@ module.exports.updateHallTime = async (req, res) => {
 // Update Hall type
 module.exports.updateHallType = async (req, res) => {
   try {
-    let { newHallType } = req.body;
+    let { newHalltype } = req.body;
     let venue = req.venue;
 
     venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { hallType: newHallType } },
+      { $set: { hallType: newHalltype } },
       { new: true }
     );
     return successResponse_ok(res, "Hall type updated", venue);

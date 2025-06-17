@@ -82,7 +82,6 @@ const CompanyPage = () => {
   const { company, setCompany } = useCompany();
   const { user, setUser } = useUser();
 
-
   const handleCreateEventClick = () => {
     navigate("/createform");
   };
@@ -95,7 +94,15 @@ const CompanyPage = () => {
     setSelectedEvent(event);
     setIsTrackModalVisible(true);
   };
-  
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalVisible(false);
+  };
+
   const openUpdateModal = (event) => {
     setSelectedEvent(event);
     setIsUpdateModalVisible(true);
@@ -104,11 +111,6 @@ const CompanyPage = () => {
   const closeTrackModal = () => {
     setIsTrackModalVisible(false);
   };
-  
-  const closeUpdateModal = () => {
-    setIsUpdateModalVisible(false);
-  };
-
 
   const handleOutsideClick = (e) => {
     if (e.target.id === "modal-overlay") {
@@ -206,9 +208,6 @@ const CompanyPage = () => {
     return isSlotConfirmed && currentDate > eventDateObj;
   };
 
-  // const [userProfile, setuserProfile] = useState();
-  // const [createdEvents, setcreatedEvents] = useState([]);
-  // const [appliedEvents, setappliedEvents] = useState([]);
   const [events, setevents] = useState([]);
   const [eventsCopy, seteventsCopy] = useState([]);
 
@@ -497,7 +496,7 @@ const CompanyPage = () => {
                       Track Event
                     </button>
 
-                     <button
+                    <button
                       className="btn1 mt-4 h-12 px-4 bg-indigo-600 text-white font-bold rounded-md w-full sm:w-auto text-sm"
                       onClick={() => openUpdateModal(event)}
                     >
@@ -511,41 +510,43 @@ const CompanyPage = () => {
 
 
         {/* Modal */}
-        {isTrackModalVisible && selectedEvent &&  (
-            <div
-              id="modal-overlay"
-              className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-              onClick={(e) => e.target.id === "modal-overlay" && closeTrackModal()}
-            >
-              <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[50%]">
-                <h2
-                  className="text-gradient1 text-4xl font-bold text-center mb-6"
-                  style={{ fontFamily: '"quick"' }}
-                >
-                  Event Tracker
-                </h2>
-                <div className="relative">
-                  <div className="relative flex flex-col">
-                    {/* Event Created */}
-                    <div className="flex items-center">
-                      <div className="w-4 h-4 rounded-full bg-blue-600 mr-2"></div>
-                      <span className="text-sm xds:text-lg font-bold">
-                        Event Creation
-                      </span>
-                    </div>
-                    <p className="text-green-500 text-sm ml-6 font-bold">
-                      Event created successfully
-                    </p>
-                    <div className="flex items-center ml-6 mt-2">
-                      <FontAwesomeIcon
-                        icon={faCalendarAlt}
-                        className="mr-2 text-gray-500"
-                      />
-                      :
-                      <span className="text-gray-500 text-sm ml-2">
-                        {selectedEvent.createdDate || "N/A"}
-                      </span>
-                    </div>
+        {isTrackModalVisible && selectedEvent && (
+          <div
+            id="modal-overlay"
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            onClick={(e) =>
+              e.target.id === "modal-overlay" && closeTrackModal()
+            }
+          >
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[50%]">
+              <h2
+                className="text-gradient1 text-4xl font-bold text-center mb-6"
+                style={{ fontFamily: '"quick"' }}
+              >
+                Event Tracker
+              </h2>
+              <div className="relative">
+                <div className="relative flex flex-col">
+                  {/* Event Created */}
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 rounded-full bg-blue-600 mr-2"></div>
+                    <span className="text-sm xds:text-lg font-bold">
+                      Event Creation
+                    </span>
+                  </div>
+                  <p className="text-green-500 text-sm ml-6 font-bold">
+                    Event created successfully
+                  </p>
+                  <div className="flex items-center ml-6 mt-2">
+                    <FontAwesomeIcon
+                      icon={faCalendarAlt}
+                      className="mr-2 text-gray-500"
+                    />
+                    :
+                    <span className="text-gray-500 text-sm ml-2">
+                      {selectedEvent.createdDate || "N/A"}
+                    </span>
+                  </div>
 
                     {/* Venue Confirmation (Only for in-person or hybrid) */}
                     {(selectedEvent.type === "in-person" || selectedEvent.type === "hybrid") && (
@@ -765,7 +766,7 @@ const CompanyPage = () => {
               <div className="space-y-2">
                 <label className="block font-semibold">Poster Image</label>
                 <img
-                  src={image || selectedEvent.posterImage?.url}
+                  src={selectedEvent.posterImage?.url}
                   alt="Event Poster"
                   className="w-40 h-auto rounded"
                 />

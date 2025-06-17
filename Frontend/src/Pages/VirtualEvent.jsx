@@ -40,7 +40,6 @@ function VirtualEvent() {
     });
   }, []);
 
-
   const headerMenuItems = [
     { label: "Home", to: "/" },
     { label: "About", to: "/" },
@@ -56,7 +55,10 @@ function VirtualEvent() {
 
         {/* Main Section */}
         <section className="text-center my-8 px-4 sm:px-6 md:px-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif" style={{ fontFamily: "quick" }}>
+          <h1
+            className="text-4xl sm:text-5xl lg:text-6xl text-blue-600 font-bold font-serif"
+            style={{ fontFamily: "quick" }}
+          >
             Virtual Events
           </h1>
 

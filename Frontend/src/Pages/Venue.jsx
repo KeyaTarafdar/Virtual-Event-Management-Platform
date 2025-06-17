@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
@@ -31,14 +31,13 @@ function Venue() {
   //   { id: 10, name: 'Amrutha Castle', location: 'Hyderabad' },
   // ];
 
-    const [allVenues, setallVenues] = useState([]);
+  const [allVenues, setallVenues] = useState([]);
 
   useEffect(() => {
     fetchAllVenues().then((response) => {
       setallVenues(response.data);
     });
   }, []);
-
 
   return (
     <>
@@ -70,17 +69,17 @@ function Venue() {
 
         <div className="w-full rounded-[2rem] text-center mt-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-2 sm:px-4">
-             {Array.isArray(allVenues) && 
-            allVenues.map((venue) => (
-              <Venue_card
-                key={venue._id} name={venue.name} location={venue.city} />
-            ))}
-
+            {Array.isArray(allVenues) &&
+              allVenues.map((venue) => (
+                <Venue_card
+                  key={venue._id}
+                  name={venue.name}
+                  location={venue.city}
+                />
+              ))}
           </div>
         </div>
       </div>
-
-      {/* Footer Section */}
       <div className="m-0 p-0" id="contact">
         <Footer menuItems1={footerMenuItems} />
       </div>
@@ -88,9 +87,3 @@ function Venue() {
   );
 }
 export default Venue;
-
-
-
-
-
-

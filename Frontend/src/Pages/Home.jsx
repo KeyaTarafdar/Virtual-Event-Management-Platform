@@ -1,4 +1,4 @@
-import { useEffect, useState,useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "../Components/Navbar";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
@@ -25,7 +25,7 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 import { fetchLastCreatedEvent, fetchCompanyDetails } from "../utils/utils";
-import { useCompany} from "../context/companyContext/CompanyContext";
+import { useCompany } from "../context/companyContext/CompanyContext";
 import { useUser } from "../context/userContext/UserContext";
 
 const headerMenuItems = [
@@ -54,16 +54,14 @@ export default function Home() {
 
   const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
-  const servicesRef=useRef(null);
-  
-
+  const servicesRef = useRef(null);
 
   const scrollToServices = () => {
     servicesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const user = useUser();
-const isLoggedIn = !!user;
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     fetchLastCreatedEvent().then((response) => {
@@ -88,8 +86,6 @@ const isLoggedIn = !!user;
     );
   }
 
-
-
   return (
     <>
       {/* Navbar ------------------------------------------------------------- */}
@@ -103,7 +99,9 @@ const isLoggedIn = !!user;
         id="services"
         ref={servicesRef}
         className="bg-slate-900 h-auto px-8 rounded-[2rem] text-center mt-8 lg:mt-0 ml-12 mr-12"
-        style={{boxShadow:"rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px",
+        style={{
+          boxShadow:
+            "rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px",
         }}
       >
         <Event_card />
@@ -173,7 +171,9 @@ const isLoggedIn = !!user;
                 Discover Our Key Features
               </h2>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-[25px] lg:pt-5 md:pt-1">
-                Explore the unique features that set us apart from the others. Our platform is designed to cater your every need, ensuring a seamless and successful event experience.
+                Explore the unique features that set us apart from the others.
+                Our platform is designed to cater your every need, ensuring a
+                seamless and successful event experience.
               </p>
 
               <div className="md:absolute 2xl:ml-[-17rem] xl:ml-[-10rem] lg:ml-[-10rem] md:ml-[-8rem] 2xl:mt-[25%] xl:mt-[20%] lg:mt-[21%] md:mt-[30%] sm:m-auto">
@@ -271,5 +271,3 @@ const isLoggedIn = !!user;
     </>
   );
 }
-
-

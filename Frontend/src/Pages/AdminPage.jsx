@@ -22,6 +22,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
@@ -29,6 +30,8 @@ function AdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
   const { company, setCompany } = useCompany();
+  const { admin, setAdmin } = useUser();
+
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
@@ -61,6 +64,10 @@ function AdminPage() {
 
   function handleAcceptVenue(venueId) {
     acceptVenue(venueId).then((response) => {
+      if (response.success) {
+        setAdmin(response.data);
+        sessionStorage.setItem("admin", JSON.stringify(response.data));
+      }
       alert(response.message);
     });
   }
@@ -103,16 +110,14 @@ function AdminPage() {
     const input = document.querySelector(`#${type}Input`).value;
     if (input) {
       console.log(
-        `Searching for ${input} by ${
-          type === "venueName" ? "Venue Name" : "Venue Address"
+        `Searching for ${input} by ${type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
 
       document.querySelector(`#${type}Input`).value = "";
     } else {
       alert(
-        `Please enter a ${
-          type === "venueName" ? "Venue Name" : "Venue Address"
+        `Please enter a ${type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
     }
@@ -284,7 +289,7 @@ function AdminPage() {
       case "Upcoming Events":
         return (
           <>
-            <div className="p-4 flex justify-center w-full min-h-screen bg-white flex-wrap gap-x-4 overflow-x-hidden mt-8">
+            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 scrollbar-hide flex-wrap gap-x-4">
               {Array.isArray(upcomingEvents) && upcomingEvents.length > 0 ? (
                 upcomingEvents.map((event) => (
                   <div key={event.id}>
@@ -297,14 +302,13 @@ function AdminPage() {
                       eventTime={event.time}
                       eventImage={event?.posterImage?.url}
                       venue={
-                        event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                        event.eventType === "in_person" || event.eventType === "hybrid"
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
-                        event.eventType === "virtual" || "hybrid"
+                        event.eventType === "virtual" || event.eventType === "hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -325,7 +329,7 @@ function AdminPage() {
       case "Past Events":
         return (
           <>
-            <div className="p-4 flex justify-center  min-h-screen overflow-x-hidden w-full  flex-wrap gap-x-4 mt-8">
+            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden scrollbar-hide w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
               {Array.isArray(pastEvents) && pastEvents.length > 0 ? (
                 pastEvents.map((event) => (
                   <div key={event.id}>
@@ -338,14 +342,13 @@ function AdminPage() {
                       eventTime={event.time}
                       eventImage={event?.posterImage?.url}
                       venue={
-                        event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                        event.eventType === "in_person" ||event.eventType === "hybrid"
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
-                        event.eventType === "virtual" || "hybrid"
+                        event.eventType === "virtual" || event.eventType === "hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -640,15 +643,15 @@ function AdminPage() {
     }
   };
 
-  const [admin, setadmin] = useState(null);
+  const [adminuser, setadminuser] = useState(null);
   const [venueRequests, setvenueRequests] = useState([]);
   const [allVenues, setallVenues] = useState([]);
   const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
-    if (!admin) {
+    if (!adminuser) {
       findAdmin().then((response) => {
-        setadmin(response);
+        setadminuser(response);
         setvenueRequests(response.appliedVenues);
       });
     }
@@ -712,8 +715,8 @@ function AdminPage() {
           >
             <div className="w-full flex justify-center pt-3">
               <img
-                className="rounded-full h-24 w-24 border-4 border-indigo-400"
-                src={admin ? (admin.image ? admin.image.url : null) : null}
+                className="rounded-full h-32 w-32 border-[.4rem] border-indigo-400"
+                src={adminuser ? (adminuser.image ? adminuser.image.url : null) : null}
                 alt="admin image"
               ></img>
               <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
@@ -735,24 +738,42 @@ function AdminPage() {
 
             <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
 
-            <ul className="space-y-3 text-center text-sm">
-              {[
-                "Home",
-                "Venue Requests",
-                "Upcoming Events",
-                "Past Events",
-                "Venue Details",
-              ].map((item) => (
-                <li
-                  key={item}
-                  onClick={() => setActiveMenu(item)}
-                  className={`cursor-pointer p-2 rounded ${
-                    activeMenu === item ? "bg-gray-600" : ""
+            <ul className="space-y-4 p-2 flex flex-col items-center">
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Home" ? "bg-gray-600" : ""
                   }`}
-                >
-                  {item}
-                </li>
-              ))}
+                onClick={() => setActiveMenu("Home")}
+              >
+                Home
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Requests" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Venue Requests")}
+              >
+                Requested Venue
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Upcoming Events")}
+              >
+                Upcoming Events
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Past Events" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Past Events")}
+              >
+                Past Events
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Details" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => setActiveMenu("Venue Details")}
+              >
+                Venue Details
+              </li>
             </ul>
             {/* <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center"> */}
             <div className="mt-10 text-xs text-center border-t pt-2">
@@ -770,11 +791,7 @@ function AdminPage() {
             </button>
           </div>
           {/* Main content */}
-          <div
-            className={`flex-1 w-full lg:ml-[18rem] transition-all overflow-x-hidden ${
-              menuVisible ? "blur-sm lg:blur-none" : ""
-            }`}
-          >
+          <div className="w-[100%] ml-[13rem] overflow-y-auto scrollbar-hide">
             {renderComponent()}
           </div>
         </div>

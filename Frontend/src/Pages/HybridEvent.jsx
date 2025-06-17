@@ -41,6 +41,7 @@ function HybridEvent() {
         );
       } else {
         alert(events.message);
+        
       }
     });
   }, []);

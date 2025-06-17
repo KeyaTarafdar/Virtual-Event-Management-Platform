@@ -26,8 +26,10 @@ export const logoutUser = async () => {
     });
     if (data.success) {
       if (data.message.includes("User")) sessionStorage.removeItem("user");
-      else if (data.message.includes("Admin")) sessionStorage.removeItem("admin");
-      else if (data.message.includes("Venue")) sessionStorage.removeItem("venue");
+      else if (data.message.includes("Admin"))
+        sessionStorage.removeItem("admin");
+      else if (data.message.includes("Venue"))
+        sessionStorage.removeItem("venue");
     } else {
       alert(data.message);
     }
@@ -456,7 +458,7 @@ export const updateHallTime_1st = async (newHalltime1st) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallTime_1st",
-      { newHalltime1st },
+      { newHall_1stHalfTime: newHalltime1st },
       { withCredentials: true }
     );
     return data;
@@ -478,6 +480,7 @@ export const updateHallTime_2nd = async (newHalltime2nd) => {
     console.log(err.message);
   }
 };
+
 // Update Venue time fullday
 export const updateHallTime_fullday = async (newHalltimefullday) => {
   try {
@@ -491,12 +494,13 @@ export const updateHallTime_fullday = async (newHalltimefullday) => {
     console.log(err.message);
   }
 };
+
 // Update Venue hallprice_1
-export const updateHallPrice_1st = async (newHallprice1) => {
+export const updateHallPrice_1st = async (newHall_1stHalfprice) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallPrice_1st",
-      { newHallprice1 },
+      { newHall_1stHalfprice },
       { withCredentials: true }
     );
     return data;
@@ -504,6 +508,7 @@ export const updateHallPrice_1st = async (newHallprice1) => {
     console.log(err.message);
   }
 };
+
 // Update Venue hallPrice_2
 export const updateHallPrice_2nd = async (newHallprice2) => {
   try {
@@ -517,6 +522,7 @@ export const updateHallPrice_2nd = async (newHallprice2) => {
     console.log(err.message);
   }
 };
+
 // Update Venue hallPrice_fullday
 export const updateHallPrice_fullday = async (newHallpricefull) => {
   try {
@@ -530,6 +536,7 @@ export const updateHallPrice_fullday = async (newHallpricefull) => {
     console.log(err.message);
   }
 };
+
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 
 // Admin Login
