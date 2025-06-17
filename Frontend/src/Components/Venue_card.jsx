@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Venue_card = ({ name, location, navigateTo = "/venuedetails" }) => {
