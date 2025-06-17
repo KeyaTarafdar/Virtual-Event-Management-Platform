@@ -53,7 +53,7 @@ const companiesData = [
     rating: 3,
   },
   {
-    logo: 'https://telavergecommunications.com/wp-content/uploads/2022/09/telaverge-home.png',
+    logo: 'https://animationvisarts.com/wp-content/uploads/2016/10/tata-logo-design.jpg',
     rating: 2,
   },
   {
