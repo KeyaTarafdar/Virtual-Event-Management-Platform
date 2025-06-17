@@ -22,7 +22,7 @@ function VenueUserPage() {
       default:
         return (
           venue &&
-          venue.completePercentage < 100 && (
+          (
             <div
               style={{
                 backgroundImage:
@@ -34,9 +34,9 @@ function VenueUserPage() {
             >
               <div className="w-[90%] sm:w-[50%] text-center ">
                 <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
-                <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
+                {venue.completePercentage < 100 && <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
                   Please complete your profile 100%!
-                </div>
+                </div>}
               </div>
             </div>
           )
