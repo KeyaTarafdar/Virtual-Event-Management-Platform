@@ -16,6 +16,7 @@ const {
   // updateCompanyEmail,
   // updateCompanyDescription,
   updateCompanyInfo,
+  fetchAllEvents,
 } = require("../controller/adminController");
 
 router.get("/", (req, res) => {
@@ -63,5 +64,8 @@ router.post("/rejectvenue", adminIsLoggedIn, rejectVenue);
 
 // FETCH ALL VENUE
 router.get("/fetchallvenue", adminIsLoggedIn, fetchAllVenue);
+
+// FETCH ALL EVENTS
+router.get("/fetchallevents", adminIsLoggedIn, fetchAllEvents);
 
 module.exports = router;

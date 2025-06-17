@@ -255,8 +255,8 @@ function AdminPage() {
         return (
           <>
             <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
-              {Array.isArray(allEvents) && allEvents.length > 0 ? (
-                allEvents.map((event) => (
+              {Array.isArray(upcomingEvents) && upcomingEvents.length > 0 ? (
+                upcomingEvents.map((event) => (
                   <div key={event.id}>
                     <BookingCard
                       eventName={event.eventName}
@@ -265,7 +265,7 @@ function AdminPage() {
                         event.eventEndDate ? event.eventEndDate : null
                       }
                       eventTime={event.time}
-                      eventImage={event.posterImage.url}
+                      eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
                           ? `${event.hallName ? `${event.hallName}, ` : ""} ${
@@ -296,8 +296,8 @@ function AdminPage() {
         return (
           <>
             <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
-              {Array.isArray(allEvents) && allEvents.length > 0 ? (
-                allEvents.map((event) => (
+              {Array.isArray(pastEvents) && pastEvents.length > 0 ? (
+                pastEvents.map((event) => (
                   <div key={event.id}>
                     <BookingCard
                       eventName={event.eventName}
@@ -306,7 +306,7 @@ function AdminPage() {
                         event.eventEndDate ? event.eventEndDate : null
                       }
                       eventTime={event.time}
-                      eventImage={event.posterImage.url}
+                      eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
                           ? `${event.hallName ? `${event.hallName}, ` : ""} ${
@@ -653,13 +653,26 @@ function AdminPage() {
     }
   }, []);
 
+  const [upcomingEvents, setupcomingEvents] = useState([]);
+  const [pastEvents, setpastEvents] = useState([]);
+
   useEffect(() => {
     fetchAllVenues().then((response) => {
       setallVenues(response.data);
     });
 
     fetchAllEvents().then((response) => {
-      setallEvents(response);
+      setallEvents(response.data);
+      const today = new Date();
+      const upcoming = response.data.filter(
+        (event) => new Date(event.date) > today
+      );
+      setupcomingEvents(upcoming);
+
+      const pastEvents = response.data.filter(
+        (event) => new Date(event.date) < today
+      );
+      setpastEvents(pastEvents);
     });
   }, []);
 

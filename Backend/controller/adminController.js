@@ -455,3 +455,13 @@ module.exports.fetchAllVenue = async (req, res) => {
     return errorResponse_catchError(res, err.message);
   }
 };
+
+// Fetch All Events
+module.exports.fetchAllEvents = async (req, res) => {
+  try {
+    let events = await eventModel.find();
+    return successResponse_ok(res, "All events fetched successfully", events);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};

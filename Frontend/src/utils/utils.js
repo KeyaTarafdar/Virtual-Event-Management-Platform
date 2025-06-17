@@ -611,7 +611,7 @@ export const rejectVenue = async (venueId, reason) => {
 export const fetchAllEvents = async () => {
   try {
     let { data } = await axios.get(
-      "http://localhost:8000/admins/fetchallvenue",
+      "http://localhost:8000/admins/fetchallevents",
       {
         withCredentials: true,
       }
