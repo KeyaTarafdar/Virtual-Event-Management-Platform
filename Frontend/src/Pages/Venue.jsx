@@ -1,8 +1,9 @@
-import React from "react";
+import { useState,useEffect } from "react";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
 import Venue_card from "../Components/Venue_card";
+import { fetchAllVenues } from "../utils/utils";
 
 const footerMenuItems = [
   { href: "header", label: "Header", icon: AiFillHome },
@@ -17,18 +18,27 @@ function Venue() {
     { label: "Contact", href: "contact" },
   ];
 
-  const venues = [
-    { id: 1, name: 'ITC Royal Bengal', location: 'Kolkata' },
-    { id: 2, name: 'The Grand Oberoi', location: 'Kolkata' },
-    { id: 3, name: 'JW Marriott', location: 'Kolkata' },
-    { id: 4, name: 'The Leela Palace', location: 'Bangalore' },
-    { id: 5, name: 'Taj West End', location: 'Bangalore' },
-    { id: 6, name: 'Conrad Pune', location: 'Pune' },
-    { id: 7, name: 'Shantai Hotel', location: 'Pune' },
-    { id: 8, name: 'Lemon Tree Hotel', location: 'Pune' },
-    { id: 9, name: 'NovotelHyderabad', location: 'Hyderabad' },
-    { id: 10, name: 'Amrutha Castle', location: 'Hyderabad' },
-  ];
+  // const venues = [
+  //   { id: 1, name: 'ITC Royal Bengal', location: 'Kolkata' },
+  //   { id: 2, name: 'The Grand Oberoi', location: 'Kolkata' },
+  //   { id: 3, name: 'JW Marriott', location: 'Kolkata' },
+  //   { id: 4, name: 'The Leela Palace', location: 'Bangalore' },
+  //   { id: 5, name: 'Taj West End', location: 'Bangalore' },
+  //   { id: 6, name: 'Conrad Pune', location: 'Pune' },
+  //   { id: 7, name: 'Shantai Hotel', location: 'Pune' },
+  //   { id: 8, name: 'Lemon Tree Hotel', location: 'Pune' },
+  //   { id: 9, name: 'NovotelHyderabad', location: 'Hyderabad' },
+  //   { id: 10, name: 'Amrutha Castle', location: 'Hyderabad' },
+  // ];
+
+    const [allVenues, setallVenues] = useState([]);
+
+  useEffect(() => {
+    fetchAllVenues().then((response) => {
+      setallVenues(response.data);
+    });
+  }, []);
+
 
   return (
     <>
@@ -60,13 +70,12 @@ function Venue() {
 
         <div className="w-full rounded-[2rem] text-center mt-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-2 sm:px-4">
-            {venues.map((Venue) => (
+             {Array.isArray(allVenues) && 
+            allVenues.map((venue) => (
               <Venue_card
-                key={Venue.id}
-                name={Venue.name}
-                location={Venue.location}
-              />
+                key={venue._id} name={venue.name} location={venue.city} />
             ))}
+
           </div>
         </div>
       </div>
@@ -79,3 +88,9 @@ function Venue() {
   );
 }
 export default Venue;
+
+
+
+
+
+

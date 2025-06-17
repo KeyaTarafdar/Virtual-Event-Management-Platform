@@ -3,27 +3,36 @@ import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {findAdmin, acceptVenue, fetchAllVenues,fetchAllEvents,uploadProfilePictureAdmin,rejectVenue,fetchCompanyDetails} from "../utils/utils";
-import {faCalendarCheck,faGlobe,faUsers,faTimes,faEllipsisV,faEdit } from "@fortawesome/free-solid-svg-icons";
+import {
+  findAdmin,
+  acceptVenue,
+  fetchAllVenues,
+  fetchAllEvents,
+  uploadProfilePictureAdmin,
+  rejectVenue,
+  fetchCompanyDetails,
+  updateCompanyInfo,
+} from "../utils/utils";
+import {
+  faCalendarCheck,
+  faGlobe,
+  faUsers,
+  faTimes,
+  faEllipsisV,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import { useCompany } from "../context/companyContext/CompanyContext";
-import { useUser } from "../context/userContext/UserContext";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
   const [menuVisible, setMenuVisible] = useState(false);
-  const [image, setImage] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
-  const [allVenues, setallVenues] = useState([]);
-  const [allEvents, setallEvents] = useState([]);
   const { company, setCompany } = useCompany();
-  const { admin, setAdmin } = useUser();
-
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
   };
-   
   useEffect(() => {
     if (menuVisible) {
       document.body.style.overflow = "hidden";
@@ -52,14 +61,9 @@ function AdminPage() {
 
   function handleAcceptVenue(venueId) {
     acceptVenue(venueId).then((response) => {
-      if (response.success) {
-        setAdmin(response.data);
-        sessionStorage.setItem("admin",JSON.stringify(response.data));
-      }
       alert(response.message);
     });
   }
-
 
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
@@ -71,10 +75,10 @@ function AdminPage() {
       };
     });
   };
+  const [image, setImage] = useState();
 
- async function handleImageChange(e) {
+  async function handleImageChange(e) {
     const file = e.target.files[0];
-
 
     if (file) {
       const maxSizeInKB = 30;
@@ -93,7 +97,7 @@ function AdminPage() {
       alert("Please Upload an Image");
       return;
     }
-  };
+  }
 
   const handleSearch = (type) => {
     const input = document.querySelector(`#${type}Input`).value;
@@ -104,7 +108,7 @@ function AdminPage() {
         }`
       );
 
-      document.querySelector(`#${type}Input`).value = ""; 
+      document.querySelector(`#${type}Input`).value = "";
     } else {
       alert(
         `Please enter a ${
@@ -127,7 +131,6 @@ function AdminPage() {
     description: "",
   });
 
-
   const [editMode, setEditMode] = useState({
     companyName: false,
     address: false,
@@ -135,7 +138,6 @@ function AdminPage() {
     contact: false,
     description: false,
   });
-
 
   const handleEditToggle = (field) => {
     if (editMode[field]) {
@@ -154,7 +156,6 @@ function AdminPage() {
     }));
   };
 
-
   const handleFieldChange = (e, field) => {
     setFields((prev) => ({
       ...prev,
@@ -164,124 +165,142 @@ function AdminPage() {
 
   const renderComponent = () => {
     switch (activeMenu) {
-    case "Venue Requests":
-      return (
-        <>
-          {venueRequests.length > 0 ? (
-            venueRequests.map((venue) => (
-              <div className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
-                {/* CARD */}
-                <div
-                  key={venue._id}
-                  className="mt-[3rem] w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
-                >
-                  {/* LEFT SIDE: VENUE INFO */}
-                  <div className="flex flex-col md:w-3/4 sm:border-r-4 sm:border-blue-600 mr-4">
-                    <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 pb-2 sm:pb-3 font-serif">
-                      <span className="font-medium">Venue Name :</span> {venue.name}
-                    </h2>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      <span className="font-bold text-blue-600 font-serif">Email :</span> {venue.email}
-                    </p>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      <span className="font-bold text-blue-600 font-serif">Contact :</span> {venue.contact}
-                    </p>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      <span className="font-bold text-blue-600 font-serif">City :</span> {venue.city}
-                    </p>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      <span className="font-bold text-blue-600 font-serif">Address :</span> {venue.address}
-                    </p>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      <span className="font-bold text-blue-600 font-serif">Multiday Event :</span>{" "}
-                      {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
-                    </p>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      <span className="font-bold text-blue-600 font-serif">Max Headcount :</span>{" "}
-                      {venue.maxCapacity}
-                    </p>
-                  </div>
+      case "Venue Requests":
+        return (
+          <>
+            {venueRequests.length > 0 ? (
+              venueRequests.map((venue) => (
+                <div className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
+                  <div
+                    key={venue._id}
+                    className="mt-[3rem] w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
+                  >
+                    <div className="flex flex-col md:w-3/4 sm:border-r-4 sm:border-blue-600 mr-4">
+                      <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 pb-2 sm:pb-3 font-serif">
+                        <span className="font-medium">Venue Name:</span>{" "}
+                        {venue.name}
+                      </h2>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Email:
+                        </span>{" "}
+                        {venue.email}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Contact:
+                        </span>{" "}
+                        {venue.contact}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          City:
+                        </span>{" "}
+                        {venue.city}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Address:
+                        </span>{" "}
+                        {venue.address}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Multiday Event:
+                        </span>{" "}
+                        {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        <span className="font-bold text-blue-600 font-serif">
+                          Max Headcount:
+                        </span>{" "}
+                        {venue.maxCapacity}
+                      </p>
+                    </div>
 
-                  {/* RIGHT SIDE: ACTION BUTTONS */}
-                  <div className="flex flex-col sm:flex-row md:flex-col gap-3 sm:gap-4 md:gap-5 md:mr-3 mt-4 md:mt-0 text-white md:w-1/4 w-full sm:w-auto ">
-                    <button
-                      className="border-2 rounded-lg bg-green-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-green-600 hover:border-green-600 transition duration-300 ease-in-out"
-                      onClick={() => {
-                        handleAcceptVenue(venue._id);
-                      }}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="border-2 rounded-lg bg-red-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-red-600 hover:border-red-600 transition duration-300 ease-in-out"
-                      onClick={handleReject}
-                    >
-                      Reject
-                    </button>
+                    <div className="flex flex-col sm:flex-row md:flex-col gap-3 sm:gap-4 md:gap-5 md:mr-3 mt-4 md:mt-0 text-white md:w-1/4 w-full sm:w-auto">
+                      <button
+                        className="border-2 rounded-lg bg-green-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-green-600 hover:border-green-600 transition duration-300 ease-in-out"
+                        onClick={() => {
+                          handleAcceptVenue(venue._id);
+                        }}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="border-2 rounded-lg bg-red-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-red-600 hover:border-red-600 transition duration-300 ease-in-out"
+                        onClick={handleReject}
+                      >
+                        Reject
+                      </button>
 
-                    {isModalOpen && (
-                      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-5 sm:p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
-                          <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-800">
-                            Enter Rejection Reason
-                          </h2>
-                          <textarea
-                            className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
-                            rows="4"
-                            placeholder="Enter your reason here..."
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value)}
-                          />
-                          <div className="flex justify-end mt-4 gap-2">
-                            <button
-                              className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
-                              onClick={handleCloseModal}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
-                              onClick={() => {
-                                handleSubmitReason(venue._id, reason);
-                              }}
-                            >
-                              Submit
-                            </button>
+                      {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                          <div className="bg-white p-5 sm:p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
+                            <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-800">
+                              Enter Rejection Reason
+                            </h2>
+                            <textarea
+                              className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
+                              rows="4"
+                              placeholder="Enter your reason here..."
+                              value={reason}
+                              onChange={(e) => setReason(e.target.value)}
+                            />
+                            <div className="flex justify-end mt-4 gap-2">
+                              <button
+                                className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
+                                onClick={handleCloseModal}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
+                                onClick={() => {
+                                  handleSubmitReason(venue._id, reason);
+                                }}
+                              >
+                                Submit
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="flex justify-center items-center h-screen bg-gray-100">
+                <img
+                  className="h-80 w-80"
+                  src="https://new4you.in/img/no_products_found.png"
+                />
               </div>
-            ))
-          ) : (
-            <div className="flex justify-center items-center h-screen bg-gray-100">
-              <img
-                className="h-80 w-80"
-                src="https://new4you.in/img/no_products_found.png"
-              />
-            </div>
-          )}
-        </>
-      );
+            )}
+          </>
+        );
 
-    case "Upcoming Events":
-      return (
+      case "Upcoming Events":
+        return (
           <>
             <div className="p-4 flex justify-center w-full min-h-screen bg-white flex-wrap gap-x-4 overflow-x-hidden mt-8">
-              {Array.isArray(allEvents) && allEvents.length > 0 ? (
-                allEvents.map((event) => (
+              {Array.isArray(upcomingEvents) && upcomingEvents.length > 0 ? (
+                upcomingEvents.map((event) => (
                   <div key={event.id}>
                     <BookingCard
                       eventName={event.eventName}
                       eventStartingDate={formatDate(event.date)}
-                      eventEndingDate={event.eventEndDate ? event.eventEndDate : null}
+                      eventEndingDate={
+                        event.eventEndDate ? event.eventEndDate : null
+                      }
                       eventTime={event.time}
-                      eventImage={event.posterImage.url}
+                      eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city}`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
+                              event.city
+                            }`
                           : null
                       }
                       platform={
@@ -301,13 +320,12 @@ function AdminPage() {
               )}
             </div>
           </>
-      );
+        );
 
-
-    case "Past Events":
+      case "Past Events":
         return (
           <>
-            <div className="p-4 flex justify-center overflow-y-scroll overflow-x-hidden scrollbar-hide w-full h-[92vh] bg-gray-100 flex-wrap gap-x-4">
+            <div className="p-4 flex justify-center  min-h-screen overflow-x-hidden w-full  flex-wrap gap-x-4 mt-8">
               {Array.isArray(pastEvents) && pastEvents.length > 0 ? (
                 pastEvents.map((event) => (
                   <div key={event.id}>
@@ -321,12 +339,13 @@ function AdminPage() {
                       eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" || "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
-                          }`
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
+                              event.city
+                            }`
                           : null
                       }
                       platform={
-                        event.eventType === "virtual" || event.eventType ==="hybrid"
+                        event.eventType === "virtual" || "hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -343,57 +362,64 @@ function AdminPage() {
             </div>
           </>
         );
-                
 
       case "Venue Details":
         return (
           <>
-            <div className="flex items-center p-5 ">
-              {/* Search by Venue Name */}
-              <div className="flex items-center">
-                <h3 className="mr-4 font-serif font-bold">
-                  Search by Venue Name :{" "}
-                </h3>
-                <input
-                  type="text"
-                  id="venueNameInput"
-                  className="p-2 border border-gray-500 rounded-md"
-                  placeholder="Enter Venue Name"
-                />
-                <button
-                  className="ml-2 p-2 bg-blue-800 text-white rounded-md"
-                  onClick={() => handleSearch("venueName")}
-                >
-                  <AiOutlineSearch />
-                </button>
+            <div className="flex w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden ">
+              {/* Top search bar */}
+              <div className="flex items-center p-5 flex-col lg:flex-row w-full h-[20%]">
+                {/* Search by Venue Name */}
+                <div className="flex items-center flex-col sm:flex-row gap-y-4">
+                  <h3 className="mr-4 font-serif font-bold">
+                    Search by Venue Name :
+                  </h3>
+                  <div>
+                    <input
+                      type="text"
+                      id="venueNameInput"
+                      className="p-2 border border-gray-500 rounded-md"
+                      placeholder="Enter Venue Name"
+                    />
+                    <button
+                      className="ml-2 p-2 bg-blue-800 text-white rounded-md"
+                      onClick={() => handleSearch("venueName")}
+                    >
+                      <AiOutlineSearch />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="hidden lg:block lg:bg-yellow-500 lg:rounded-lg lg:w-1 lg:h-12 lg:ml-8 lg:mr-8"></div>
+                <div className="lg:hidden bg-yellow-500 rounded-lg w-[90%] mt-4 mb-4 h-1 ml-8 mr-8"></div>
+
+                {/* Search by Venue Address */}
+                <div className="flex items-center flex-col sm:flex-row gap-y-4">
+                  <h3 className="mr-4 font-serif font-bold">
+                    Search by Venue Address :
+                  </h3>
+                  <div>
+                    <input
+                      type="text"
+                      id="venueAddressInput"
+                      className="p-2 border border-gray-500 rounded-md"
+                      placeholder="Enter Venue Address"
+                    />
+                    <button
+                      className="ml-2 p-2 bg-blue-800 text-white rounded-md"
+                      onClick={() => handleSearch("venueAddress")}
+                    >
+                      <AiOutlineSearch />
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div className="bg-yellow-500 rounded-lg w-1 h-12 ml-8 mr-8"></div>
-              {/* Search by Venue Address */}
-              <div className="flex items-center">
-                <h3 className="mr-4 font-serif font-bold">
-                  Search by Venue Address :{" "}
-                </h3>
-                <input
-                  type="text"
-                  id="venueAddressInput"
-                  className="p-2 border border-gray-500 rounded-md"
-                  placeholder="Enter Venue Address"
-                />
-                <button
-                  className="ml-2 p-2 bg-blue-800 text-white rounded-md"
-                  onClick={() => handleSearch("venueAddress")}
-                >
-                  <AiOutlineSearch />
-                </button>
-              </div>
-            </div>
-
-            <div className=" max-w-[200rem] h-[92vh] text-center mt-[0.6px]">
-              <div>
-                <table className="w-full table-fixed">
-                  <thead className=" sticky top-0 bg-black text-white">
-                    <tr className="">
+              {/* Scrollable table container */}
+              <div className="w-full overflow-x-auto  px-4 ">
+                <table className="min-w-[120rem] table-fixed">
+                  <thead className="sticky top-0 bg-black text-white">
+                    <tr>
                       <th className="w-[5rem] border-2 border-white">Sl No.</th>
                       <th className="w-[15rem] border-2 border-white">
                         Venue Name
@@ -445,147 +471,179 @@ function AdminPage() {
                       </th>
                     </tr>
                   </thead>
-
-                      <tbody>
-                        {Array.isArray(allVenues) &&
-                          allVenues.map((venue, index) => (
-                            <tr key={venue._id}>
-                              <td className="border-2 p-2">{index + 1}</td>
-                              <td className="border-2 p-2">{venue.name}</td>
-                              <td className="border-2 p-2">{venue.ownerName}</td>
-                              <td className="border-2 p-2">{venue.email}</td>
-                              <td className="border-2 p-2">{venue.contact}</td>
-                              <td className="border-2 p-2">{venue.city}</td>
-                              <td className="border-2 p-2">{venue.address}</td>
-                              <td className="border-2 p-2">
-                                {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
-                              </td>
-                              <td className="border-2 p-2">{venue.maxCapacity}</td>
-                              <td className="border-2 p-2">{venue.openingtime}</td>
-                              <td className="border-2 p-2">{venue.closingtime}</td>
-                              <td className="border-2 p-2">{venue.firstHalfTiming}</td>
-                              <td className="border-2 p-2">{venue.firstHalfPrice}</td>
-                              <td className="border-2 p-2">{venue.secondHalfTiming}</td>
-                              <td className="border-2 p-2">{venue.secondHalfPrice}</td>
-                              <td className="border-2 p-2">{venue.fullDayTiming}</td>
-                              <td className="border-2 p-2">{venue.fullDayPrice}</td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-              </div>    
-            </>
-      );
-
-
-    case "Home":
-      return (
-        <div className="bg-white min-h-screen overflow-x-hidden">
-          {/* Header with clip-path */}
-              <div
-                className="p-6 bg-gradient-to-r from-blue-200 to-indigo-500 h-44 text-white"
-                style={{
-                  clipPath:
-                    "polygon(100% 0%, 0% 0%, 0% 65%, 100% 52.4%)",
-                }}
-              >
-                <h1 className="text-5xl font-serif font-bold text-gradient2 mt-[1.7rem]" style={{ fontFamily: '"quick"' }}>Welcome Admin...</h1>
+                  <tbody>
+                    {Array.isArray(allVenues) &&
+                      allVenues.map((venue, index) => (
+                        <tr key={venue._id}>
+                          <td className="border-2 p-2">{index + 1}</td>
+                          <td className="border-2 p-2">{venue.name}</td>
+                          <td className="border-2 p-2">{venue.owner}</td>
+                          <td className="border-2 p-2">{venue.email}</td>
+                          <td className="border-2 p-2">{venue.contact}</td>
+                          <td className="border-2 p-2">{venue.city}</td>
+                          <td className="border-2 p-2">{venue.address}</td>
+                          <td className="border-2 p-2">
+                            {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
+                          </td>
+                          <td className="border-2 p-2">{venue.maxCapacity}</td>
+                          <td className="border-2 p-2">{venue.openingtime}</td>
+                          <td className="border-2 p-2">{venue.closingtime}</td>
+                          <td className="border-2 p-2">
+                            {venue.firstHalfTiming}
+                          </td>
+                          <td className="border-2 p-2">
+                            {venue.firstHalfPrice}
+                          </td>
+                          <td className="border-2 p-2">
+                            {venue.secondHalfTiming}
+                          </td>
+                          <td className="border-2 p-2">
+                            {venue.secondHalfPrice}
+                          </td>
+                          <td className="border-2 p-2">
+                            {venue.fullDayTiming}
+                          </td>
+                          <td className="border-2 p-2">{venue.fullDayPrice}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </div>
+            </div>
+          </>
+        );
 
-          {/* Main content container */}
-              <div className="max-w-6xl mx-auto -mt-20 px-4 pb-10">
-                <div className="bg-yellow-100 border-2 border-yellow-500 rounded-lg p-6 shadow-2xl">
-                  <h2 className="text-center text-2xl font-serif font-bold mb-6">Company Information</h2>
+      case "Home":
+        return (
+          <div className="bg-white min-h-screen overflow-x-hidden">
+            {/* Header with clip-path */}
+            <div
+              className="p-6 bg-gradient-to-r from-blue-200 to-indigo-500 h-44 text-white"
+              style={{
+                clipPath: "polygon(100% 0%, 0% 0%, 0% 65%, 100% 52.4%)",
+              }}
+            >
+              <h1
+                className="text-5xl font-serif font-bold text-gradient2 mt-[1.7rem]"
+                style={{ fontFamily: '"quick"' }}
+              >
+                Welcome Admin...
+              </h1>
+            </div>
 
-                  <div className="flex flex-col md:flex-row gap-8">
-                    {/* Company details */}
-                    <div className="flex-1 bg-white p-4 border-2 border-gray-400 rounded-md shadow-2xl">
-                      <h3 className="text-center text-lg font-serif font-semibold mb-4">Company Details</h3>
-                      <div className="space-y-6">
-                        {Object.entries(fields).map(([key, value]) => (
-                          <div key={key} className="flex justify-between items-center bg-gray-200 p-3 rounded shadow">
+            {/* Main content container */}
+            <div className="max-w-6xl mx-auto -mt-20 px-4 pb-10">
+              <div className="bg-yellow-100 border-2 border-yellow-500 rounded-lg p-6 shadow-2xl">
+                <h2 className="text-center text-2xl font-serif font-bold mb-6">
+                  Company Information
+                </h2>
+
+                <div className="flex flex-col md:flex-row gap-8">
+                  {/* Company details */}
+                  <div className="flex-1 bg-white p-4 border-2 border-gray-400 rounded-md shadow-2xl">
+                    <h3 className="text-center text-lg font-serif font-semibold mb-4">
+                      Company Details
+                    </h3>
+                    <div className="space-y-6">
+                      {Object.entries(fields).map(([key, value]) => (
+                        <div
+                          key={key}
+                          className="flex justify-between items-center bg-gray-200 p-3 rounded shadow"
+                        >
+                          {editMode[key] ? (
+                            <input
+                              type="text"
+                              value={value}
+                              onChange={(e) => handleFieldChange(e, key)}
+                              className="flex-1 p-1 border rounded"
+                            />
+                          ) : (
+                            <p>
+                              <span className="font-medium capitalize">
+                                {key.replace(/([A-Z])/g, " $1")}:
+                              </span>{" "}
+                              {value}
+                            </p>
+                          )}
+                          <button
+                            onClick={() => handleEditToggle(key)}
+                            className="ml-4 text-xl text-blue-500"
+                          >
                             {editMode[key] ? (
-                              <input
-                                type="text"
-                                value={value}
-                                onChange={(e) => handleFieldChange(e, key)}
-                                className="flex-1 p-1 border rounded"
-                              />
+                              <AiOutlineSave />
                             ) : (
-                              <p>
-                                <span className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}:</span>{" "}
-                                {value}
-                              </p>
+                              <AiOutlineEdit />
                             )}
-                            <button
-                              onClick={() => handleEditToggle(key)}
-                              className="ml-4 text-xl text-blue-500"
-                            >
-                              {editMode[key] ? <AiOutlineSave /> : <AiOutlineEdit />}
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Analytics */}
-                    <div className="flex-1">
-                      <h3 className="text-center text-lg font-serif font-semibold mb-4 mt-4 md:mt-0">
-                        Company Analytics
-                      </h3>
-                      <div className="space-y-6">
-                        {/* Stats */}
-                          <div className="bg-white border-2 border-gray-400 p-4 rounded shadow-xl flex flex-wrap justify-center gap-4">
-                            {[
-                              { color: "red", label: "Events", value: "100,000+" },
-                              { color: "yellow", label: "Event Planner", value: "50,000+" },
-                              { color: "green", label: "Countries", value: "100+" },
-                              { color: "blue", label: "Attendees", value: "100k+" },
-                            ].map(({ color, label, value }, i) => {
-                              const bgColorClass = {
-                                red: "bg-red-200",
-                                yellow: "bg-yellow-200",
-                                green: "bg-green-200",
-                                blue: "bg-blue-200",
-                              }[color];
-
-                              return (
-                                <div key={i} className={`${bgColorClass} h-28 w-[45%] p-4 rounded shadow`}>
-                                  <FontAwesomeIcon icon={faCalendarCheck} />
-                                  <div className="text-xl font-bold">{value}</div>
-                                  <div className="text-sm">{label}</div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        {/* Charts */}
-                        <div className="flex justify-center gap-4 bg-white border-2 border-gray-400 p-4 rounded shadow-xl">
-                          <img
-                            src="https://r-charts.com/en/part-whole/donut-chart_files/figure-html/donut-chart-hole-fill.png"
-                            alt="Chart 1"
-                            className="w-[45%] rounded"
-                          />
-                          <img
-                            src="https://www.nobledesktop.com/images/tableaucolorfig8.png"
-                            alt="Chart 2"
-                            className="w-[45%] rounded"
-                          />
+                          </button>
                         </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Analytics */}
+                  <div className="flex-1">
+                    <h3 className="text-center text-lg font-serif font-semibold mb-4 mt-4 md:mt-0">
+                      Company Analytics
+                    </h3>
+                    <div className="space-y-6">
+                      {/* Stats */}
+                      <div className="bg-white border-2 border-gray-400 p-4 rounded shadow-xl flex flex-wrap justify-center gap-4">
+                        {[
+                          { color: "red", label: "Events", value: "100,000+" },
+                          {
+                            color: "yellow",
+                            label: "Event Planner",
+                            value: "50,000+",
+                          },
+                          { color: "green", label: "Countries", value: "100+" },
+                          { color: "blue", label: "Attendees", value: "100k+" },
+                        ].map(({ color, label, value }, i) => {
+                          const bgColorClass = {
+                            red: "bg-red-200",
+                            yellow: "bg-yellow-200",
+                            green: "bg-green-200",
+                            blue: "bg-blue-200",
+                          }[color];
+
+                          return (
+                            <div
+                              key={i}
+                              className={`${bgColorClass} h-28 w-[45%] p-4 rounded shadow`}
+                            >
+                              <FontAwesomeIcon icon={faCalendarCheck} />
+                              <div className="text-xl font-bold">{value}</div>
+                              <div className="text-sm">{label}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {/* Charts */}
+                      <div className="flex justify-center gap-4 bg-white border-2 border-gray-400 p-4 rounded shadow-xl">
+                        <img
+                          src="https://r-charts.com/en/part-whole/donut-chart_files/figure-html/donut-chart-hole-fill.png"
+                          alt="Chart 1"
+                          className="w-[45%] rounded"
+                        />
+                        <img
+                          src="https://www.nobledesktop.com/images/tableaucolorfig8.png"
+                          alt="Chart 2"
+                          className="w-[45%] rounded"
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-        </div>
-      );
-
+            </div>
+          </div>
+        );
     }
   };
 
+  const [admin, setadmin] = useState(null);
   const [venueRequests, setvenueRequests] = useState([]);
- 
-
+  const [allVenues, setallVenues] = useState([]);
+  const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
     if (!admin) {
@@ -640,127 +698,25 @@ function AdminPage() {
     });
   }, []);
 
-  // return (
-  //   <>
-  //     <div className="min-h-screen">
-  //       <Navbar menuItems={[]} />
-  //       {/* BODY */}
-  //       <div className="flex ">
-  //               {/* Sidebar */}
-  //               <div
-  //                 className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${
-  //                   menuVisible ? "translate-x-0" : "-translate-x-full"
-  //                 } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
-  //                 style={{ height: "calc(100vh - 4rem)" }}
-  //               >
-  //                 <div className="w-full flex justify-center pt-3">
-  //                   <img
-  //                     className="rounded-full h-24 w-24 border-4 border-indigo-400"
-  //                     src={admin?.image?.url || ""}
-  //                     alt="admin"
-  //                   />
-  //                   <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
-  //                     <FontAwesomeIcon icon={faEdit} className="text-white" />
-  //                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-  //                   </label>
-  //                 </div>
-  //                 <div className="h-20 text-center pt-5 font-bold font-serif text-lg">{admin?.username}</div>
-  //                 <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
-  //                 <ul className="space-y-3 text-center text-sm">
-  //                   {["Home", "Venue Requests", "Upcoming Events", "Past Events", "Venue Details"].map((item) => (
-  //                     <li
-  //                       key={item}
-  //                       onClick={() => setActiveMenu(item)}
-  //                       className={`cursor-pointer p-2 rounded ${
-  //                         activeMenu === item ? "bg-gray-600" : ""
-  //                       }`}
-  //                     >
-  //                       {item}
-  //                     </li>
-  //                   ))}
-  //                 </ul>
-  //                 <div className="mt-10 text-xs text-center border-t pt-2">&copy; Eventek 2024</div>
-  //               </div>
-
-  //           <div className="h-20 text-center flex-col justify-center ">
-  //             <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif">
-  //               {company ? company.companyName : null}
-  //             </div>
-  //           </div>
-
-  //           <div className="w-[100%] h-1 border-b-4 border-yellow-400 rounded-2xl  mb-2"></div>
-
-  //           <ul className="space-y-4 p-2 flex flex-col items-center">
-  //             <li
-  //               className={`cursor-pointer p-2 rounded w-full text-center ${
-  //                 activeMenu === "Home" ? "bg-gray-600" : ""
-  //               }`}
-  //               onClick={() => setActiveMenu("Home")}
-  //             >
-  //               Home
-  //             </li>
-  //             <li
-  //               className={`cursor-pointer p-2 rounded w-full text-center ${
-  //                 activeMenu === "Venue Requests" ? "bg-gray-600" : ""
-  //               }`}
-  //               onClick={() => setActiveMenu("Venue Requests")}
-  //             >
-  //               Requested Venue
-  //             </li>
-  //             <li
-  //               className={`cursor-pointer p-2 rounded w-full text-center ${
-  //                 activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
-  //               }`}
-  //               onClick={() => setActiveMenu("Upcoming Events")}
-  //             >
-  //               Upcoming Events
-  //             </li>
-  //             <li
-  //               className={`cursor-pointer p-2 rounded w-full text-center ${
-  //                 activeMenu === "Past Events" ? "bg-gray-600" : ""
-  //               }`}
-  //               onClick={() => setActiveMenu("Past Events")}
-  //             >
-  //               Past Events
-  //             </li>
-  //             <li
-  //               className={`cursor-pointer p-2 rounded w-full text-center ${
-  //                 activeMenu === "Venue Details" ? "bg-gray-600" : ""
-  //               }`}
-  //               onClick={() => setActiveMenu("Venue Details")}
-  //             >
-  //               Venue Details
-  //             </li>
-  //           </ul>
-  //           <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center">
-  //             <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-6 mb-4"></div>
-  //             &copy;{company?.companyName}2024.
-  //           </div>
-  //         </div>
-
-  //         {/* Main content */}
-  //         <div className="w-[100%] ml-[13rem] overflow-y-auto">
-  //           {renderComponent()}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </>
-  // );
-  
   return (
     <>
-      <div className="h-screen">
+      <div className="min-h-screen">
         <Navbar menuItems={[]} />
-        <div className="h-[91.7vh] flex m-0 p-0 overflow-hidden">
+        <div className="flex">
           {/* side bar */}
-          <div className="w-[13rem] min-w-[13rem] rounded-r-2xl bg-[#081647] text-white p-4 h-[91%] fixed top-[4rem] left-0 z-10">
-            <div className="w-full flex justify-center pt-3  ">
+          <div
+            className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${
+              menuVisible ? "translate-x-0" : "-translate-x-full"
+            } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
+            style={{ height: "calc(100vh - 4rem)" }}
+          >
+            <div className="w-full flex justify-center pt-3">
               <img
-                className="rounded-full h-32 w-32 border-[.4rem] border-indigo-400"
-                src={adminuser ? (adminuser.image ? adminuser.image.url : null) : null}
+                className="rounded-full h-24 w-24 border-4 border-indigo-400"
+                src={admin ? (admin.image ? admin.image.url : null) : null}
                 alt="admin image"
               ></img>
-              <label className="mt-3 absolute top-[5.8rem] sm:top-[7.5rem] w-8 h-8 cursor-pointer flex justify-center items-center  bg-gray-600 rounded-full p-2">
+              <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
                 <FontAwesomeIcon icon={faEdit} className="text-white" />
                 <input
                   type="file"
@@ -771,59 +727,54 @@ function AdminPage() {
               </label>
             </div>
 
-            <div className="h-20 text-center flex-col justify-center ">
-              <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif">
-                {company ? company.companyName : null}
-              </div>
+            <div className="h-20 text-center pt-5 font-bold font-serif text-lg">
+              {/* <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif"> */}
+              {company ? company.companyName : null}
+              {/* </div> */}
             </div>
 
-            <div className="w-[100%] h-1 border-b-4 border-yellow-400 rounded-2xl  mb-2"></div>
+            <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
 
-            <ul className="space-y-4 p-2 flex flex-col items-center">
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Home" ? "bg-gray-600" : ""
+            <ul className="space-y-3 text-center text-sm">
+              {[
+                "Home",
+                "Venue Requests",
+                "Upcoming Events",
+                "Past Events",
+                "Venue Details",
+              ].map((item) => (
+                <li
+                  key={item}
+                  onClick={() => setActiveMenu(item)}
+                  className={`cursor-pointer p-2 rounded ${
+                    activeMenu === item ? "bg-gray-600" : ""
                   }`}
-                onClick={() => setActiveMenu("Home")}
-              >
-                Home
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Requests" ? "bg-gray-600" : ""
-                  }`}
-                onClick={() => setActiveMenu("Venue Requests")}
-              >
-                Requested Venue
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
-                  }`}
-                onClick={() => setActiveMenu("Upcoming Events")}
-              >
-                Upcoming Events
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Past Events" ? "bg-gray-600" : ""
-                  }`}
-                onClick={() => setActiveMenu("Past Events")}
-              >
-                Past Events
-              </li>
-              <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Details" ? "bg-gray-600" : ""
-                  }`}
-                onClick={() => setActiveMenu("Venue Details")}
-              >
-                Venue Details
-              </li>
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
-            <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center">
-              <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-6 mb-4"></div>
+            {/* <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center"> */}
+            <div className="mt-10 text-xs text-center border-t pt-2">
               &copy;{company?.companyName}2024.
             </div>
+            {/* </div> */}
           </div>
-
+          {/* Toggle button for small screens */}
+          <div className="lg:hidden fixed top-[4.5rem] left-4 z-50">
+            <button
+              onClick={toggleMenu}
+              className="p-2 h-8 w-8 rounded-full text-red-500 flex items-center justify-center font-bold border-4 border-red-500"
+            >
+              <FontAwesomeIcon icon={menuVisible ? faTimes : faEllipsisV} />
+            </button>
+          </div>
           {/* Main content */}
-          <div className="w-[100%] ml-[13rem] overflow-y-auto scrollbar-hide">
+          <div
+            className={`flex-1 w-full lg:ml-[18rem] transition-all overflow-x-hidden ${
+              menuVisible ? "blur-sm lg:blur-none" : ""
+            }`}
+          >
             {renderComponent()}
           </div>
         </div>

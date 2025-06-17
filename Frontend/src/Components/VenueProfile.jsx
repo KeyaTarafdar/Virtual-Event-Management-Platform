@@ -535,13 +535,8 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="yes"
-                            checked={companyDetails.multiDayBooking === "yes"}
-                            onChange={(e) =>
-                              setCompanyDetails({
-                                ...companyDetails,
-                                multiDayBooking: e.target.value,
-                              })
-                            }
+                            checked={newHallMultiday}
+                            onChange={(e) => setnewHallMultiday(true)}
                             className="mr-2"
                           />
                           Yes
@@ -550,13 +545,8 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="no"
-                            checked={companyDetails.multiDayBooking === "no"}
-                            onChange={(e) =>
-                              setCompanyDetails({
-                                ...companyDetails,
-                                multiDayBooking: e.target.value,
-                              })
-                            }
+                            checked={!newHallMultiday}
+                            onChange={(e) => setnewHallMultiday(false)}
                             className="mr-2"
                           />
                           No
@@ -564,17 +554,6 @@ function VenueProfile() {
                       </div>
                     ) :(
                       <span
-// className={`rounded-lg w-[90%] p-2 ${
-//                           companyDetails.multiDayBooking
-//                             ? ""
-//                             : "text-red-500 bg-white"
-//                         }`}
-//                       >
-//                         {companyDetails.multiDayBooking
-//                           ? companyDetails.multiDayBooking.charAt(0).toUpperCase() +
-//                             companyDetails.multiDayBooking.slice(1)
-
-
                         className={`rounded-lg w-[90%] p-2 ${venue && venue.canOrganizeMultidayEvent
                           ? ""
                           : "text-red-500 bg-white"
@@ -589,11 +568,6 @@ function VenueProfile() {
                       </span>
                     )}
                     <button
-                    // onClick={() =>
-                    //     isEditing === "multiDayBooking"
-                    //       ? handleSave("multiDayBooking")
-                    //       : setIsEditing("multiDayBooking")
-                    //   }
                       onClick={() => {
                         if (isEditing === "multiDayBooking") {
                           updateVenueMultidayEvent(newHallMultiday).then(
@@ -662,20 +636,7 @@ function VenueProfile() {
                           : "Please Select Hall Type"}
                       </span>
                     )}
-                    {/* <button
-                      onClick={() =>
-                        isEditing === "halltype"
-                          ? handleSave("halltype")
-                          : setIsEditing("halltype")
-                      }
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
-                    >
-                      {isEditing === "halltype" ? (
-                        <AiOutlineCheck size={16} />
-                      ) : (
-                        <AiOutlineEdit size={16} />
-                      )}
-                    </button> */}
+                 
                      <button
                       onClick={() => {
                         if (isEditing === "halltype") {
