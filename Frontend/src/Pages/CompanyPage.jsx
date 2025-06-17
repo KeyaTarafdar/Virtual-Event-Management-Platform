@@ -209,9 +209,6 @@ const CompanyPage = () => {
     return isSlotConfirmed && currentDate > eventDateObj;
   };
 
-  // const [userProfile, setuserProfile] = useState();
-  // const [createdEvents, setcreatedEvents] = useState([]);
-  // const [appliedEvents, setappliedEvents] = useState([]);
   const [events, setevents] = useState([]);
   const [eventsCopy, seteventsCopy] = useState([]);
 

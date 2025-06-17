@@ -1,7 +1,10 @@
-import React, { } from "react";
+import  { useEffect} from "react";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { AiFillHome, AiOutlineAppstore, AiFillContacts } from "react-icons/ai";
+import { useParams } from "react-router-dom";
+import { useUser } from "../context/userContext/UserContext";
+import { findVenue } from "../utils/utils";
 
 const footerMenuItems = [
   { href: "header", label: "Header", icon: AiFillHome },
@@ -15,6 +18,16 @@ function Venue_Details() {
     { label: "About", to: "/" },
     { label: "Contact", href: "contact" },
   ];
+
+  // const {venueId}=useParams();
+  // const{venue,setVenue}=useUser();
+
+  // useEffect(() => {
+  //   findVenue(venueId).then((response)=>{
+  //     setVenue(response.data);
+  //   })  
+  // }, [])
+  
 
   return (
     <>
