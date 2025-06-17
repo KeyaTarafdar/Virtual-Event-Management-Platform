@@ -25,6 +25,7 @@ const {
   updateHall_fullDayPrice,
   updateHallOpeningTime,
   updateHallClosingTime,
+  updateHallDescription,
 } = require("../controller/venueController");
 
 router.get("/", (req, res) => {
@@ -55,6 +56,9 @@ router.get("/fetchvenueuser", venueIsLoggedIn, fetchVenueUser);
 
 // UPDATE HALL NAME
 router.post("/updatehallname", venueIsLoggedIn, updateHallName);
+
+// UPDATE HALL DESCRIPTION
+router.post("/updatehalldescription", venueIsLoggedIn, updateHallDescription);
 
 // UPDATE HALL City
 router.post("/updatehallcity", venueIsLoggedIn, updateHallCity);

@@ -253,6 +253,30 @@ module.exports.updateHallName = async (req, res) => {
   }
 };
 
+// Update Hall Name
+module.exports.updateHallDescription = async (req, res) => {
+  try {
+    let { newHallDescription } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          description: newHallDescription,
+          completePercentage: oldVenue.description
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 5,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall description updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
 // Update Hall City
 module.exports.updateHallCity = async (req, res) => {
   try {

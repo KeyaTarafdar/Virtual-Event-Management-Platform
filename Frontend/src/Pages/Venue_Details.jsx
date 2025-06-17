@@ -77,7 +77,7 @@ function Venue_Details() {
 
         {/* Hotel Description */}
         <section className="bg-white rounded-md p-6 mx-4 sm:mx-auto max-w-4xl w-full mt-6">
-          <h2 className="text-lg sm:text-xl font-semibold">About the Hotel</h2>
+          <h2 className="text-lg sm:text-xl font-semibold">About the Hall</h2>
           <p className="mt-2 text-gray-700 text-sm sm:text-base">
             Our hotel is one of the premium hotels and boasts luxury and comfort
             for all our guests. Lorem ipsum dolor sit amet, consectetur
