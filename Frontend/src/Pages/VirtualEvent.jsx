@@ -20,20 +20,25 @@ function VirtualEvent() {
 
   useEffect(() => {
     fetchVirtualEvents().then((events) => {
-      setVirtualEvents(
-        events.filter((event) => {
-          const today = new Date();
-          const currentDate = today.toISOString().split("T")[0];
-          const eventDate = new Date(event.date).toISOString().split("T")[0];
-          const registrationLastDate = new Date(event.lastDateOfRegistration)
-            .toISOString()
-            .split("T")[0];
+      if (events.success) {
+        setVirtualEvents(
+          events.data.filter((event) => {
+            const today = new Date();
+            const currentDate = today.toISOString().split("T")[0];
+            const eventDate = new Date(event.date).toISOString().split("T")[0];
+            const registrationLastDate = new Date(event.lastDateOfRegistration)
+              .toISOString()
+              .split("T")[0];
 
-          return registrationLastDate >= currentDate && eventDate > currentDate;
-        })
-      );
+            return registrationLastDate >= currentDate && eventDate > currentDate;
+          })
+        );
+      } else {
+        alert(events.message);
+      }
     });
   }, []);
+
 
   const headerMenuItems = [
     { label: "Home", to: "/" },

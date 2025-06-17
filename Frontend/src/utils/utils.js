@@ -530,3 +530,5 @@ export const fetchAllEvents = async () => {
     console.log(err.message);
   }
 };
+
+

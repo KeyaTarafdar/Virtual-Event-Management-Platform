@@ -17,7 +17,8 @@ import {
   faPen,
   faCheck
 } from "@fortawesome/free-solid-svg-icons";
-
+import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 import { useNavigate } from "react-router-dom";
 import {
@@ -78,6 +79,9 @@ const CompanyPage = () => {
   const [selectedTab, setSelectedTab] = useState("created");
   const [isTrackModalVisible, setIsTrackModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const { company, setCompany } = useCompany();
+  const { user, setUser } = useUser();
+
 
   const handleCreateEventClick = () => {
     navigate("/createform");
@@ -106,6 +110,7 @@ const CompanyPage = () => {
   };
 
 
+
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -132,10 +137,11 @@ const CompanyPage = () => {
       const imageData = await setFileToBase(file);
 
       uploadProfilePicture(imageData).then((response) => {
-        alert(response);
-        findUser().then((response) => {
-          setuserProfile(response);
-        });
+        if (response.success) {
+          sessionStorage.setItem("user", JSON.stringify(response.data))
+          setUser(response.data)
+        }
+        alert(response.message);
       });
     } else {
       alert("Please Upload an Image");
@@ -143,11 +149,11 @@ const CompanyPage = () => {
     }
   };
 
+
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
   };
 
-  const [company, setCompany] = useState({});
 
   useEffect(() => {
     if (menuVisible) {
@@ -197,9 +203,9 @@ const CompanyPage = () => {
     return isSlotConfirmed && currentDate > eventDateObj;
   };
 
-  const [userProfile, setuserProfile] = useState();
-  const [createdEvents, setcreatedEvents] = useState([]);
-  const [appliedEvents, setappliedEvents] = useState([]);
+  // const [userProfile, setuserProfile] = useState();
+  // const [createdEvents, setcreatedEvents] = useState([]);
+  // const [appliedEvents, setappliedEvents] = useState([]);
   const [events, setevents] = useState([]);
   const [eventsCopy, seteventsCopy] = useState([]);
 
@@ -243,9 +249,7 @@ const CompanyPage = () => {
         >
           <img
             src={
-              userProfile && userProfile.image
-                ? userProfile.image.url
-                : "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
+                user?.image?.url || "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
             }
             alt="User Profile"
             className="rounded-full w-24 bg-gray-900 text-sm h-24 mb-4 shadow-lg border-[.4rem] border-indigo-400 sm:w-32 sm:h-32"
@@ -262,7 +266,7 @@ const CompanyPage = () => {
           </label>
 
           <h2 className="text-md font-bold sm:text-lg">
-            {userProfile ? userProfile.username : null}
+            {user?.username}
           </h2>
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-12"></div>
 
@@ -270,21 +274,21 @@ const CompanyPage = () => {
             <div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faEnvelope} className="text-indigo-300" />
               <p className="text-xs sm:text-sm">
-                {userProfile ? userProfile.email : null}
+                {user?.email}
               </p>
             </div>
 
             <div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faPhone} className="text-indigo-300" />
               <p className="text-xs sm:text-sm">
-                {userProfile ? userProfile.contact : null}
+                {user?.contact}
               </p>
             </div>
           </div>
 
           <div className="mt-auto w-[100%] flex flex-col text-xs items-center">
             <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl mt-10 mb-4"></div>
-            &copy;{company.companyName}2024.
+            &copy;{company?.companyName}2024.
           </div>
         </div>
 

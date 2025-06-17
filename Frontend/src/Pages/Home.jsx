@@ -9,7 +9,6 @@ import FreqtQuestion from "../Components/FreqtQuestion";
 import Gallery_Card from "../Components/Gallery_card";
 import Event_card from "../Components/Event_card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { findUser } from "../utils/utils";
 import {
   faCalendarCheck,
   faCalendar,
@@ -26,7 +25,8 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 import { fetchLastCreatedEvent, fetchCompanyDetails } from "../utils/utils";
-import { useCompany } from "../context/companyContext/CompanyContext";
+import { useCompany} from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 const headerMenuItems = [
   { label: "Services", href: "services" },
@@ -46,7 +46,7 @@ const footerMenuItems = [
 
 export default function Home() {
   const navigate = useNavigate();
-  // const { company, setCompany } = useCompany();
+  const { company, setCompany } = useCompany();
 
   const handleSignUpClick = () => {
     navigate("/signup");
@@ -54,37 +54,28 @@ export default function Home() {
 
   const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
-  // const [company, setCompany] = useState({});
-  const { company, setCompany } = useCompany();
-  const servicesRef = useRef(null);
-  const [user, setUser] = useState(null);
+  const servicesRef=useRef(null);
+  
 
-  useEffect(() => {
-    findUser().then((response) => {
-      const username = response.username;
-      setUser(username ? username.split(" ")[0] : null);
-    });
-  }, []);
-
-  const isLoggedIn = !!user;
 
   const scrollToServices = () => {
     servicesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const user = useUser();
+const isLoggedIn = !!user;
+
   useEffect(() => {
-    fetchLastCreatedEvent().then((resonse) => {
-      setlastEvent(resonse);
+    fetchLastCreatedEvent().then((response) => {
+      if (response.success) setlastEvent(response.data);
     });
 
-    fetchCompanyDetails().then((response) => {
-      if (response.status === 200) {
-        setCompany(response.data);
-        setfetchingCompleted(true);
-      } else {
-        alert(response.data);
-      }
-    });
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response);
+      });
+    }
+    setfetchingCompleted(true);
   }, []);
 
   if (!fetchingCompleted) {
@@ -96,6 +87,8 @@ export default function Home() {
       </>
     );
   }
+
+
 
   return (
     <>
@@ -278,3 +271,5 @@ export default function Home() {
     </>
   );
 }
+
+

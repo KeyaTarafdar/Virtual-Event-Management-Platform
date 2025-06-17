@@ -52,6 +52,7 @@ function VenueUserPage() {
   };
 
   const renderComponent = () => {
+    console.log("Venue:", venue);
     switch (activeMenu) {
       case "Calendar":
         return <CustomCalendar />;
@@ -208,3 +209,10 @@ function VenueUserPage() {
 }
 
 export default VenueUserPage;
+
+
+
+
+
+
+

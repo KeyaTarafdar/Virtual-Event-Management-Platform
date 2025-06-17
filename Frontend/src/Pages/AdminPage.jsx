@@ -3,18 +3,22 @@ import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {findAdmin, acceptVenue, fetchAllVenues,fetchAllEvents,uploadProfilePictureAdmin,rejectVenue,} from "../utils/utils";
+import {findAdmin, acceptVenue, fetchAllVenues,fetchAllEvents,uploadProfilePictureAdmin,rejectVenue,fetchCompanyDetails} from "../utils/utils";
 import {faCalendarCheck,faGlobe,faUsers,faTimes,faEllipsisV,faEdit } from "@fortawesome/free-solid-svg-icons";
+import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 function AdminPage() {
   const [activeMenu, setActiveMenu] = useState("Home");
   const [menuVisible, setMenuVisible] = useState(false);
   const [image, setImage] = useState();
-  const [admin, setadmin] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
   const [allVenues, setallVenues] = useState([]);
   const [allEvents, setallEvents] = useState([]);
+  const { company, setCompany } = useCompany();
+  const { admin, setAdmin } = useUser();
+
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
@@ -46,11 +50,16 @@ function AdminPage() {
     setReason("");
   };
 
-  const handleAcceptVenue = (venueId) => {
+  function handleAcceptVenue(venueId) {
     acceptVenue(venueId).then((response) => {
-      alert(response);
+      if (response.success) {
+        setAdmin(response.data);
+        sessionStorage.setItem("admin",JSON.stringify(response.data));
+      }
+      alert(response.message);
     });
-  };
+  }
+
 
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
@@ -63,8 +72,9 @@ function AdminPage() {
     });
   };
 
-  const handleImageChange = async (e) => {
+ async function handleImageChange(e) {
     const file = e.target.files[0];
+
 
     if (file) {
       const maxSizeInKB = 30;
@@ -110,31 +120,40 @@ function AdminPage() {
   };
 
   const [fields, setFields] = useState({
-    companyName: "Eventek Inc.",
-    mainOfficeCity: "Kolkata",
-    mainOfficeAddress: "8/41, Sahid Nagar",
-    mainOfficePincode: "700078",
-    email: "info@eventek.com",
-    contactNumber: "+1-234-567-890",
+    companyName: "",
+    address: "",
+    email: "",
+    contact: "",
+    description: "",
   });
+
 
   const [editMode, setEditMode] = useState({
     companyName: false,
-    establishedYear: false,
-    companyOwner: false,
-    mainOfficeCity: false,
-    mainOfficeAddress: false,
-    mainOfficePincode: false,
+    address: false,
     email: false,
-    contactNumber: false,
+    contact: false,
+    description: false,
   });
 
+
   const handleEditToggle = (field) => {
+    if (editMode[field]) {
+      updateCompanyInfo(fields).then((response) => {
+        if (response.success) {
+          setCompany(response.data);
+          sessionStorage.setItem("company", JSON.stringify(response.data));
+        } else {
+          alert(response.message);
+        }
+      });
+    }
     setEditMode((prev) => ({
       ...prev,
       [field]: !prev[field],
     }));
   };
+
 
   const handleFieldChange = (e, field) => {
     setFields((prev) => ({
@@ -328,9 +347,9 @@ function AdminPage() {
     case "Venue Details":
       return (
             <>
-              <div className="flex w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden ">
+              <div className="flex w-full  flex-wrap gap-x-4 overflow-x-hidden ">
                   {/* Top search bar */}
-                  <div className="flex items-center p-5 flex-col lg:flex-row w-full h-[20%]">
+                  <div className="flex items-center p-5 flex-col lg:flex-row w-full h-[20%] ">
                         {/* Search by Venue Name */}
                         <div className="flex items-center flex-col sm:flex-row gap-y-4">
                           <h3 className="mr-4 font-serif font-bold">Search by Venue Name :</h3>
@@ -374,7 +393,7 @@ function AdminPage() {
                   </div>
 
                   {/* Scrollable table container */}
-                  <div className="w-full overflow-x-auto  px-4 ">
+                  <div className="w-full overflow-x-auto  px-4">
                     <table className="min-w-[120rem] table-fixed">
                       <thead className="sticky top-0 bg-black text-white">
                         <tr>
@@ -403,7 +422,7 @@ function AdminPage() {
                             <tr key={venue._id}>
                               <td className="border-2 p-2">{index + 1}</td>
                               <td className="border-2 p-2">{venue.name}</td>
-                              <td className="border-2 p-2">{venue.owner}</td>
+                              <td className="border-2 p-2">{venue.ownerName}</td>
                               <td className="border-2 p-2">{venue.email}</td>
                               <td className="border-2 p-2">{venue.contact}</td>
                               <td className="border-2 p-2">{venue.city}</td>
@@ -537,12 +556,7 @@ function AdminPage() {
   const [venueRequests, setvenueRequests] = useState([]);
  
 
-  useEffect(() => {
-    findAdmin().then((response) => {
-      setadmin(response);
-      setvenueRequests(response.appliedVenues);
-    });
-  }, [handleAcceptVenue, handleImageChange]);
+
 
   useEffect(() => {
     fetchAllVenues().then((response) => {

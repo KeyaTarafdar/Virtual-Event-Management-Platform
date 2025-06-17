@@ -4,15 +4,18 @@ import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { AiFillVideoCamera, AiFillMail, AiFillPhone } from "react-icons/ai";
 import { Link } from "react-scroll";
 import { fetchCompanyDetails } from "../utils/utils";
+import { useCompany } from "../context/companyContext/CompanyContext";
 
 export default function Footer({ menuItems1 }) {
-  const [company, setCompany] = useState({});
+  const { company, setCompany } = useCompany()
 
   useEffect(() => {
-    fetchCompanyDetails().then((response) => {
-      setCompany(response.data);
-    });
-  }, []);
+    if (!company) {
+      fetchCompanyDetails().then((response) => {
+        setCompany(response);
+      });
+    }
+  },[]);
 
   return (
     <footer className="bg-gradient-to-r from-blue-950 to-cyan-900 text-white py-8 px-6">
@@ -20,9 +23,9 @@ export default function Footer({ menuItems1 }) {
         {/* About Us */}
         <div className="flex flex-col items-center text-center">
           <div className="text-2xl font-serif text-center md:text-left md:mb-0">
-            {company.companyName}
+            {company?.companyName}
           </div>
-          <p className="mt-[2rem] text-gray-300">{company.description}</p>
+          <p className="mt-[2rem] text-gray-300">{company?.description}</p>
         </div>
 
         {/* Quick Links */}

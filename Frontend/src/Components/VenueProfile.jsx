@@ -502,8 +502,13 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="yes"
-                            checked={newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(true)}
+                            checked={companyDetails.multiDayBooking === "yes"}
+                            onChange={(e) =>
+                              setCompanyDetails({
+                                ...companyDetails,
+                                multiDayBooking: e.target.value,
+                              })
+                            }
                             className="mr-2"
                           />
                           Yes
@@ -512,47 +517,38 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="no"
-                            checked={!newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(false)}
+                            checked={companyDetails.multiDayBooking === "no"}
+                            onChange={(e) =>
+                              setCompanyDetails({
+                                ...companyDetails,
+                                multiDayBooking: e.target.value,
+                              })
+                            }
                             className="mr-2"
                           />
                           No
                         </label>
                       </div>
-                    ) : (
+                    ) :(
                       <span
                         className={`rounded-lg w-[90%] p-2 ${
-                          venue && venue.canOrganizeMultidayEvent
+                          companyDetails.multiDayBooking
                             ? ""
                             : "text-red-500 bg-white"
                         }`}
                       >
-                        {venue && (venue.canOrganizeMultidayEvent)
-                          ? venue.canOrganizeMultidayEvent
-                              .charAt(0)
-                              .toUpperCase() +
-                            venue.canOrganizeMultidayEvent.slice(1)
+                        {companyDetails.multiDayBooking
+                          ? companyDetails.multiDayBooking.charAt(0).toUpperCase() +
+                            companyDetails.multiDayBooking.slice(1)
                           : "Please Select an Option"}
                       </span>
                     )}
                     <button
-                      onClick={() => {
-                        if (isEditing === "multiDayBooking") {
-                          updateVenueMultidayEvent(newHallMultiday).then(
-                            (response) => {
-                              findVenue().then((response) => {
-                                setvenue(response);
-                              });
-                              setIsEditing(null);
-                            }
-                          );
-                        } else {
-                          setnewHallMultiday(
-                            venue ? venue.canOrganizeMultidayEvent : null
-                          );
-                          setIsEditing("multiDayBooking");
-                        }
-                      }}
+                      onClick={() =>
+                        isEditing === "multiDayBooking"
+                          ? handleSave("multiDayBooking")
+                          : setIsEditing("multiDayBooking")
+                      }
                       className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 ml-4"
                     >
                       {isEditing === "multiDayBooking" ? (
