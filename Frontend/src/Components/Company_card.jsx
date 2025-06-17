@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
 
 const CompanyCard = ({ logo, rating }) => {
   const stars = Array.from({ length: 5 }, (_, index) => (
     <i
       key={index}
-      className={`fa fa-star text-xs ${index < rating ? 'text-yellow-500' : 'text-gray-300'}`}
+      className={`fa fa-star text-xs ${
+        index < rating ? "text-yellow-500" : "text-gray-300"
+      }`}
       aria-hidden="true"
     />
   ));
@@ -34,42 +36,41 @@ const CompanyGrid = ({ companies }) => {
   );
 };
 
-
 const companiesData = [
   {
-    logo: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Symbol.jpg',
+    logo: "https://logos-world.net/wp-content/uploads/2020/04/Amazon-Symbol.jpg",
     rating: 4,
   },
   {
-    logo: 'https://sightsinplus.com/wp-content/uploads/2022/03/Cognizant-announces-new-logo-and-tagline.jpg',
+    logo: "https://sightsinplus.com/wp-content/uploads/2022/03/Cognizant-announces-new-logo-and-tagline.jpg",
     rating: 3,
   },
   {
-    logo: 'https://media.talentbattle.in/Files/C4U_Images/C4U_BLOG_IMAGES/C4U_BLOG_CATEGORIES_IMAGES/85/29.png',
+    logo: "https://media.talentbattle.in/Files/C4U_Images/C4U_BLOG_IMAGES/C4U_BLOG_CATEGORIES_IMAGES/85/29.png",
     rating: 4,
   },
   {
-    logo: 'https://i.pinimg.com/736x/dc/ff/1e/dcff1e321e7fc8387ccb4d1007906cdf.jpg',
+    logo: "https://i.pinimg.com/736x/dc/ff/1e/dcff1e321e7fc8387ccb4d1007906cdf.jpg",
     rating: 3,
   },
   {
-    logo: 'https://telavergecommunications.com/wp-content/uploads/2022/09/telaverge-home.png',
+    logo: "https://animationvisarts.com/wp-content/uploads/2016/10/tata-logo-design.jpg",
     rating: 2,
   },
   {
-    logo: 'https://i.pinimg.com/474x/26/18/66/261866f939644dc0fc73eb129af3b42e.jpg',
+    logo: "https://i.pinimg.com/474x/26/18/66/261866f939644dc0fc73eb129af3b42e.jpg",
     rating: 2,
   },
   {
-    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkmk-siGMW3NHmUIx8VoPzJPwv9xWVxzIV0A&s',
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkmk-siGMW3NHmUIx8VoPzJPwv9xWVxzIV0A&s",
     rating: 3,
   },
   {
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Meesho_logo.png',
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/33/Meesho_logo.png",
     rating: 4,
   },
   {
-    logo: 'https://media.geeksforgeeks.org/wp-content/uploads/20190802021607/geeks14.png',
+    logo: "https://media.geeksforgeeks.org/wp-content/uploads/20190802021607/geeks14.png",
     rating: 4,
   },
 ];
