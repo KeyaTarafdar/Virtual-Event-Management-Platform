@@ -59,7 +59,7 @@ function App() {
             <Route path="/calendar" element={<CustomCalendar />} />
             <Route path="/venuecard" element={<Venue_card />} />
             <Route path="/venue" element={<Venue />} />
-            <Route path="/venuedetails" element={<Venue_Details />} />
+            <Route path="/venuedetails/:venueId" element={<Venue_Details />} />
             <Route path="/adminpanel" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>

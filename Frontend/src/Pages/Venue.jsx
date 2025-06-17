@@ -18,24 +18,11 @@ function Venue() {
     { label: "Contact", href: "contact" },
   ];
 
-  // const venues = [
-  //   { id: 1, name: 'ITC Royal Bengal', location: 'Kolkata' },
-  //   { id: 2, name: 'The Grand Oberoi', location: 'Kolkata' },
-  //   { id: 3, name: 'JW Marriott', location: 'Kolkata' },
-  //   { id: 4, name: 'The Leela Palace', location: 'Bangalore' },
-  //   { id: 5, name: 'Taj West End', location: 'Bangalore' },
-  //   { id: 6, name: 'Conrad Pune', location: 'Pune' },
-  //   { id: 7, name: 'Shantai Hotel', location: 'Pune' },
-  //   { id: 8, name: 'Lemon Tree Hotel', location: 'Pune' },
-  //   { id: 9, name: 'NovotelHyderabad', location: 'Hyderabad' },
-  //   { id: 10, name: 'Amrutha Castle', location: 'Hyderabad' },
-  // ];
-
   const [allVenues, setallVenues] = useState([]);
 
   useEffect(() => {
     fetchAllVenues().then((response) => {
-      setallVenues(response.data);
+      if (response.success) setallVenues(response.data);
     });
   }, []);
 
@@ -73,6 +60,7 @@ function Venue() {
               allVenues.map((venue) => (
                 <Venue_card
                   key={venue._id}
+                  id={venue._id}
                   name={venue.name}
                   location={venue.city}
                 />
