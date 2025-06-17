@@ -500,7 +500,35 @@ export const updateHallTime_fullday = async (newHalltimefullday) => {
   try {
     const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallTime_fullday",
-      { newHall_fullDayTime:newHalltimefullday },
+      { newHall_fullDayTime: newHalltimefullday },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update opening time
+export const updateOpeningTime = async (newHallOpeningTime) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallopeningtime",
+      { newOpeningTime: newHallOpeningTime },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//update closing Time
+export const updateClosingTime = async (newHallClosingTime) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallclosingtime",
+      { newClosingTime: newHallClosingTime },
       { withCredentials: true }
     );
     return data;
@@ -550,6 +578,50 @@ export const updateHallPrice_fullday = async (newHallpricefull) => {
     console.log(err.message);
   }
 };
+
+//Update Venue Projector
+export const updateVenueProjector = async (newHallProjector) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallprojector",
+      { newHallProjector },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Venue Broadband
+export const updateVenueBroadband = async (newHallBroadband) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallbroadband",
+      { newHallBroadband },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Venue Desc
+export const updateHallDescription = async (newHallDescription) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehalldescription",
+      { newHallDescription },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+
 
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 
