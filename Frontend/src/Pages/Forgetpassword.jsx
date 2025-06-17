@@ -90,8 +90,9 @@ const Forgetpassword = () => {
                 value={formData.email}
                 onChange={handleChange}
                 id="email"
-                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${errors.email ? "border-red-500" : "border-gray-300"
-                  } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
                 placeholder=" "
               />
               <label
