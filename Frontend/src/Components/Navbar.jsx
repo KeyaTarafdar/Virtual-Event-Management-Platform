@@ -211,7 +211,7 @@ export default function Navbar({ menuItems }) {
             ) : (
               <>
                 {/* Login Button */}
-                <div className="w-full lg:w-[55%] flex items-center justify-center px-[3px] sm:px-8 pr-4 lg:pr-16  md:px-1 lg:pr-24 xl:px-2 2xl:px-1">
+                <div className="w-full lg:w-[55%] flex items-center justify-center px-[3px] sm:px-8 pr-4 md:px-1 lg:pr-24 xl:px-2 2xl:px-1">
                   <div className=" w-full flex justify-center items-center">
                     <button
                       onClick={handleLogInClick}
