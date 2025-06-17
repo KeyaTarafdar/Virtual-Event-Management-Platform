@@ -7,7 +7,7 @@ import { fetchCompanyDetails } from "../utils/utils";
 import { useCompany } from "../context/companyContext/CompanyContext";
 
 export default function Footer({ menuItems1 }) {
-  const { company, setCompany } = useCompany()
+  const { company, setCompany } = useCompany();
 
   useEffect(() => {
     if (!company) {
@@ -64,12 +64,13 @@ export default function Footer({ menuItems1 }) {
             Keya Tarafdar
           </a>
           <a
-            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+            href="#"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Priya Acharjee
-          </a><a
-            href="https://docs.google.com/document/d/159yuCoWaNpEdNQU9DL74hRHT_nfcmgWF4dYBVrmyf2o/edit"
+          </a>
+          <a
+            href="https://drive.google.com/file/d/1USH3LX83vEr8ie7Iw_qxR2thUcCtG_8h/view?usp=sharing"
             className="text-gray-300 hover:text-blue-400 transition-colors"
           >
             Shreya Kundu

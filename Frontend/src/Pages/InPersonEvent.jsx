@@ -80,7 +80,7 @@ function InPersonEvent() {
             </div>
           </div>
 
-          {/* Search Input for Small/Medium Screens */}
+          {/* search div for md and sm screen------------------------- */}
           <div className="w-full max-w-md mx-auto mt-6 px-2 lg:hidden">
             <div className="relative w-full h-12">
               <input

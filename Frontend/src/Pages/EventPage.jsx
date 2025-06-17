@@ -153,26 +153,18 @@ function EventPage() {
                 Registered
               </button>
             ) : (
-              <div className="relative group inline-block">
-                <button
-                  className={`mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500 ${buttonCursor}`}
-                  onClick={() => {
-                    if (user) {
-                      navigate(`/registrationform/${eventId}`);
-                    } else {
-                      navigate("/login");
-                    }
-                  }}
-                  disabled={buttonCursor !== "cursor-pointer"}
-                >
-                  Register Now
-                </button>
-                {buttonCursor !== "cursor-pointer" && (
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-all bg-black text-white text-xs px-2 py-1 rounded z-10 whitespace-nowrap">
-                    Registration date is over
-                  </span>
-                )}
-              </div>
+              <button
+                className="mt-6 w-full sm:w-auto bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
+                onClick={() => {
+                  if (user) {
+                    navigate(`/registrationform/${eventId}`);
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+              >
+                Register Now
+              </button>
             )}
           </div>
         </div>

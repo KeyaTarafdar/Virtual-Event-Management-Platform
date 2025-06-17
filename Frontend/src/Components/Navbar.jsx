@@ -19,7 +19,7 @@ import {
   findAdmin,
   fetchCompanyDetails,
 } from "../utils/utils";
-import Loader from "./loader";
+import Loader from "./Loader";
 import { useCompany } from "../context/companyContext/CompanyContext";
 import { useUser } from "../context/userContext/UserContext";
 
@@ -177,6 +177,7 @@ export default function Navbar({ menuItems }) {
                       className="text-lg cursor-pointer"
                     />
                     <span className="text-white font-bold hover:text-blue-100 hover:underline">
+                      {" "}
                       {user?.username
                         ? user.username.split(" ")[0]
                         : venue?.name
@@ -260,7 +261,7 @@ export default function Navbar({ menuItems }) {
                     duration={500}
                     className="w-full text-center  hover:cursor-pointer hover:text-red-300 hover:font-bold"
                   >
-                    <div className=" w-40 border-b-2 border-gray-200 -mb-2  ">
+                    <div className=" w-40 border-b-2 border-gray-200 -mb-2">
                       {item.label}
                     </div>
                   </ScrollLink>

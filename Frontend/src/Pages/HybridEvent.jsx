@@ -24,6 +24,7 @@ function HybridEvent() {
 
   useEffect(() => {
     fetchHybridEvents().then((events) => {
+      if (events.success) {
       setHybridEvents(
         events.filter((event) => {
           const today = new Date();
@@ -33,9 +34,14 @@ function HybridEvent() {
             .toISOString()
             .split("T")[0];
 
-          return registrationLastDate >= currentDate && eventDate > currentDate;
-        })
-      );
+            return (
+              registrationLastDate >= currentDate && eventDate > currentDate
+            );
+          })
+        );
+      } else {
+        alert(events.message);
+      }
     });
   }, []);
 
@@ -59,7 +65,6 @@ function HybridEvent() {
           >
             Hybrid Events
           </h1>
-
           <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-0 lg:items-start lg:h-72">
             <p className="text-slate-500 text-base sm:text-lg lg:text-xl text-center lg:text-left font-serif w-full lg:w-2/3 lg:pl-16">
               Join us for our hybrid events that combine the best of in-person
@@ -82,7 +87,7 @@ function HybridEvent() {
             </div>
           </div>
 
-          {/* Search bar (shown only on small/medium screens) */}
+          {/* search div for md and sm screen------------------------- */}
           <div className="max-w-lg mx-auto mt-6 lg:hidden h-16">
             <div className="relative w-full">
               <input
@@ -113,8 +118,11 @@ function HybridEvent() {
           </div>
         </section>
 
-        {/* Upcoming Events */}
-        <section className="text-center mb-12 px-4 sm:px-6 lg:px-8" id="upcoming">
+        {/* Upcoming Events Section */}
+        <section
+          className="text-center mb-12 px-4 sm:px-6 lg:px-8"
+          id="upcoming"
+        >
           <h2 className="text-2xl sm:text-3xl font-serif font-semibold mb-6">
             Our upcoming events
           </h2>

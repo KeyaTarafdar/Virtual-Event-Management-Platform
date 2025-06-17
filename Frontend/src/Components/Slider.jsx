@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 const images = [
-    "https://www.shutterstock.com/image-photo/busy-diverse-professional-business-team-600nw-2380776443.jpg",
-    "https://www.shutterstock.com/image-photo/young-team-manager-woman-talking-600nw-2414833253.jpg",  
+  "https://www.shutterstock.com/image-photo/busy-diverse-professional-business-team-600nw-2380776443.jpg",
+  "https://www.shutterstock.com/image-photo/young-team-manager-woman-talking-600nw-2414833253.jpg",
 ];
 
 const Slider = () => {
@@ -13,9 +13,9 @@ const Slider = () => {
       setCurrentIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); 
+    }, 3000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, []);
 
   return (

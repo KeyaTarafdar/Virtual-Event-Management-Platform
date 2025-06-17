@@ -110,6 +110,11 @@ const CompanyPage = () => {
   };
 
 
+  const handleOutsideClick = (e) => {
+    if (e.target.id === "modal-overlay") {
+      closeModal();
+    }
+  };
 
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
@@ -137,8 +142,8 @@ const CompanyPage = () => {
 
       uploadProfilePicture(imageData).then((response) => {
         if (response.success) {
-          sessionStorage.setItem("user", JSON.stringify(response.data))
-          setUser(response.data)
+          sessionStorage.setItem("user", JSON.stringify(response.data));
+          setUser(response.data);
         }
         alert(response.message);
       });
@@ -164,7 +169,7 @@ const CompanyPage = () => {
   useEffect(() => {
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        sessionStorage.setItem("company", JSON.stringify(response))
+        sessionStorage.setItem("company", JSON.stringify(response));
         setCompany(response);
       });
     }
@@ -210,13 +215,13 @@ const CompanyPage = () => {
   useEffect(() => {
     if (!user) {
       findUser().then((response) => {
-        sessionStorage.setItem("user", JSON.stringify(response))
-        setUser(response)
-        setevents(response?.createdEvents)
-      })
+        sessionStorage.setItem("user", JSON.stringify(response));
+        setUser(response);
+        setevents(response?.createdEvents);
+      });
     } else {
-      const user = JSON.parse(sessionStorage.getItem("user"))
-      setevents(user?.createdEvents)
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      setevents(user?.createdEvents);
     }
   }, []);
 
@@ -226,10 +231,10 @@ const CompanyPage = () => {
 
       <div className="flex">
         {/* COMPANY DETAILS */}
-        <div className="fixed top-[4.5rem] left-4 z-50  lg:hidden">
+        <div className="fixed top-[4.5rem] left-4 z-50 lg:hidden">
           <button
             onClick={toggleMenu}
-            className="p-2 h-8 w-8 bg-indigo-200 flex justify-center items-center rounded-full text-red-500  "
+            className="p-2 h-8 w-8 bg-indigo-200 flex justify-center items-center rounded-full text-red-500"
           >
             <FontAwesomeIcon
               icon={menuVisible ? faTimes : faEllipsisV}
@@ -247,13 +252,15 @@ const CompanyPage = () => {
         >
           <img
             src={
-                user?.image?.url || "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
+              user?.image?.url ||
+              "https://img.freepik.com/free-vector/natural-landscape-wallpaper-concept_23-2148650600.jpg"
             }
             alt="User Profile"
             className="rounded-full w-24 bg-gray-900 text-sm h-24 mb-4 shadow-lg border-[.4rem] border-indigo-400 sm:w-32 sm:h-32"
           />
 
           <label className="absolute top-[5.5rem] sm:top-[7.5rem] w-8 h-8 cursor-pointer flex justify-center items-center  bg-gray-600 rounded-full p-2">
+            {" "}
             <FontAwesomeIcon icon={faEdit} className="text-white" />
             <input
               type="file"
@@ -263,24 +270,18 @@ const CompanyPage = () => {
             />
           </label>
 
-          <h2 className="text-md font-bold sm:text-lg">
-            {user?.username}
-          </h2>
+          <h2 className="text-md font-bold sm:text-lg">{user?.username}</h2>
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-4 mb-12"></div>
 
           <div className="flex flex-col text-left space-y-4">
             <div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faEnvelope} className="text-indigo-300" />
-              <p className="text-xs sm:text-sm">
-                {user?.email}
-              </p>
+              <p className="text-xs sm:text-sm">{user?.email}</p>
             </div>
 
             <div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faPhone} className="text-indigo-300" />
-              <p className="text-xs sm:text-sm">
-                {user?.contact}
-              </p>
+              <p className="text-xs sm:text-sm">{user?.contact}</p>
             </div>
           </div>
 
@@ -496,7 +497,7 @@ const CompanyPage = () => {
                       Track Event
                     </button>
 
-                    <button
+                     <button
                       className="btn1 mt-4 h-12 px-4 bg-indigo-600 text-white font-bold rounded-md w-full sm:w-auto text-sm"
                       onClick={() => openUpdateModal(event)}
                     >
