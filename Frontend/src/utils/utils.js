@@ -292,8 +292,6 @@ export const checkUserIsRegisteredInEventOrNot = async (eventId) => {
   }
 };
 
-
-
 // Pay Venue
 export const payVenue = async (eventId) => {
   try {
@@ -645,6 +643,20 @@ export const acceptEvent = async (eventId, timeslot) => {
     const { data } = await axios.post(
       "http://localhost:8000/venue/acceptevent",
       { eventId, timeslot },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Reject Event
+export const rejectEvent = async (eventId) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/rejectevent",
+      { eventId },
       { withCredentials: true }
     );
     return data;

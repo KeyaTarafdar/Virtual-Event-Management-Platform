@@ -29,6 +29,7 @@ const {
   updateHallProjector,
   updateHallBroadband,
   acceptEvent,
+  rejectEvent,
 } = require("../controller/venueController");
 
 router.get("/", (req, res) => {
@@ -125,6 +126,6 @@ router.put("/updatehalltiming", venueIsLoggedIn, updateHallTime);
 router.post("/acceptevent", venueIsLoggedIn, acceptEvent);
 
 // Reject EVENT
-// router.post("/rejectevent", venueIsLoggedIn, acceptEvent);
+router.post("/rejectevent", venueIsLoggedIn, rejectEvent);
 
 module.exports = router;
