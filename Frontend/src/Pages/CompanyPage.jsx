@@ -648,7 +648,7 @@ const CompanyPage = () => {
                           ? "Venue confirmation failed"
                           : "Venue is not yet confirmed"}
                         {selectedEvent.finalVenueDeatails && (
-                          <span className="underline text-blue-600 cursor-pointer">
+                          <span className="underline ml-4 text-blue-600 cursor-pointer">
                             Check Now
                           </span>
                         )}
@@ -693,20 +693,20 @@ const CompanyPage = () => {
                         </span>
                       </div>
                       {!selectedEvent.isVenueConfirmed ? (
-                        <div className="flex gap-4">
+                        <div className="gap-4">
                           <p className="text-yellow-500 text-sm ml-6 font-bold">
                             Payment is not done yet
                           </p>
                           <span
-                            className="underline text-sm font-bold text-blue-600 cursor-pointer"
+                            className="ml-6 underline text-sm font-bold text-blue-600 cursor-pointer"
                             onClick={handleVenuePayment}
                           >
                             Pay Now ({selectedEvent?.bill}/-)
                           </span>
-                          <span className="text-red-500 text-xs">
+                          <p className="text-red-500 text-xs ml-6">
                             Do the payment within 12 hours. Else the your venue
                             will be cancled!
-                          </span>
+                          </p>
                         </div>
                       ) : !isSlotConfirmed && selectedEvent.createdDate ? (
                         <p className="text-red-500 text-sm ml-6 font-bold">
@@ -732,7 +732,7 @@ const CompanyPage = () => {
 
                   {/* Line to Completion */}
                   <div
-                    className={`w-1 h-16 ${
+                    className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-6rem] ${
                       checkEventCompletion(
                         selectedEvent.date,
                         selectedEvent.slotConfirmedDate,
@@ -744,7 +744,6 @@ const CompanyPage = () => {
                     style={{
                       marginLeft: "0.35rem",
                       marginRight: "1.5rem",
-                      marginTop: "-3.5rem",
                     }}
                   ></div>
 
