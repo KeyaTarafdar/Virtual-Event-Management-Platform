@@ -47,6 +47,7 @@ const eventSchema = new mongoose.Schema({
       ref: "venue",
     },
   ],
+  allvenueRejected: Boolean,
 
   finalVenueDeatails: { type: mongoose.Schema.Types.ObjectId, ref: "venue" },
   finalVenueSlot: String,

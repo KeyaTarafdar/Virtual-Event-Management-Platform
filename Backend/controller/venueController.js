@@ -842,6 +842,9 @@ module.exports.rejectEvent = async (req, res) => {
     // receiver:user.email
 
     if (event.rejectedVenueRequests === 3) {
+      updatedVenue.allvenueRejected = true;
+      await updatedVenue.save();
+      
       const venue1 = await event.rejectedVenueRequests[0].populate();
       const venue2 = await event.rejectedVenueRequests[1].populate();
       const venue3 = await event.rejectedVenueRequests[2].populate();
