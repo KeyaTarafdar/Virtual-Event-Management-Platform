@@ -221,16 +221,19 @@ function VenueProfile() {
                     ))}
                 </div>
               </div>
-               <div className="flex flex-col w-full mt-4 px-4">
-                <div className="text-sm mb-1">Completed</div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${venue?.completePercentage-30}%` }}                    
-                  ></div>
+              <div className="flex flex-col w-full mt-4 px-4">
+                <div className="text-md font-semibold mb-1">-: Completed :-</div>
+                  <div className="w-[95%] bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-blue-500 h-2 rounded-full w-[95%]"
+                      style={{
+                        width: `${Math.min(100, Math.max(0, venue?.completePercentage - 30))}%`,
+                      }}                 
+                    >
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
             <div className="w-px bg-black m-6 "></div>
             <div className="lg:hidden bg-yellow-500 rounded-lg w-[90%] mb-8 h-1 ml-8 mr-8"></div>
