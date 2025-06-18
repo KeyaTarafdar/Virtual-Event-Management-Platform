@@ -15,6 +15,7 @@ const {
   errorResponse_alreadyExists,
 } = require("../responseObject");
 const { default: mongoose } = require("mongoose");
+const userModel = require("../models/userModel");
 
 // Register Venue
 module.exports.signUp = async (req, res) => {
@@ -740,10 +741,10 @@ module.exports.acceptEvent = async (req, res) => {
       timeslot === "1"
         ? venue.time_1stHalf
         : timeslot === "2"
-        ? venue.time_2ndHalf
-        : timeslot === "F"
-        ? venue.time_fullDay
-        : null;
+          ? venue.time_2ndHalf
+          : timeslot === "F"
+            ? venue.time_fullDay
+            : null;
     if (event) {
       event.finalVenueDeatails = venue._id;
       event.finalVenueSlot = `${timeslot}+${slot}`;
@@ -835,6 +836,10 @@ module.exports.rejectEvent = async (req, res) => {
       { $set: { bookingRequests: updatedBookingRequests } },
       { new: true }
     );
+
+    const user = userModel.findOne({ _id: event.ownerId })
+    // sender:venue.email
+    // receiver:user.email
 
     if (event.rejectedVenueRequests === 3) {
       const venue1 = await event.rejectedVenueRequests[0].populate();
