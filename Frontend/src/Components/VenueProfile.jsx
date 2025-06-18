@@ -1545,9 +1545,15 @@ function VenueProfile() {
                           <button
                             className="w-[8rem] bg-green-500 text-white px-4 py-2 rounded-lg border-green-800 border-2  hover:bg-green-600"
                             onClick={() => {
-                              acceptEvent(request.id._id, request.timeslot).then(
-                                (response) => {}
-                              );
+                              acceptEvent(
+                                request.id._id,
+                                request.timeslot
+                              ).then((response) => {
+                                alert(response.message);
+                                if (response.success) {
+                                  setVenue(response.data);
+                                }
+                              });
                             }}
                           >
                             Approve

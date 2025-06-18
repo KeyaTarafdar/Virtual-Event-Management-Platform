@@ -790,6 +790,12 @@ module.exports.acceptEvent = async (req, res) => {
     event.requestedVenues = [];
     await event.save();
     const updatedVenue = await venueModel.findById(venue._id);
+    if (updatedVenue.bookings && updatedVenue.bookings.length > 0) {
+      await updatedVenue.populate({
+        path: "bookings.eventId",
+        model: "event",
+      });
+    }
 
     return successResponse_ok(res, "Event Accepted", updatedVenue);
   } catch (err) {
