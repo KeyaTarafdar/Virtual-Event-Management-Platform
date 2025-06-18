@@ -801,7 +801,7 @@ module.exports.acceptEvent = async (req, res) => {
     const updatedVenue = await venueModel.findById(venue._id);
     if (updatedVenue.bookings && updatedVenue.bookings.length > 0) {
       await updatedVenue.populate({
-        path: "bookings.eventId",
+        path: "bookings.eventId bookingRequests.id",
         model: "event",
       });
     }
