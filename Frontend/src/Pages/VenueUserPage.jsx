@@ -93,8 +93,9 @@ function VenueUserPage() {
   return (
     <>
       <Navbar menuItems={[]} />
-      <div className="flex m-0 p-0 relative">
-        <div className="sm:block lg:hidden relative z-50 ml-4 mt-2 ">
+      <div className="flex flex-col min-h-screen relative">
+        {/* Floating 3-dot button */}
+        <div className="sm:block lg:hidden absolute z-50 ml-4 mt-[1rem] h-12 ">
           {!sidebarOpen ? (
             <button
               onClick={() => setSidebarOpen(true)}
@@ -113,100 +114,104 @@ function VenueUserPage() {
             </button>
           )}
         </div>
-        {/* SIDE BAR */}
-        <div
-          className={`
-            ${sidebarOpen ? "block" : "hidden"} 
-            lg:block fixed z-40 bg-[#081647] text-white rounded-r-2xl transition-transform ease-in-out duration-300
-            left-0 shadow-2xl p-4 lg:translate-x-0 w-[50%] sm:w-[70%] md:w-[50%] lg:w-[18rem]  
-          `}
-          style={{ height: "calc(100vh - 4rem)" }}
-        >
-          <div className="h-40 text-center flex flex-col items-center justify-center relative">
-            <div className="relative inline-block">
-              <img
-                src={
-                  venue && venue.profilepicture
-                    ? venue.profilepicture.url
-                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
-                }
-                alt="Venue Profile"
-                className="rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
-              />
-              <label
-                className="
-                  absolute bottom-0 right-0 
-                  w-7 h-7 sm:w-8 sm:h-8 
-                  cursor-pointer flex justify-center items-center 
-                  bg-gray-600 rounded-full
-                "
-              >
-                <FontAwesomeIcon icon={faEdit} className="text-white text-sm" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
+
+        <div className="flex flex-1 relative overflow-hidden">
+          {/* Sidebar */}
+          <div
+            className={`
+              ${sidebarOpen ? "block" : "hidden"} 
+              lg:block fixed z-40 bg-[#081647] text-white rounded-r-2xl transition-transform ease-in-out duration-300
+              left-0 shadow-2xl p-4 w-[70%] sm:w-[60%] md:w-[45%] lg:w-[18rem]  
+            `}
+            style={{ height: "calc(100vh - 4rem)" }} // assuming Navbar height is 4rem
+          >
+            <div className="h-40 text-center flex flex-col items-center justify-center relative">
+              <div className="relative inline-block">
+                <img
+                  src={
+                    venue && venue.profilepicture
+                      ? venue.profilepicture.url
+                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
+                  }
+                  alt="Venue Profile"
+                  className="mt-8 rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
                 />
-              </label>
+                <label
+                  className="
+                    absolute bottom-0 right-0 
+                    w-7 h-7 sm:w-8 sm:h-8 
+                    cursor-pointer flex justify-center items-center 
+                    bg-gray-600 rounded-full
+                  "
+                >
+                  <FontAwesomeIcon icon={faEdit} className="text-white text-sm" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              <div className="mt-2 text-base sm:text-xl font-serif font-extrabold">
+                {venue ? venue.name.split(" ")[0] : null}
+              </div>
+              <div className="h-8 flex items-center justify-center text-xs sm:text-sm">
+                {venue && (
+                  <>
+                    <AiOutlineEnvironment className="mr-2 text-lg" />
+                    {venue.city}
+                  </>
+                )}
+              </div>
             </div>
 
-            <div className="mt-2 text-base sm:text-xl font-serif font-extrabold">
-              {venue ? venue.name.split(" ")[0] : null}
-            </div>
-            <div className="h-8 flex items-center justify-center text-xs sm:text-sm">
-              {venue && (
-                <>
-                  <AiOutlineEnvironment className="mr-2 text-lg" />
-                  {venue.city}
-                </>
-              )}
+            <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-10 mb-2"></div>
+            <ul className="space-y-4 flex flex-col items-center p-2">
+              <li
+                className={`cursor-pointer p-2 rounded ${activeMenu === "Calendar" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => {
+                  setActiveMenu("Calendar");
+                  setSidebarOpen(false);
+                }}
+              >
+                Event Calender
+              </li>
+              <li
+                className={`cursor-pointer  p-2 rounded ${activeMenu === "Profile" ? "bg-gray-600" : ""
+                  }`}
+                onClick={() => {
+                  setActiveMenu("Profile");
+                  setSidebarOpen(false);
+                }}
+              >
+                Venue Profile
+              </li>
+            </ul>
+            <div className="mt-10 w-full flex flex-col text-xs items-center">
+              <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl"></div>
+              &copy;Eventek2024.
             </div>
           </div>
 
-          <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-10 mb-2"></div>
-          <ul className="space-y-4 flex flex-col items-center p-2">
-            <li
-              className={`cursor-pointer p-2 rounded ${activeMenu === "Calendar" ? "bg-gray-600" : ""
-                }`}
-              onClick={() => {
-                setActiveMenu("Calendar");
-                setSidebarOpen(false);
-              }}
-            >
-              Event Calender
-            </li>
-            <li
-              className={`cursor-pointer  p-2 rounded ${activeMenu === "Profile" ? "bg-gray-600" : ""
-                }`}
-              onClick={() => {
-                setActiveMenu("Profile");
-                setSidebarOpen(false);
-              }}
-            >
-              Venue Profile
-            </li>
-          </ul>
-          <div className="mt-10 w-full flex flex-col text-xs items-center">
-            <div className="w-[95%] border-b-2 border-gray-200 m-2 rounded-2xl"></div>
-            &copy;Eventek2024.
+          {/* Main Content */}
+          <div
+            className={`
+              flex-1 w-full overflow-y-auto transition-all duration-300 
+              pt-[4.5rem] px-4
+              ${sidebarOpen ? "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto" : ""}
+              lg:ml-[18rem]  // offset when sidebar is visible in desktop
+            `}
+          >
+            {renderComponent()}
           </div>
-        </div>
-        {/* MAIN  CONTENT */}
-        <div
-          className={`
-            flex-1 w-full  lg:ml-[15%] mt-[3.5rem] lg:mt-0
-            overflow-y-auto transition-all duration-300
-            ${sidebarOpen &&
-            "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
-            }
-          `}
-        >
-          {renderComponent()}
         </div>
       </div>
     </>
   );
+
 }
 
 export default VenueUserPage;
