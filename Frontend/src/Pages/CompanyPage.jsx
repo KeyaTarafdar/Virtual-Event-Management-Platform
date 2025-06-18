@@ -574,7 +574,7 @@ const CompanyPage = () => {
               e.target.id === "modal-overlay" && closeTrackModal()
             }
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[50%]">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[50%] mt-8">
               <h2
                 className="text-gradient1 text-4xl font-bold text-center mb-6"
                 style={{ fontFamily: '"quick"' }}
@@ -629,30 +629,35 @@ const CompanyPage = () => {
                               : "bg-gray-400"
                           } mr-2`}
                         ></div>
-                        <span className="text-xs xds:text-lg font-bold">
+                        <span className="text-xs xds:text-lg font-bold   text-sm xds:text-lg font-bold">
                           Venue Confirmation
                         </span>
                       </div>
-                      <p
-                        className={`text-sm ml-6 font-bold ${
-                          selectedEvent.finalVenueDeatails
+                       <p
+                          className={`text-sm ml-6 font-bold gap-3 ${selectedEvent.finalVenueDeatails
                             ? "text-green-500"
                             : selectedEvent.venueRejected
-                            ? "text-red-500"
-                            : "text-yellow-500"
-                        }`}
-                      >
-                        {selectedEvent.finalVenueDeatails
-                          ? "Venue has been confirmed"
-                          : selectedEvent.venueRejected
-                          ? "Venue confirmation failed"
-                          : "Venue is not yet confirmed"}
-                        {selectedEvent.finalVenueDeatails && (
-                          <span className="underline ml-4 text-blue-600 cursor-pointer">
-                            Check Now
-                          </span>
-                        )}
-                      </p>
+                              ? "text-red-500"
+                              : "text-yellow-500"
+                            }`}
+                        >
+                          {selectedEvent.finalVenueDeatails
+                            ? (<span>Venue has been confirmed</span>)
+                            : selectedEvent.venueRejected
+                              ? (<span>Venue confirmation failed</span>)
+                              : (<span>Venue is not yet confirmed</span>)}
+                          {selectedEvent.finalVenueDeatails && (
+                            <>
+                              <p className="text-black">{selectedEvent?.finalVenueDeatails?.name}</p>
+                              <p className="text-black">{selectedEvent?.finalVenueSlot === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</p>
+                              {/* <span>{selectedEvent?.finalVenueSlot.split('+')[0] === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</span>
+                              <span>{selectedEvent?.finalVenueSlot.split('+')[1][0]} to {selectedEvent?.finalVenueSlot.split('+')[1][1]}</span> */}
+                              <span className="underline text-blue-600 cursor-pointer " onClick={() => { navigate('/venuedetails/' + selectedEvent?.finalVenueDeatails?._id) }}>
+                                Check Now
+                              </span>
+                            </>
+                          )}
+                        </p>
 
                       <div className="flex items-center ml-6 mt-2">
                         <FontAwesomeIcon
@@ -667,7 +672,7 @@ const CompanyPage = () => {
 
                       {/* Line to Slot Confirmation */}
                       <div
-                        className={`w-1 h-16 ${
+                        className={` w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-7rem]  ${
                           selectedEvent.slotConfirmedDate
                             ? "bg-blue-600"
                             : "bg-gray-400"
@@ -675,7 +680,6 @@ const CompanyPage = () => {
                         style={{
                           marginLeft: "0.35rem",
                           marginRight: "1.5rem",
-                          marginTop: "-3.5rem",
                         }}
                       ></div>
 
@@ -798,7 +802,7 @@ const CompanyPage = () => {
               e.target.id === "modal-overlay" && closeUpdateModal()
             }
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[75%] lg:w-[50%] space-y-6">
+            <div className="bg-white p-6 mt-[4rem] rounded-lg shadow-lg w-[90%] sm:w-[75%] lg:w-[50%] space-y-2">
               <h2
                 className="text-gradient1 text-4xl font-bold text-center mb-6"
                 style={{ fontFamily: '"quick"' }}
