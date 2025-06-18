@@ -1507,33 +1507,33 @@ function VenueProfile() {
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-blue-800">
                           Event Created By :{" "}
-                          {request.id ? request.id.ownerId.username : null}
+                          {request?.id ? request?.id?.ownerId?.username : null}
                         </h3>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Event Name : </span>
-                          {request.id ? request.id.eventName : null}
+                          {request?.id ? request?.id?.eventName : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Date : </span>
-                          {request.id
-                            ? new Date(request.id.date).toLocaleDateString(
+                          {request?.id
+                            ? new Date(request?.id?.date).toLocaleDateString(
                                 "en-GB"
                               )
                             : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Head Count : </span>
-                          {request.id ? request.id.headcount : null}
+                          {request?.id ? request?.id?.headcount : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Time : </span>
-                          {request.id ? request.id.time : null}
+                          {request?.id ? request?.id?.time : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Time Slot : </span>
-                          {request.timeslot === "1" && "1st Half"}
-                          {request.timeslot === "2" && "2nd Half"}
-                          {request.timeslot === "F" && "Full Day"}
+                          {request?.timeslot === "1" && "1st Half"}
+                          {request?.timeslot === "2" && "2nd Half"}
+                          {request?.timeslot === "F" && "Full Day"}
                         </p>
                       </div>
 
