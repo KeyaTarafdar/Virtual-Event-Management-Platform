@@ -626,12 +626,12 @@ const CompanyPage = () => {
                               : "bg-gray-400"
                               } mr-2`}
                           ></div>
-                          <span className="text-xs xds:text-lg font-bold">
+                          <span className="text-sm xds:text-lg font-bold">
                             Venue Confirmation
                           </span>
                         </div>
                         <p
-                          className={`text-sm ml-6 font-bold flex gap-3 ${selectedEvent.finalVenueDeatails
+                          className={`text-sm ml-6 font-bold gap-3 ${selectedEvent.finalVenueDeatails
                             ? "text-green-500"
                             : selectedEvent.venueRejected
                               ? "text-red-500"
@@ -645,11 +645,11 @@ const CompanyPage = () => {
                               : (<span>Venue is not yet confirmed</span>)}
                           {selectedEvent.finalVenueDeatails && (
                             <>
-                              <span>{selectedEvent?.finalVenueDeatails?.name}</span>
-                              <span>{selectedEvent?.finalVenueSlot === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</span>
+                              <p className="text-black">{selectedEvent?.finalVenueDeatails?.name}</p>
+                              <p className="text-black">{selectedEvent?.finalVenueSlot === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</p>
                               {/* <span>{selectedEvent?.finalVenueSlot.split('+')[0] === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</span>
                               <span>{selectedEvent?.finalVenueSlot.split('+')[1][0]} to {selectedEvent?.finalVenueSlot.split('+')[1][1]}</span> */}
-                              <span className="underline text-blue-600 cursor-pointer px-5" onClick={() => { navigate('/venuedetails/' + selectedEvent?.finalVenueDeatails?._id) }}>
+                              <span className="underline text-blue-600 cursor-pointer " onClick={() => { navigate('/venuedetails/' + selectedEvent?.finalVenueDeatails?._id) }}>
                                 Check Now
                               </span>
                             </>
@@ -667,18 +667,18 @@ const CompanyPage = () => {
                           </span>
                         </div>
 
-                        {/* Line to Slot Confirmation */}
-                        <div
-                          className={`w-1 h-16 ${selectedEvent.slotConfirmedDate
+                      {/* Line to Slot Confirmation */}
+                      <div
+                        className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-7rem]  ${
+                          selectedEvent.slotConfirmedDate
                             ? "bg-blue-600"
                             : "bg-gray-400"
-                            }`}
-                          style={{
-                            marginLeft: "0.35rem",
-                            marginRight: "1.5rem",
-                            marginTop: "-3.5rem",
-                          }}
-                        ></div>
+                        }`}
+                        style={{
+                          marginLeft: "0.35rem",
+                          marginRight: "1.5rem",
+                        }}
+                      ></div>
 
                         {/* Payment Confirmation */}
                         <div className="flex items-center">
@@ -693,20 +693,20 @@ const CompanyPage = () => {
                           </span>
                         </div>
                         {!selectedEvent.isVenueConfirmed ? (
-                          <div className="flex gap-4">
+                          <div className="gap-4">
                             <p className="text-yellow-500 text-sm ml-6 font-bold">
                               Payment is not done yet
                             </p>
                             <span
-                              className="underline text-sm font-bold text-blue-600 cursor-pointer"
+                              className="ml-6 underline text-sm font-bold text-blue-600 cursor-pointer"
                               onClick={handleVenuePayment}
                             >
                               Pay Now ({selectedEvent?.bill}/-)
                             </span>
-                            <span className="text-red-500 text-xs">
+                            <p className="text-red-500 text-xs ml-6">
                               Do the payment within 12 hours. Else the your venue
                               will be cancled!
-                            </span>
+                            </p>
                           </div>
                         ) : !isSlotConfirmed && selectedEvent.createdDate ? (
                           <p className="text-red-500 text-sm ml-6 font-bold">
@@ -732,7 +732,7 @@ const CompanyPage = () => {
 
                   {/* Line to Completion */}
                   <div
-                    className={`w-1 h-16 ${checkEventCompletion(
+                    className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-6rem] ${checkEventCompletion(
                       selectedEvent.date,
                       selectedEvent.slotConfirmedDate,
                       selectedEvent.createdDate
@@ -743,7 +743,6 @@ const CompanyPage = () => {
                     style={{
                       marginLeft: "0.35rem",
                       marginRight: "1.5rem",
-                      marginTop: "-3.5rem",
                     }}
                   ></div>
 
@@ -797,7 +796,7 @@ const CompanyPage = () => {
               e.target.id === "modal-overlay" && closeUpdateModal()
             }
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[75%] lg:w-[50%] space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[75%] lg:w-[50%] space-y-2 mt-[4rem]">
               <h2
                 className="text-gradient1 text-4xl font-bold text-center mb-6"
                 style={{ fontFamily: '"quick"' }}
