@@ -129,23 +129,14 @@ const CreateForm = () => {
       setLoading(false);
       alert(result.message);
       if (result.success) {
-        if (
-          formData.eventType === "virtual" &&
-          result === "Event created successfully!"
-        ) {
+        if (formData.eventType === "virtual") {
           navigate("/virtualevent");
         }
-        if (
-          formData.eventType === "hybrid" &&
-          result === "Event created successfully!"
-        ) {
-          navigate("/hybridevent");
+        if (formData.eventType === "hybrid") {
+          navigate("/companypage");
         }
-        if (
-          formData.eventType === "in_person" &&
-          result === "Event created successfully!"
-        ) {
-          navigate("/inpersonevent");
+        if (formData.eventType === "in_person") {
+          navigate("/companypage");
         }
       }
     } catch (error) {

@@ -639,10 +639,10 @@ function VenueProfile() {
                         className="p-2 border rounded-md w-full"
                       >
                         <option value="">Select Hall Type</option>
-                        <option value="auditorium">Auditorium</option>
-                        <option value="banquetHall">Banquet Hall</option>
-                        <option value="openHalls">Open Halls</option>
-                        <option value="lawns">Lawns</option>
+                        <option value="Auditorium">Auditorium</option>
+                        <option value="Banquet Hall">Banquet Hall</option>
+                        <option value="Open Halls">Open Halls</option>
+                        <option value="Lawns">Lawns</option>
                       </select>
                     ) : (
                       <span
@@ -1570,58 +1570,71 @@ function VenueProfile() {
                         </p>
                       </div>
 
-                      <div className="border-l-4 border-yellow-600  ml-4 h-64 ">
-                        <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-12">
-                          Choose Status
-                        </h2>
-                        <div className=" lg:mt-0 lg:ml-4 flex  space-x-2">
-                          <button className="w-[8rem] bg-green-500 text-white px-4 py-2 rounded-lg border-green-800 border-2  hover:bg-green-600">
-                            Approve
-                          </button>
-                          <button
-                            className="w-[8rem]  bg-red-500 text-white px-4 py-2 rounded-lg border-red-800 border-2 hover:bg-red-600"
-                            onClick={handleReject}
-                          >
-                            Reject
-                          </button>
-                          {isModalOpen && (
-                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                                <h2 className="text-xl font-bold mb-4 text-gray-800">
-                                  Enter Rejection Reason
-                                </h2>
-                                <textarea
-                                  className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
-                                  rows="4"
-                                  placeholder="Enter your reason here..."
-                                  value={reason}
-                                  onChange={(e) => setReason(e.target.value)}
-                                />
-                                <div className="flex justify-end mt-4 gap-2">
-                                  <button
-                                    className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
-                                    onClick={handleCloseModal}
-                                  >
-                                    Cancel
-                                  </button>
-                                  <button
-                                    className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
-                                    onClick={handleSubmitReason}
-                                  >
-                                    Submit
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </>
-        );
+                      <div className="border-l-4 border-yellow-600  ml-4 h-64 ">
+                        <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-12">
+                          Choose Status
+                        </h2>
+                        <div className=" lg:mt-0 lg:ml-4 flex  space-x-2">
+                          <button
+                            className="w-[8rem] bg-green-500 text-white px-4 py-2 rounded-lg border-green-800 border-2  hover:bg-green-600"
+                            onClick={() => {
+                              acceptEvent(
+                                request.id._id,
+                                request.timeslot
+                              ).then((response) => {
+                                alert(response.message);
+                                if (response.success) {
+                                  setVenue(response.data);
+                                }
+                              });
+                            }}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            className="w-[8rem]  bg-red-500 text-white px-4 py-2 rounded-lg border-red-800 border-2 hover:bg-red-600"
+                            onClick={handleReject}
+                          >
+                            Reject
+                          </button>
+                          {isModalOpen && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                                <h2 className="text-xl font-bold mb-4 text-gray-800">
+                                  Enter Rejection Reason
+                                </h2>
+                                <textarea
+                                  className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
+                                  rows="4"
+                                  placeholder="Enter your reason here..."
+                                  value={reason}
+                                  onChange={(e) => setReason(e.target.value)}
+                                />
+                                <div className="flex justify-end mt-4 gap-2">
+                                  <button
+                                    className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
+                                    onClick={handleCloseModal}
+                                  >
+                                    Cancel
+                                  </button>
+                                  <button
+                                    className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
+                                    onClick={handleSubmitReason}
+                                  >
+                                    Submit
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </>
+        );
 
       case "Upcoming Bookings":
         return (

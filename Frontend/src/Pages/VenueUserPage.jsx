@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { uploadVenueProfilePicture } from "../utils/utils";
 import { HiDotsVertical, HiX } from "react-icons/hi";
+import { useUser } from "../context/userContext/UserContext";
 
 function VenueUserPage() {
   const [activeMenu, setActiveMenu] = useState("");
@@ -16,13 +17,12 @@ function VenueUserPage() {
   const renderComponent = () => {
     switch (activeMenu) {
       case "Calendar":
-        return <CustomCalendar />;
+        return <CustomCalendar venue={venue} />;
       case "Profile":
         return <VenueProfile />;
       default:
         return (
-          venue &&
-          (
+          venue && (
             <div
               style={{
                 backgroundImage:
@@ -34,9 +34,11 @@ function VenueUserPage() {
             >
               <div className="w-[90%] sm:w-[50%] text-center ">
                 <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
-                {venue?.completePercentage < 100 && <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
-                  Please complete your profile 100%!
-                </div>}
+                {venue?.completePercentage < 100 && (
+                  <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
+                    Please complete your profile 100%!
+                  </div>
+                )}
               </div>
             </div>
           )
@@ -44,11 +46,11 @@ function VenueUserPage() {
     }
   };
 
-  const [venue, setvenue] = useState(null);
+  const { venue, setVenue } = useUser();
 
   useEffect(() => {
     findVenue().then((response) => {
-      setvenue(response);
+      setVenue(response);
     });
   }, []);
 
@@ -81,7 +83,7 @@ function VenueUserPage() {
       uploadVenueProfilePicture(imageData).then((response) => {
         alert(response.message);
         findVenue().then((response) => {
-          setvenue(response);
+          setVenue(response);
         });
       });
     } else {

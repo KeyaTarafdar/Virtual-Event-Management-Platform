@@ -486,34 +486,36 @@ function AdminPage() {
                       allVenues.map((venue, index) => (
                         <tr key={venue._id}>
                           <td className="border-2 p-2">{index + 1}</td>
-                          <td className="border-2 p-2">{venue.name}</td>
-                          <td className="border-2 p-2">{venue.owner}</td>
-                          <td className="border-2 p-2">{venue.email}</td>
-                          <td className="border-2 p-2">{venue.contact}</td>
-                          <td className="border-2 p-2">{venue.city}</td>
-                          <td className="border-2 p-2">{venue.address}</td>
+                          <td className="border-2 p-2">{venue?.name}</td>
+                          <td className="border-2 p-2">{venue?.ownerName}</td>
+                          <td className="border-2 p-2">{venue?.email}</td>
+                          <td className="border-2 p-2">{venue?.contact}</td>
+                          <td className="border-2 p-2">{venue?.city}</td>
+                          <td className="border-2 p-2">{venue?.address}</td>
                           <td className="border-2 p-2">
                             {venue.canOrganizeMultidayEvent ? "Yes" : "No"}
                           </td>
-                          <td className="border-2 p-2">{venue.maxCapacity}</td>
-                          <td className="border-2 p-2">{venue.openingtime}</td>
-                          <td className="border-2 p-2">{venue.closingtime}</td>
+                          <td className="border-2 p-2">{venue?.maxCapacity}</td>
+                          <td className="border-2 p-2">{venue?.openingtime}</td>
+                          <td className="border-2 p-2">{venue?.closingtime}</td>
                           <td className="border-2 p-2">
-                            {venue.firstHalfTiming}
+                            {venue?.time_1stHalf[0]} to {venue?.time_1stHalf[1]}
                           </td>
                           <td className="border-2 p-2">
-                            {venue.firstHalfPrice}
+                            {venue?.bookingPrice_1stHalf}
                           </td>
                           <td className="border-2 p-2">
-                            {venue.secondHalfTiming}
+                            {venue?.time_2ndHalf[0]} to {venue?.time_2ndHalf[1]}
                           </td>
                           <td className="border-2 p-2">
-                            {venue.secondHalfPrice}
+                            {venue?.bookingPrice_2ndHalf}
                           </td>
                           <td className="border-2 p-2">
-                            {venue.fullDayTiming}
+                            {venue?.time_fullDay[0]} to {venue?.time_fullDay[1]}
                           </td>
-                          <td className="border-2 p-2">{venue.fullDayPrice}</td>
+                          <td className="border-2 p-2">
+                            {venue?.bookingPrice_fullDay}
+                          </td>
                         </tr>
                       ))}
                   </tbody>
@@ -654,11 +656,9 @@ function AdminPage() {
   const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
-    if (!admin) {
-      findAdmin().then((response) => {
-        setAdmin(response);
-      });
-    }
+    findAdmin().then((response) => {
+      setAdmin(response);
+    });
 
     if (!company) {
       fetchCompanyDetails().then((response) => {
