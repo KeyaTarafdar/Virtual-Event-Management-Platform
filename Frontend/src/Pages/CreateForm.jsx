@@ -133,10 +133,10 @@ const CreateForm = () => {
           navigate("/virtualevent");
         }
         if (formData.eventType === "hybrid") {
-          navigate("/hybridevent");
+          navigate("/companypage");
         }
         if (formData.eventType === "in_person") {
-          navigate("/inpersonevent");
+          navigate("/companypage");
         }
       }
     } catch (error) {
