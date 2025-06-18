@@ -8,9 +8,9 @@ const UserContextWrapper = ({ children }) => {
   const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem("user"));
-    const storedVenue = JSON.parse(sessionStorage.getItem("venue"));
-    const storedAdmin = JSON.parse(sessionStorage.getItem("admin"));
+    const storedUser = JSON.parse(sessionStorage.getItem("user") | "");
+    const storedVenue = JSON.parse(sessionStorage.getItem("venue") | "");
+    const storedAdmin = JSON.parse(sessionStorage.getItem("admin") | "");
 
     if (storedUser) {
       setUser(storedUser);
