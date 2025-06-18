@@ -383,7 +383,7 @@ module.exports.rejectVenue = async (req, res) => {
     await transporter.sendMail({
       from: '"Eventek" <eventek@gmail.com>',
       to: venue.email,
-      subject: "Application accepted",
+      subject: "Application Rejected",
       html: `<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9f9; color: #333;">
          <div style="margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
              <div style="background-color: #f6440e; color: #ffffff; padding: 15px; border-radius: 8px 8px 0 0; text-align: center;">
