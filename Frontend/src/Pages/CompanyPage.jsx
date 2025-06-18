@@ -599,7 +599,7 @@ const CompanyPage = () => {
                     />
                     :
                     <span className="text-gray-500 text-sm ml-2">
-                      {selectedEvent.createdDate || "N/A"}
+                      {selectedEvent.createdDate || "19-06-2025"}
                     </span>
                   </div>
 
@@ -663,7 +663,7 @@ const CompanyPage = () => {
                           />
                           :
                           <span className="text-gray-500 text-sm ml-2">
-                            {selectedEvent.venueConfirmationDate || "N/A"}
+                            {selectedEvent.venueConfirmationDate || "19-06-2025"}
                           </span>
                         </div>
 
@@ -724,7 +724,7 @@ const CompanyPage = () => {
                           />
                           :
                           <span className="text-gray-500 text-sm ml-2">
-                            {selectedEvent.slotConfirmedDate || "N/A"}
+                            {selectedEvent.slotConfirmedDate || "19-06-2025"}
                           </span>
                         </div>
                       </>
