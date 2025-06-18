@@ -709,6 +709,20 @@ export const acceptEvent = async (eventId, timeslot) => {
   }
 };
 
+// Reject Event
+export const rejectEvent = async (eventId) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/rejectevent",
+      { eventId },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 
 // Admin Login

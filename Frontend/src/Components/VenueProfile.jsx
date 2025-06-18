@@ -28,6 +28,7 @@ import {
   updateOpeningTime,
   updateClosingTime,
   acceptEvent,
+  rejectEvent,
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
 import { useUser } from "../context/userContext/UserContext";
@@ -1560,7 +1561,13 @@ function VenueProfile() {
                           </button>
                           <button
                             className="w-[8rem]  bg-red-500 text-white px-4 py-2 rounded-lg border-red-800 border-2 hover:bg-red-600"
-                            onClick={handleReject}
+                            onClick={() => {
+                              rejectEvent(request.id._id).then((response) => {
+                                alert(response.message);
+                                if (response.success) {
+                                  setVenue(response.data);                                }
+                              });
+                            }}
                           >
                             Reject
                           </button>

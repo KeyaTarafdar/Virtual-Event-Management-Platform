@@ -736,9 +736,17 @@ module.exports.acceptEvent = async (req, res) => {
       amount = venue.bookingPrice_fullDay;
     }
     const oldRequestedVenues = event.requestedVenues;
+    const slot =
+      timeslot === "1"
+        ? venue.time_1stHalf
+        : timeslot === "2"
+        ? venue.time_2ndHalf
+        : timeslot === "F"
+        ? venue.time_fullDay
+        : null;
     if (event) {
       event.finalVenueDeatails = venue._id;
-      event.finalVenueSlot = timeslot;
+      event.finalVenueSlot = `${timeslot}+${slot}`;
       event.bill = amount;
       await event.save();
     }
@@ -798,6 +806,52 @@ module.exports.acceptEvent = async (req, res) => {
     }
 
     return successResponse_ok(res, "Event Accepted", updatedVenue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Reject event request
+module.exports.rejectEvent = async (req, res) => {
+  try {
+    const { eventId } = req.body;
+    let venue = req.venue;
+    let event = await eventModel.findOneAndUpdate(
+      { _id: eventId },
+      { $addToSet: { rejectedVenueRequests: eventId } }
+    );
+    event = await eventModel.findById(eventId);
+    event.requestedVenues = event.requestedVenues.filter(
+      (venueReq) => venueReq.id.toString() !== venue._id
+    );
+    await event.save();
+
+    venue = await venueModel.findById(venue._id);
+    const updatedBookingRequests = venue.bookingRequests.filter((request) => {
+      return request.id.toString() !== eventId.toString();
+    });
+    const updatedVenue = await venueModel.findOneAndUpdate(
+      { _id: venue._id },
+      { $set: { bookingRequests: updatedBookingRequests } },
+      { new: true }
+    );
+
+    if (event.rejectedVenueRequests === 3) {
+      const venue1 = await event.rejectedVenueRequests[0].populate();
+      const venue2 = await event.rejectedVenueRequests[1].populate();
+      const venue3 = await event.rejectedVenueRequests[2].populate();
+      // send mail that venue1.name, venue2.name, venue3.name has rejected your request
+      event.rejectedVenueRequests = [];
+      await event.save();
+    }
+    await updatedVenue.populate([
+      {
+        path: "bookingRequests.id",
+        model: "event",
+        populate: { path: "ownerId" },
+      },
+    ]);
+    return successResponse_ok(res, "Event Rejected", updatedVenue);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }

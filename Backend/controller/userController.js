@@ -145,6 +145,7 @@ module.exports.getUser = async (req, res) => {
         path: "appliedEvents",
       },
     ]);
+
     return successResponse_ok(res, "User fetched", user);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
