@@ -1172,7 +1172,11 @@ function VenueProfile() {
                             : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
                         }`}
                       >
-                        {venue.projector ? "Yes" : "No"}
+                        {venue.projector === true
+                          ? "Yes"
+                          : venue.projector === false
+                          ? "No"
+                          : "Please select projector availability"}
                       </span>
                     )}
                     <button
@@ -1245,7 +1249,11 @@ function VenueProfile() {
                             : "rounded-lg w-[90%] p-2 text-red-500 bg-white"
                         }`}
                       >
-                        {venue.broadband ? "Yes" : "No"}
+                        {venue.broadband === true
+                          ? "Yes"
+                          : venue.broadband === false
+                          ? "No"
+                          : "Please select broadband availability"}
                       </span>
                     )}
                     <button
