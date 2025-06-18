@@ -228,7 +228,7 @@ module.exports.fetchVenueUser = async (req, res) => {
         model: "event",
         populate: { path: "ownerId" },
       },
-      { path: "bookedEvents" },
+      { path: "bookings.eventId" },
     ]);
 
     return successResponse_ok(res, "Venue fetched", venue);
