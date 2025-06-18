@@ -15,7 +15,7 @@ import {
   faTowerBroadcast,
   faUsers,
   faPen,
-  faCheck
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCompany } from "../context/companyContext/CompanyContext";
 import { useUser } from "../context/userContext/UserContext";
@@ -25,7 +25,9 @@ import {
   findUser,
   fetchCompanyDetails,
   uploadProfilePicture,
+  payVenue,
 } from "../utils/utils";
+import axios from "axios";
 
 const headerMenuItems = [{ label: "Home", to: "/" }];
 
@@ -38,38 +40,40 @@ const EditableField = ({ label, value, onSave, type }) => {
     setEditMode(false);
   };
 
-return (
-  <div className="flex flex-wrap md:flex-nowrap items-start md:items-center gap-3 w-full">
-    <label className="w-full md:w-56 font-semibold text-sm md:text-base">{label} :- </label>
+  return (
+    <div className="flex flex-wrap md:flex-nowrap items-start md:items-center gap-3 w-full">
+      <label className="w-full md:w-56 font-semibold text-sm md:text-base">
+        {label} :-{" "}
+      </label>
 
-    {!editMode ? (
-      <>
-        <p className="w-[90%] md:w-[60%] text-green-700 font-bold shadow-[0_4px_10px_#e4f868] bg-blue-200 rounded-lg p-2 md:pl-8 border-blue-800 border-2 text-sm md:text-base break-words">
-          {fieldValue}
-        </p>
-        <FontAwesomeIcon
-          icon={faPen}
-          className="cursor-pointer text-blue-600 text-base md:text-lg"
-          onClick={() => setEditMode(true)}
-        />
-      </>
-    ) : (
-      <>
-        <input
-          type={type}
-          className="flex-1 min-w-0 px-2 py-1 border rounded text-sm md:text-base"
-          value={fieldValue}
-          onChange={(e) => setFieldValue(e.target.value)}
-        />
-        <FontAwesomeIcon
-          icon={faCheck}
-          className="cursor-pointer font-bold text-green-600 text-base md:text-lg"
-          onClick={handleSave}
-        />
-      </>
-    )}
-  </div>
-);
+      {!editMode ? (
+        <>
+          <p className="w-[90%] md:w-[60%] text-green-700 font-bold shadow-[0_4px_10px_#e4f868] bg-blue-200 rounded-lg p-2 md:pl-8 border-blue-800 border-2 text-sm md:text-base break-words">
+            {fieldValue}
+          </p>
+          <FontAwesomeIcon
+            icon={faPen}
+            className="cursor-pointer text-blue-600 text-base md:text-lg"
+            onClick={() => setEditMode(true)}
+          />
+        </>
+      ) : (
+        <>
+          <input
+            type={type}
+            className="flex-1 min-w-0 px-2 py-1 border rounded text-sm md:text-base"
+            value={fieldValue}
+            onChange={(e) => setFieldValue(e.target.value)}
+          />
+          <FontAwesomeIcon
+            icon={faCheck}
+            className="cursor-pointer font-bold text-green-600 text-base md:text-lg"
+            onClick={handleSave}
+          />
+        </>
+      )}
+    </div>
+  );
 };
 
 const CompanyPage = () => {
@@ -91,6 +95,7 @@ const CompanyPage = () => {
   };
 
   const openTrackModal = (event) => {
+    console.log("event", event);
     setSelectedEvent(event);
     setIsTrackModalVisible(true);
   };
@@ -107,7 +112,7 @@ const CompanyPage = () => {
     setSelectedEvent(event);
     setIsUpdateModalVisible(true);
   };
-  
+
   const closeTrackModal = () => {
     setIsTrackModalVisible(false);
   };
@@ -154,7 +159,6 @@ const CompanyPage = () => {
       return;
     }
   };
-
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
@@ -223,6 +227,57 @@ const CompanyPage = () => {
       setevents(user?.createdEvents);
     }
   }, []);
+
+  const handleVenuePayment = async () => {
+    const { data } = await axios.post(
+      "http://localhost:8000/users/create-order",
+      {
+        amount: Number(selectedEvent?.bill),
+        currency: "INR",
+        receipt: "receipt#1",
+        notes: {},
+      },
+      { withCredentials: true }
+    );
+
+    const options = {
+      key: "rzp_test_B9RwKdpPVSHcZx",
+      amount: data.order.amount,
+      currency: data.order.currency,
+      name: "abc",
+      description: "abcd",
+      order_id: data.order.id,
+      handler: async (response) => {
+        let verifyResponse = await axios.post(
+          "http://localhost:8000/users/verify-payment",
+          {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          },
+          { withCredentials: true }
+        );
+        if (verifyResponse.data.success) {
+          payVenue(selectedEvent._id).then((response) => {
+            if (response.success) setSelectedEvent(response.data);
+          });
+        } else {
+          alert("Failed to register!");
+        }
+      },
+      prefill: {
+        name: "Rahul Jha",
+        email: "rahul@gmail.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#F37254",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
 
   return (
     <>
@@ -397,7 +452,7 @@ const CompanyPage = () => {
           <hr className="border-0 h-[2px] bg-gray-500 my-6"></hr>
 
           {Array.isArray(events) &&
-            events.map((event, event1, index) => (
+            events.map((event, index) => (
               <div
                 key={index}
                 className="border-2 border-black mt-4 lg:ml-32 w-[100%] lg:w-[80%] h-auto bg-gray-200 shadow-lg rounded-lg p-4 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4"
@@ -463,7 +518,9 @@ const CompanyPage = () => {
                         icon={faTowerBroadcast}
                         className="mr-2 text-indigo-800"
                       />
-                      {event.eventType === "in_person" && <span>In Person</span>}
+                      {event.eventType === "in_person" && (
+                        <span>In Person</span>
+                      )}
                       {event.eventType === "virtual" && <span>Virtual</span>}
                       {event.eventType === "hybrid" && <span>Hybrid</span>}
                     </div>
@@ -487,7 +544,7 @@ const CompanyPage = () => {
                       <span>{event.tillNowTotalRegistration}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col sm:flex-row sm:gap-10">
                     <button
                       className="btn1 mt-4 h-12 px-4 bg-indigo-600 text-white font-bold rounded-md w-full sm:w-auto text-sm"
@@ -507,7 +564,6 @@ const CompanyPage = () => {
               </div>
             ))}
         </div>
-
 
         {/* Modal */}
         {isTrackModalVisible && selectedEvent && (
@@ -548,113 +604,154 @@ const CompanyPage = () => {
                     </span>
                   </div>
 
-                    {/* Venue Confirmation (Only for in-person or hybrid) */}
-                    {(selectedEvent.type === "in-person" || selectedEvent.type === "hybrid") && (
-                      <>
-                        <div
-                          className={`w-1 h-16 ${
-                            selectedEvent.venueConfirmed ? "bg-blue-600" : "bg-gray-400"
-                          }`}
-                          style={{
-                            marginLeft: "0.35rem",
-                            marginRight: "1.5rem",
-                            marginTop: "-3.5rem",
-                          }}
-                        ></div>
-
-                        <div className="flex items-center">
-                          <div
-                            className={`w-4 h-4 rounded-full ${
-                              selectedEvent.venueConfirmed ? "bg-blue-600" : "bg-gray-400"
-                            } mr-2`}
-                          ></div>
-                          <span className="text-xs xds:text-lg font-bold">
-                            Venue Confirmation
-                          </span>
-                        </div>
-                        <p
-                          className={`text-sm ml-6 font-bold ${
-                            selectedEvent.venueConfirmed
-                              ? "text-green-500"
-                              : selectedEvent.venueRejected
-                              ? "text-red-500"
-                              : "text-yellow-500"
-                          }`}
-                        >
-                          {selectedEvent.venueConfirmed
-                            ? "Venue has been confirmed"
-                            : selectedEvent.venueRejected
-                            ? "Venue confirmation failed"
-                            : "Venue is not yet confirmed"}
-                        </p>
-
-                        <div className="flex items-center ml-6 mt-2">
-                          <FontAwesomeIcon
-                            icon={faCalendarAlt}
-                            className="mr-2 text-gray-500"
-                          />
-                          :
-                          <span className="text-gray-500 text-sm ml-2">
-                            {selectedEvent.venueConfirmationDate || "N/A"}
-                          </span>
-                        </div>
-                      </>
-                    )}
-
-                    {/* Line to Slot Confirmation */}
-                    <div
-                      className={`w-1 h-16 ${
-                        selectedEvent.slotConfirmedDate ? "bg-blue-600" : "bg-gray-400"
-                      }`}
-                      style={{
-                        marginLeft: "0.35rem",
-                        marginRight: "1.5rem",
-                        marginTop: "-3.5rem",
-                      }}
-                    ></div>
-
-                    {/* Slot Confirmation */}
-                    <div className="flex items-center">
+                  {/* Venue Confirmation (Only for in-person or hybrid) */}
+                  {(selectedEvent.eventType === "in_person" ||
+                    selectedEvent.eventType === "hybrid") && (
+                    <>
                       <div
-                        className={`w-4 h-4 rounded-full ${
-                          selectedEvent.slotConfirmedDate
-                            ? isSlotConfirmed
+                        className={`w-1 h-16 ${
+                          selectedEvent.venueConfirmed
+                            ? "bg-blue-600"
+                            : "bg-gray-400"
+                        }`}
+                        style={{
+                          marginLeft: "0.35rem",
+                          marginRight: "1.5rem",
+                          marginTop: "-3.5rem",
+                        }}
+                      ></div>
+
+                      <div className="flex items-center">
+                        <div
+                          className={`w-4 h-4 rounded-full ${
+                            selectedEvent.finalVenueDeatails
                               ? "bg-blue-600"
                               : "bg-gray-400"
-                            : "bg-gray-400"
-                        } mr-2`}
-                      ></div>
-                      <span className="text-xs xds:text-lg font-bold">
-                        Slot Confirmation
-                      </span>
-                    </div>
-                    {!selectedEvent.slotConfirmedDate ? (
-                      <p className="text-yellow-500 text-sm ml-6 font-bold">
-                        Slot not yet Confirmed
+                          } mr-2`}
+                        ></div>
+                        <span className="text-xs xds:text-lg font-bold">
+                          Venue Confirmation
+                        </span>
+                      </div>
+                      <p
+                        className={`text-sm ml-6 font-bold ${
+                          selectedEvent.finalVenueDeatails
+                            ? "text-green-500"
+                            : selectedEvent.venueRejected
+                            ? "text-red-500"
+                            : "text-yellow-500"
+                        }`}
+                      >
+                        {selectedEvent.finalVenueDeatails
+                          ? "Venue has been confirmed"
+                          : selectedEvent.venueRejected
+                          ? "Venue confirmation failed"
+                          : "Venue is not yet confirmed"}
+                        {selectedEvent.finalVenueDeatails && (
+                          <span className="underline text-blue-600 cursor-pointer">
+                            Check Now
+                          </span>
+                        )}
                       </p>
-                    ) : !isSlotConfirmed && selectedEvent.createdDate ? (
-                      <p className="text-red-500 text-sm ml-6 font-bold">
-                        Slot Confirmation failed
-                      </p>
-                    ) : (
-                      <p className="text-green-500 text-sm ml-6 font-bold">
-                        Slot has been successfully scheduled!
-                      </p>
-                    )}
-                    <div className="flex items-center ml-6 mt-2">
-                      <FontAwesomeIcon
-                        icon={faCalendarAlt}
-                        className="mr-2 text-gray-500"
-                      />
-                      :
-                      <span className="text-gray-500 text-sm ml-2">
-                        {selectedEvent.slotConfirmedDate || "N/A"}
-                      </span>
-                    </div>
 
-                    {/* Line to Completion */}
+                      <div className="flex items-center ml-6 mt-2">
+                        <FontAwesomeIcon
+                          icon={faCalendarAlt}
+                          className="mr-2 text-gray-500"
+                        />
+                        :
+                        <span className="text-gray-500 text-sm ml-2">
+                          {selectedEvent.venueConfirmationDate || "N/A"}
+                        </span>
+                      </div>
+
+                      {/* Line to Slot Confirmation */}
+                      <div
+                        className={`w-1 h-16 ${
+                          selectedEvent.slotConfirmedDate
+                            ? "bg-blue-600"
+                            : "bg-gray-400"
+                        }`}
+                        style={{
+                          marginLeft: "0.35rem",
+                          marginRight: "1.5rem",
+                          marginTop: "-3.5rem",
+                        }}
+                      ></div>
+
+                      {/* Payment Confirmation */}
+                      <div className="flex items-center">
+                        <div
+                          className={`w-4 h-4 rounded-full ${
+                            selectedEvent.isVenueConfirmed
+                              ? "bg-blue-600"
+                              : "bg-gray-400"
+                          } mr-2`}
+                        ></div>
+                        <span className="text-xs xds:text-lg font-bold">
+                          Payment Comfirmation
+                        </span>
+                      </div>
+                      {!selectedEvent.isVenueConfirmed ? (
+                        <div className="flex gap-4">
+                          <p className="text-yellow-500 text-sm ml-6 font-bold">
+                            Payment is not done yet
+                          </p>
+                          <span
+                            className="underline text-sm font-bold text-blue-600 cursor-pointer"
+                            onClick={handleVenuePayment}
+                          >
+                            Pay Now ({selectedEvent?.bill}/-)
+                          </span>
+                          <span className="text-red-500 text-xs">
+                            Do the payment within 12 hours. Else the your venue
+                            will be cancled!
+                          </span>
+                        </div>
+                      ) : !isSlotConfirmed && selectedEvent.createdDate ? (
+                        <p className="text-red-500 text-sm ml-6 font-bold">
+                          Slot Confirmation failed
+                        </p>
+                      ) : (
+                        <p className="text-green-500 text-sm ml-6 font-bold">
+                          Payment Done!
+                        </p>
+                      )}
+                      <div className="flex items-center ml-6 mt-2">
+                        <FontAwesomeIcon
+                          icon={faCalendarAlt}
+                          className="mr-2 text-gray-500"
+                        />
+                        :
+                        <span className="text-gray-500 text-sm ml-2">
+                          {selectedEvent.slotConfirmedDate || "N/A"}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Line to Completion */}
+                  <div
+                    className={`w-1 h-16 ${
+                      checkEventCompletion(
+                        selectedEvent.date,
+                        selectedEvent.slotConfirmedDate,
+                        selectedEvent.createdDate
+                      )
+                        ? "bg-blue-600"
+                        : "bg-gray-400"
+                    }`}
+                    style={{
+                      marginLeft: "0.35rem",
+                      marginRight: "1.5rem",
+                      marginTop: "-3.5rem",
+                    }}
+                  ></div>
+
+                  {/* Event Completion */}
+                  <div className="flex items-center">
                     <div
-                      className={`w-1 h-16 ${
+                      className={`w-4 h-4 rounded-full ${
                         checkEventCompletion(
                           selectedEvent.date,
                           selectedEvent.slotConfirmedDate,
@@ -662,90 +759,79 @@ const CompanyPage = () => {
                         )
                           ? "bg-blue-600"
                           : "bg-gray-400"
-                      }`}
-                      style={{
-                        marginLeft: "0.35rem",
-                        marginRight: "1.5rem",
-                        marginTop: "-3.5rem",
-                      }}
+                      } mr-2`}
                     ></div>
-
-                    {/* Event Completion */}
-                    <div className="flex items-center">
-                      <div
-                        className={`w-4 h-4 rounded-full ${
-                          checkEventCompletion(
-                            selectedEvent.date,
-                            selectedEvent.slotConfirmedDate,
-                            selectedEvent.createdDate
-                          )
-                            ? "bg-blue-600"
-                            : "bg-gray-400"
-                        } mr-2`}
-                      ></div>
-                      <span className="text-xs xds:text-lg font-bold">
-                        Event Completion
-                      </span>
-                    </div>
-                    {checkEventCompletion(
-                      selectedEvent.date,
-                      selectedEvent.slotConfirmedDate,
-                      selectedEvent.createdDate
-                    ) ? (
-                      <p className="text-green-500 text-sm ml-6 font-bold">
-                        Event completed successfully
-                      </p>
-                    ) : (
-                      <p className="text-red-500 text-sm ml-6 font-bold">
-                        Event is not yet complete
-                      </p>
-                    )}
+                    <span className="text-xs xds:text-lg font-bold">
+                      Event Completion
+                    </span>
                   </div>
+                  {checkEventCompletion(
+                    selectedEvent.date,
+                    selectedEvent.slotConfirmedDate,
+                    selectedEvent.createdDate
+                  ) ? (
+                    <p className="text-green-500 text-sm ml-6 font-bold">
+                      Event completed successfully
+                    </p>
+                  ) : (
+                    <p className="text-red-500 text-sm ml-6 font-bold">
+                      Event is not yet complete
+                    </p>
+                  )}
                 </div>
-
-                <button
-                  className="mt-8 px-4 py-2 bg-red-600 text-white font-bold rounded-md w-full"
-                  onClick={closeTrackModal}
-                >
-                  Close
-                </button>
               </div>
+
+              <button
+                className="mt-8 px-4 py-2 bg-red-600 text-white font-bold rounded-md w-full"
+                onClick={closeTrackModal}
+              >
+                Close
+              </button>
             </div>
+          </div>
         )}
 
         {isUpdateModalVisible && selectedEvent && (
           <div
             id="modal-overlay"
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center "
-            onClick={(e) => e.target.id === "modal-overlay" && closeUpdateModal()}
+            onClick={(e) =>
+              e.target.id === "modal-overlay" && closeUpdateModal()
+            }
           >
             <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[75%] lg:w-[50%] space-y-6">
               <h2
-                  className="text-gradient1 text-4xl font-bold text-center mb-6"
-                  style={{ fontFamily: '"quick"' }}
+                className="text-gradient1 text-4xl font-bold text-center mb-6"
+                style={{ fontFamily: '"quick"' }}
               >
-                  Update Event Details
+                Update Event Details
               </h2>
 
               {/* Event Name Field */}
               <EditableField
                 label="Event Name"
                 value={selectedEvent.eventName}
-                onSave={(val) => setSelectedEvent({ ...selectedEvent, eventName: val })}
+                onSave={(val) =>
+                  setSelectedEvent({ ...selectedEvent, eventName: val })
+                }
               />
 
               {/* Speaker Name Field */}
               <EditableField
                 label="Speaker Name"
                 value={selectedEvent.speaker || ""}
-                onSave={(val) => setSelectedEvent({ ...selectedEvent, speaker: val })}
+                onSave={(val) =>
+                  setSelectedEvent({ ...selectedEvent, speaker: val })
+                }
               />
 
               {/* Description Field */}
               <EditableField
                 label="Description"
                 value={selectedEvent.description || ""}
-                onSave={(val) => setSelectedEvent({ ...selectedEvent, description: val })}
+                onSave={(val) =>
+                  setSelectedEvent({ ...selectedEvent, description: val })
+                }
               />
 
               {/* Last Date of Registration */}
@@ -758,7 +844,10 @@ const CompanyPage = () => {
                 }
                 type="date"
                 onSave={(val) =>
-                  setSelectedEvent({ ...selectedEvent, lastDateOfRegistration: val })
+                  setSelectedEvent({
+                    ...selectedEvent,
+                    lastDateOfRegistration: val,
+                  })
                 }
               />
 
@@ -783,17 +872,16 @@ const CompanyPage = () => {
               </div>
 
               <div className="flex  justify-center">
-                  <button
-                    className="px-4 py-2 bg-red-600 text-white font-bold rounded-md w-[50%]"
-                    onClick={closeUpdateModal}
-                  >
-                    Close
-                  </button>
-                </div>
+                <button
+                  className="px-4 py-2 bg-red-600 text-white font-bold rounded-md w-[50%]"
+                  onClick={closeUpdateModal}
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         )}
-
       </div>
     </>
   );

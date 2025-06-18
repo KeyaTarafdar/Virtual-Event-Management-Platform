@@ -261,9 +261,7 @@ module.exports.createEvent = async (req, res) => {
       speaker: speakerName,
       eventType,
       city,
-      venue_1: venue1,
-      venue_2: venue2,
-      venue_3: venue3,
+      requestedVenues: [venue1, venue2, venue3],
       platform,
       isPublic,
       isPaid,
@@ -678,5 +676,31 @@ exports.fetchAllVenueBasedOnCity = async (req, res) => {
     return successResponse_ok(res, "Venue fetched", venues);
   } catch (err) {
     res.status(500).send(err.message);
+  }
+};
+
+// Payment
+module.exports.payVenue = async (req, res) => {
+  try {
+    const { eventId } = req.body;
+    const event = await eventModel.findOneAndUpdate(
+      { _id: eventId },
+      { $set: { isVenueConfirmed: true } },
+      { new: true }
+    );
+    await venueModel.updateOne(
+      {
+        _id: event.finalVenueDeatails,
+        "bookings.eventId": eventId, // find the booking inside bookings array
+      },
+      {
+        $set: {
+          "bookings.$.paymentDone": true, // update that booking
+        },
+      }
+    );
+    return successResponse_ok(res, "Payment Done", event);
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
   }
 };

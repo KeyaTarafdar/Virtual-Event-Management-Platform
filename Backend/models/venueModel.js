@@ -59,7 +59,12 @@ const venueSchema = new mongoose.Schema({
     default: 40,
   },
 
-  bookedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "event" }],
+  bookedEvents: [
+    {
+      eventId: { type: mongoose.Schema.Types.ObjectId, ref: "event" },
+      paymentDone: { type: Boolean, default: false },
+    },
+  ],
   bookingRequests: [
     {
       id: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
@@ -67,15 +72,14 @@ const venueSchema = new mongoose.Schema({
     },
   ],
 
-  bookingDates: {
-    type: [Date],
-  },
-
-  bookingShifts: {
-    type: [String],
-  },
-
-  bookingDetails: [{ date: String, timeSlot: String }],
+  bookings: [
+    {
+      eventId: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
+      date: Date,
+      slot: String,
+      paymentDone: { type: Boolean, default: false },
+    },
+  ],
 });
 
 module.exports = mongoose.model("venue", venueSchema);

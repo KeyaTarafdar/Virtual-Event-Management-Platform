@@ -25,6 +25,7 @@ import {
   updateHallDescription,
   updateOpeningTime,
   updateClosingTime,
+  acceptEvent,
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
 import { useUser } from "../context/userContext/UserContext";
