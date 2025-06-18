@@ -226,7 +226,7 @@ function VenueProfile() {
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${20}%` }}
+                    style={{ width: `${venue?.completePercentage-30}%` }}                    
                   ></div>
                 </div>
               </div>
