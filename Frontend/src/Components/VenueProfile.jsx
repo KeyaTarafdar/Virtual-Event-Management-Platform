@@ -626,10 +626,10 @@ function VenueProfile() {
                         className="p-2 border rounded-md w-full"
                       >
                         <option value="">Select Hall Type</option>
-                        <option value="auditorium">Auditorium</option>
-                        <option value="banquetHall">Banquet Hall</option>
-                        <option value="openHalls">Open Halls</option>
-                        <option value="lawns">Lawns</option>
+                        <option value="Auditorium">Auditorium</option>
+                        <option value="Banquet Hall">Banquet Hall</option>
+                        <option value="Open Halls">Open Halls</option>
+                        <option value="Lawns">Lawns</option>
                       </select>
                     ) : (
                       <span

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { uploadVenueProfilePicture } from "../utils/utils";
 import { HiDotsVertical, HiX } from "react-icons/hi";
+import { useUser } from "../context/userContext/UserContext";
 
 function VenueUserPage() {
   const [activeMenu, setActiveMenu] = useState("");
@@ -16,13 +17,12 @@ function VenueUserPage() {
   const renderComponent = () => {
     switch (activeMenu) {
       case "Calendar":
-        return <CustomCalendar />;
+        return <CustomCalendar venue={venue} />;
       case "Profile":
         return <VenueProfile />;
       default:
         return (
-          venue &&
-          (
+          venue && (
             <div
               style={{
                 backgroundImage:
@@ -34,9 +34,11 @@ function VenueUserPage() {
             >
               <div className="w-[90%] sm:w-[50%] text-center ">
                 <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
-                {venue?.completePercentage < 100 && <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
-                  Please complete your profile 100%!
-                </div>}
+                {venue?.completePercentage < 100 && (
+                  <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
+                    Please complete your profile 100%!
+                  </div>
+                )}
               </div>
             </div>
           )
@@ -44,11 +46,11 @@ function VenueUserPage() {
     }
   };
 
-  const [venue, setvenue] = useState(null);
+  const { venue, setVenue } = useUser();
 
   useEffect(() => {
     findVenue().then((response) => {
-      setvenue(response);
+      setVenue(response);
     });
   }, []);
 
@@ -81,7 +83,7 @@ function VenueUserPage() {
       uploadVenueProfilePicture(imageData).then((response) => {
         alert(response.message);
         findVenue().then((response) => {
-          setvenue(response);
+          setVenue(response);
         });
       });
     } else {
@@ -167,8 +169,9 @@ function VenueUserPage() {
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-10 mb-2"></div>
           <ul className="space-y-4 flex flex-col items-center p-2">
             <li
-              className={`cursor-pointer p-2 rounded ${activeMenu === "Calendar" ? "bg-gray-600" : ""
-                }`}
+              className={`cursor-pointer p-2 rounded ${
+                activeMenu === "Calendar" ? "bg-gray-600" : ""
+              }`}
               onClick={() => {
                 setActiveMenu("Calendar");
                 setSidebarOpen(false);
@@ -177,8 +180,9 @@ function VenueUserPage() {
               Event Calender
             </li>
             <li
-              className={`cursor-pointer  p-2 rounded ${activeMenu === "Profile" ? "bg-gray-600" : ""
-                }`}
+              className={`cursor-pointer  p-2 rounded ${
+                activeMenu === "Profile" ? "bg-gray-600" : ""
+              }`}
               onClick={() => {
                 setActiveMenu("Profile");
                 setSidebarOpen(false);
@@ -197,8 +201,9 @@ function VenueUserPage() {
           className={`
             flex-1 w-full  lg:ml-[15%] mt-[3.5rem] lg:mt-0
             overflow-y-auto transition-all duration-300
-            ${sidebarOpen &&
-            "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
+            ${
+              sidebarOpen &&
+              "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
             }
           `}
         >
