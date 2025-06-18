@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import {
   AiOutlineVideoCameraAdd,
@@ -116,58 +118,26 @@ function VenueProfile() {
     },
   ]);
 
-  const handleImageUpload = (event) => {
-    const files = event.target.files;
-    if (files) {
-      const newImages = Array.from(files).map((file) => ({
-        url: URL.createObjectURL(file),
-      }));
-      setGalleryImages((prevImages) => [...prevImages, ...newImages]);
-    }
-  };
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // const imageUrl = URL.createObjectURL(file);
+      // setCompanyDetails((prevDetails) => ({
+      //   ...prevDetails,
+      //   logo: imageUrl,
+      // }));
+    }
+  };
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setCompanyDetails((prevDetails) => ({
-        ...prevDetails,
-        logo: imageUrl,
-      }));
-    }
-  };
-
-  const [companyDetails, setCompanyDetails] = useState({
-    name: "ITC",
-    address: "8/41, Sahid Nagar",
-    city: "Kolkata",
-    email: "itc@gmail.com",
-    phone: "9876543211",
-    logo: "https://images.pexels.com/photos/1709003/pexels-photo-1709003.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  });
-
-  const handleSave = (field) => {
-    if (field === "email" && !companyDetails.email.includes("@")) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    if (field === "phone" && !/^\d{10}$/.test(companyDetails.phone)) {
-      alert("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    setIsEditing(null);
-  };
-
-  useEffect(() => {
-    if (!venue) {
-      findVenue().then((response) => {
-        if (response.success) {
-          setVenue(response);
-        }
-      });
-    }
-  }, []);
+  useEffect(() => {
+    if (!venue) {
+      findVenue().then((response) => {
+        if (response.success) {
+          setVenue(response);
+        }
+      });
+    }
+  }, []);
 
   const renderComponent = () => {
     switch (activeMenu) {
@@ -567,7 +537,7 @@ function VenueProfile() {
                             type="radio"
                             value="yes"
                             checked={newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(true)}
+                            onChange={() => setnewHallMultiday(true)}
                             className="mr-2"
                           />
                           Yes
@@ -577,7 +547,7 @@ function VenueProfile() {
                             type="radio"
                             value="no"
                             checked={!newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(false)}
+                            onChange={() => setnewHallMultiday(false)}
                             className="mr-2"
                           />
                           No
@@ -1541,33 +1511,33 @@ function VenueProfile() {
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-blue-800">
                           Event Created By :{" "}
-                          {request.id ? request.id.ownerId.username : null}
+                          {request?.id ? request?.id?.ownerId?.username : null}
                         </h3>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Event Name : </span>
-                          {request.id ? request.id.eventName : null}
+                          {request?.id ? request?.id?.eventName : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Date : </span>
-                          {request.id
-                            ? new Date(request.id.date).toLocaleDateString(
+                          {request?.id
+                            ? new Date(request?.id?.date).toLocaleDateString(
                                 "en-GB"
                               )
                             : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Head Count : </span>
-                          {request.id ? request.id.headcount : null}
+                          {request?.id ? request?.id?.headcount : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Time : </span>
-                          {request.id ? request.id.time : null}
+                          {request?.id ? request?.id?.time : null}
                         </p>
                         <p className="text-gray-700 mt-2">
                           <span className="font-bold">Time Slot : </span>
-                          {request.timeslot === "1" && "1st Half"}
-                          {request.timeslot === "2" && "2nd Half"}
-                          {request.timeslot === "F" && "Full Day"}
+                          {request?.timeslot === "1" && "1st Half"}
+                          {request?.timeslot === "2" && "2nd Half"}
+                          {request?.timeslot === "F" && "Full Day"}
                         </p>
                       </div>
 
