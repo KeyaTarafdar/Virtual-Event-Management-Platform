@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import { AiOutlineEdit, AiOutlineSave } from "react-icons/ai";
@@ -109,16 +110,14 @@ function AdminPage() {
     const input = document.querySelector(`#${type}Input`).value;
     if (input) {
       console.log(
-        `Searching for ${input} by ${
-          type === "venueName" ? "Venue Name" : "Venue Address"
+        `Searching for ${input} by ${type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
 
       document.querySelector(`#${type}Input`).value = "";
     } else {
       alert(
-        `Please enter a ${
-          type === "venueName" ? "Venue Name" : "Venue Address"
+        `Please enter a ${type === "venueName" ? "Venue Name" : "Venue Address"
         }`
       );
     }
@@ -175,10 +174,9 @@ function AdminPage() {
         return (
           <>
             {admin?.appliedVenues.length > 0 ? (
-              admin?.appliedVenues.map((venue) => (
-                <div className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
+              admin?.appliedVenues.map((venue, index) => (
+                <div key={index} className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
                   <div
-                    key={venue._id}
                     className="w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
                   >
                     <div className="flex flex-col md:w-3/4 sm:border-r-4 sm:border-blue-600 mr-4">
@@ -304,15 +302,14 @@ function AdminPage() {
                       eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" ||
-                        event.eventType === "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                          event.eventType === "hybrid"
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
                         event.eventType === "virtual" ||
-                        event.eventType === "hybrid"
+                          event.eventType === "hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -347,15 +344,14 @@ function AdminPage() {
                       eventImage={event?.posterImage?.url}
                       venue={
                         event.eventType === "in_person" ||
-                        event.eventType === "hybrid"
-                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${
-                              event.city
-                            }`
+                          event.eventType === "hybrid"
+                          ? `${event.hallName ? `${event.hallName}, ` : ""} ${event.city
+                          }`
                           : null
                       }
                       platform={
                         event.eventType === "virtual" ||
-                        event.eventType === "hybrid"
+                          event.eventType === "hybrid"
                           ? `${event.platform}`
                           : null
                       }
@@ -712,9 +708,8 @@ function AdminPage() {
         <div className="flex">
           {/* side bar */}
           <div
-            className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${
-              menuVisible ? "translate-x-0" : "-translate-x-full"
-            } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
+            className={`fixed top-16 left-0 bg-[#081647] text-white rounded-r-2xl shadow-2xl p-4 z-40 transition-transform duration-300 ${menuVisible ? "translate-x-0" : "-translate-x-full"
+              } lg:translate-x-0 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[18rem]`}
             style={{ height: "calc(100vh - 4rem)" }}
           >
             <div className="w-full flex justify-center pt-3">
@@ -742,41 +737,36 @@ function AdminPage() {
 
             <ul className="space-y-4 p-2 flex flex-col items-center">
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Home" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Home" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Home")}
               >
                 Home
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Venue Requests" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Requests" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Venue Requests")}
               >
                 Requested Venue
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Upcoming Events" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Upcoming Events")}
               >
                 Upcoming Events
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Past Events" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Past Events" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Past Events")}
               >
                 Past Events
               </li>
               <li
-                className={`cursor-pointer p-2 rounded w-full text-center ${
-                  activeMenu === "Venue Details" ? "bg-gray-600" : ""
-                }`}
+                className={`cursor-pointer p-2 rounded w-full text-center ${activeMenu === "Venue Details" ? "bg-gray-600" : ""
+                  }`}
                 onClick={() => setActiveMenu("Venue Details")}
               >
                 Venue Details
