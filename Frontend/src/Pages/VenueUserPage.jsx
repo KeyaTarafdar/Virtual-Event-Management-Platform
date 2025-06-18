@@ -123,7 +123,7 @@ function VenueUserPage() {
               lg:block fixed z-40 bg-[#081647] text-white rounded-r-2xl transition-transform ease-in-out duration-300
               left-0 shadow-2xl p-4 w-[70%] sm:w-[60%] md:w-[45%] lg:w-[18rem]  
             `}
-            style={{ height: "calc(100vh - 4rem)" }} // assuming Navbar height is 4rem
+            style={{ height: "calc(100vh - 4rem)" }} 
           >
             <div className="h-40 text-center flex flex-col items-center justify-center relative">
               <div className="relative inline-block">
