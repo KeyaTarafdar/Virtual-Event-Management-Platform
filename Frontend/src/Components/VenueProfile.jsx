@@ -1510,13 +1510,13 @@ function VenueProfile() {
       case "Booking Requests":
         return (
           <>
-            <div className="p-4">
-              <div className="space-y-8 ">
+            <div className="p-4 w-full">
+              <div className="space-y-8 w-full">
                 {Array.isArray(venue.bookingRequests) &&
                   venue.bookingRequests.map((request, index) => (
                     <div
                       key={index}
-                      className="flex flex-col lg:flex-row items-start lg:items-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-300 p-4 border-2 border-blue-500 rounded-lg shadow-2xl hover:shadow-lg transition-all"
+                      className="w-[95%] flex flex-col lg:flex-row items-start lg:items-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-300 p-4 border-2 border-blue-500 rounded-lg shadow-2xl hover:shadow-lg transition-all"
                     >
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-blue-800">
@@ -1551,8 +1551,8 @@ function VenueProfile() {
                         </p>
                       </div>
 
-                      <div className="border-l-4 border-yellow-600  ml-4 h-64 ">
-                        <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-12">
+                      <div className="border-t-4 lg:border-t-0 border-l-0 lg:border-l-4 border-yellow-600 w-[95%] lg:w-[25%] lg:ml-4 mt-4 lg:mt-0">
+                        <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-8 lg:mb-12 mt-4 lg:mt-0">
                           Choose Status
                         </h2>
                         <div className=" lg:mt-0 lg:ml-4 flex  space-x-2">
