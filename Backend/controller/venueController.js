@@ -719,16 +719,55 @@ module.exports.acceptEvent = async (req, res) => {
     const { eventId, timeslot } = req.body;
     const event = await eventModel.findOne({ _id: eventId });
     let venue = req.venue;
+    const oldRequestedVenues = event.requestedVenues;
     if (event) {
-      event.venues = [{ id: venue.id, timeslot }];
-      event.isVenueConfirmed = true;
+      event.finalVenueDeatails = venue._id;
+      event.requestedVenues = [];
       await event.save();
     }
+    const existingVenue = await venueModel.findById(venue._id);
+    const eventDate = new Date(event.date).toISOString().split("T")[0];
 
-    await venueModel.findOneAndUpdate({ _id: venue._id }, {});
+    let updatedBookings = [...existingVenue.bookings];
+    let bookingIndex = updatedBookings.findIndex(
+      (b) => new Date(b.date).toISOString().split("T")[0] === eventDate
+    );
 
-    const { _id } = req.vneue;
+    if (bookingIndex !== -1) {
+      let existingSlot = updatedBookings[bookingIndex].slot;
+      if (
+        (existingSlot === "1" && timeslot === "2") ||
+        (existingSlot === "2" && timeslot === "1")
+      ) {
+        updatedBookings[bookingIndex].slot = "F";
+      }
+    } else {
+      updatedBookings.push({ date: event.date, slot: timeslot });
+    }
+
+    await venueModel.findByIdAndUpdate(
+      venue._id,
+      { bookings: updatedBookings },
+      { new: true }
+    );
+
+    await Promise.all(
+      oldRequestedVenues.map(async (id) => {
+        await venueModel.updateOne(
+          { _id: id },
+          {
+            $pull: {
+              bookingRequests: { id: new mongoose.Types.ObjectId(eventId) },
+            },
+          }
+        );
+      })
+    );
+
+    const updatedVenue = await venueModel.findById(venue._id);
+
+    return successResponse_ok(res, "Event Accepted", venue);
   } catch (err) {
-    res.status(500).send(err.message);
+    return errorResponse_catchError(res, err.message);
   }
 };

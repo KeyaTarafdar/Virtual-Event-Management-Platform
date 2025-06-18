@@ -23,6 +23,10 @@ const CreateForm = () => {
   const [venue2, setVenue2] = useState(false);
   const [venue3, setVenue3] = useState(false);
 
+  const [venue1_Details, setVenue1_Details] = useState(null);
+  const [venue2_Details, setVenue2_Details] = useState(null);
+  const [venue3_Details, setVenue3_Details] = useState(null);
+
   const [formData, setFormData] = useState({
     eventName: "",
     eventDate: "",
@@ -99,17 +103,17 @@ const CreateForm = () => {
         venue1: {
           ...formData.venue1,
           id: null,
-          bookingshifts: null,
+          // bookingshifts: null,
         },
         venue2: {
           ...formData.venue2,
           id: null,
-          bookingshifts: null,
+          // bookingshifts: null,
         },
         venue3: {
           ...formData.venue3,
           id: null,
-          bookingshifts: null,
+          // bookingshifts: null,
         },
       });
     } else {
@@ -122,9 +126,9 @@ const CreateForm = () => {
     try {
       setLoading(true);
       const result = await createEvent(formData);
-      setTimeout(async () => {
-        setLoading(false);
-        alert(result);
+      setLoading(false);
+      alert(result.message);
+      if (result.success) {
         if (
           formData.eventType === "virtual" &&
           result === "Event created successfully!"
@@ -143,7 +147,7 @@ const CreateForm = () => {
         ) {
           navigate("/inpersonevent");
         }
-      }, 3000);
+      }
     } catch (error) {
       alert("An error occurred while creating the event. Please try again.");
     }
@@ -167,8 +171,12 @@ const CreateForm = () => {
     });
   }, []);
 
-  const openNewTab = () => {
-    window.open("http://localhost:5173/venue", "_blank", "noopener,noreferrer");
+  const openNewTab = (id) => {
+    window.open(
+      `http://localhost:5173/venuedetails/${id}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
 
   return (
@@ -193,7 +201,7 @@ const CreateForm = () => {
                   onChange={(e) => {
                     const value = e.target.value;
                     const maxWords = 20;
-                    const regex = /^[A-Za-z][A-Za-z\s]{0,}$/; 
+                    const regex = /^[A-Za-z][A-Za-z\s]{0,}$/;
                     const wordCount = value.trim().split(/\s+/).length;
 
                     const errorMessage = !regex.test(value)
@@ -248,10 +256,12 @@ const CreateForm = () => {
 
                     // Filter venue based to date
                     const filteredVenues = allVenuesCopy.filter((venue) => {
-                      return venue.bookingDates.every((bookingDate, index) => {
+                      console.log(venue?.completePercentage);
+                      return venue?.bookingDates.every((bookingDate, index) => {
                         return (
-                          bookingDate !== e.target.value ||
-                          venue.bookingShifts[index] !== "F"
+                          (bookingDate !== e.target.value ||
+                            venue.bookingShifts[index] !== "F") &&
+                          venue?.completePercentage >= 130
                         );
                       });
                     });
@@ -458,7 +468,17 @@ const CreateForm = () => {
               {/* Event Type */}
               <div>
                 <label className="block text-sm mt-8 font-medium text-gray-700">
-                  Event Type <span className="text-red-500">*</span>
+                  Event Type <span className="text-red-500">*</span>{" "}
+                  {formData.eventType && formData.eventType !== "virtual" && (
+                    <span
+                      className="text-red-500 underline flex justify-end"
+                      onClick={() => {
+                        navigate("/venue");
+                      }}
+                    >
+                      Check all Venues
+                    </span>
+                  )}
                 </label>
                 <select
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
@@ -507,7 +527,8 @@ const CreateForm = () => {
                                 venue.bookingShifts !== "F") ||
                                 !venue.bookingDates.includes(
                                   formData.eventDate
-                                ))
+                                )) &&
+                              venue?.completePercentage >= 130
                           )
                           .map((venue) => venue)
                       );
@@ -522,7 +543,9 @@ const CreateForm = () => {
                     {formData.eventDate ? (
                       <>
                         {allCity.map((city, index) => (
-                          <option key={index}>{city}</option>
+                          <option key={index} value={city}>
+                            {city}
+                          </option>
                         ))}
                       </>
                     ) : (
@@ -539,16 +562,19 @@ const CreateForm = () => {
                       <div className="mt-4">
                         <label className="block text-sm font-medium text-gray-700">
                           Venue 1 <span className="text-red-500">*</span>
-                          <span
-                            className="float-end hover:underline text-blue-800"
-                            onClick={openNewTab}
-                          >
-                            View Details
-                          </span>
+                          {venue1_Details && (
+                            <span
+                              className="float-end hover:underline text-blue-800"
+                              onClick={() => openNewTab(venue1_Details?._id)}
+                            >
+                              View Details
+                            </span>
+                          )}
                         </label>
                         <select
                           onChange={(e) => {
                             const selectedVenue = JSON.parse(e.target.value);
+                            setVenue1_Details(JSON.parse(e.target.value));
                             setFormData({
                               ...formData,
                               venue1: {
@@ -605,7 +631,9 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            First Half (7:00 AM - 10:00 AM)
+                            First Half{" "}
+                            <span>{`(${venue1_Details?.time_1stHalf[0]} - ${venue1_Details?.time_1stHalf[1]})`}</span>
+                            <span>{venue1_Details?.bookingPrice_1stHalf}</span>
                           </div>
                           <div>
                             <input
@@ -624,7 +652,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Second Half (12:00 PM - 5:00 PM)
+                            Second Half
+                            <span>{`(${venue1_Details?.time_2ndHalf[0]} - ${venue1_Details?.time_2ndHalf[1]})`}</span>
+                            <span>
+                              {venue1_Details?.bookingPrice_2ndHalf}/-
+                            </span>
                           </div>
                           <div>
                             <input
@@ -642,7 +674,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Full Day (7:00 AM - 9:00 PM)
+                            Full Day
+                            <span>{`(${venue1_Details?.time_fullDay[0]} - ${venue1_Details?.time_fullDay[1]})`}</span>
+                            <span>
+                              {venue1_Details?.bookingPrice_fullDay}/-
+                            </span>
                           </div>
                         </div>
                       ) : null}
@@ -651,16 +687,19 @@ const CreateForm = () => {
                       <div className="mt-4">
                         <label className="block text-sm font-medium text-gray-700">
                           Venue 2 <span className="text-red-500">*</span>
-                          <span
-                            className="float-end hover:underline text-blue-800"
-                            onClick={openNewTab}
-                          >
-                            View Details
-                          </span>
+                          {venue2_Details && (
+                            <span
+                              className="float-end hover:underline text-blue-800"
+                              onClick={() => openNewTab(venue2_Details?._id)}
+                            >
+                              View Details
+                            </span>
+                          )}
                         </label>
                         <select
                           onChange={(e) => {
                             const selectedVenue = JSON.parse(e.target.value);
+                            setVenue2_Details(JSON.parse(e.target.value));
                             setFormData({
                               ...formData,
                               venue2: {
@@ -723,7 +762,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            First Half (7:00 AM - 10:00 AM)
+                            First Half
+                            {`${venue2_Details?.time_1stHalf[0]} - ${venue2_Details?.time_1stHalf[1]}`}
+                            <span>
+                              {venue2_Details?.bookingPrice_1stHalf}/-
+                            </span>
                           </div>
                           <div>
                             <input
@@ -742,7 +785,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Second Half (12:00 PM - 5:00 PM)
+                            Second Half
+                            {`${venue2_Details?.time_2ndHalf[0]} - ${venue2_Details?.time_2ndHalf[1]}`}
+                            <span>
+                              {venue2_Details?.bookingPrice_2ndHalf}/-
+                            </span>
                           </div>
                           <div>
                             <input
@@ -760,7 +807,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Full Day (7:00 AM - 9:00 PM)
+                            Full Day
+                            {`${venue2_Details?.time_fullDay[0]} - ${venue2_Details?.time_fullDay[1]}`}
+                            <span>
+                              {venue2_Details?.bookingPrice_fullDay}/-
+                            </span>
                           </div>
                         </div>
                       ) : null}
@@ -769,16 +820,19 @@ const CreateForm = () => {
                       <div className="mt-4">
                         <label className="block text-sm font-medium text-gray-700">
                           Venue 3
-                          <span
-                            className="float-end hover:underline text-blue-800"
-                            onClick={openNewTab}
-                          >
-                            View Details
-                          </span>
+                          {venue3_Details && (
+                            <span
+                              className="float-end hover:underline text-blue-800"
+                              onClick={() => openNewTab(venue3_Details?._id)}
+                            >
+                              View Details
+                            </span>
+                          )}
                         </label>
                         <select
                           onChange={(e) => {
                             const selectedVenue = JSON.parse(e.target.value);
+                            setVenue3_Details(JSON.parse(e.target.value));
                             setFormData({
                               ...formData,
                               venue3: {
@@ -835,7 +889,9 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            First Half (7:00 AM - 10:00 AM)
+                            First Half
+                            {`${venue3_Details?.time_1stHalf[0]} - ${venue3_Details?.time_1stHalf[1]}`}
+                            <span>{venue3_Details?.bookingPrice_1stHalf}</span>
                           </div>
                           <div>
                             <input
@@ -854,7 +910,9 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Second Half (12:00 PM - 5:00 PM)
+                            Second Half
+                            {`${venue3_Details?.time_2ndHalf[0]} - ${venue3_Details?.time_2ndHalf[1]}`}
+                            <span>{venue3_Details?.bookingPrice_2ndHalf}</span>
                           </div>
                           <div>
                             <input
@@ -872,8 +930,10 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Full Day (7:00 AM - 9:00 PM)
-                          </div>
+                            Full Day
+                            {`${venue3_Details?.time_fullDay[0]} - ${venue3_Details?.time_fullDay[1]}`}
+                            <span>{venue3_Details?.time_fullDay}</span>
+                          </div>{" "}
                         </div>
                       ) : null}
                     </>
@@ -979,26 +1039,36 @@ const CreateForm = () => {
                           <div className="mt-4">
                             <label className="block text-sm font-medium text-gray-700">
                               Venue 1 <span className="text-red-500">*</span>
-                              <span
-                                className="float-end hover:underline text-blue-800"
-                                onClick={openNewTab}
-                              >
-                                View Details
-                              </span>
+                              {venue1_Details && (
+                                <span
+                                  className="float-end hover:underline text-blue-800"
+                                  onClick={() =>
+                                    openNewTab(venue1_Details?._id)
+                                  }
+                                >
+                                  View Details
+                                </span>
+                              )}
                             </label>
                             <select
                               onChange={(e) => {
+                                const selectedVenue = JSON.parse(
+                                  e.target.value
+                                );
                                 setFormData({
                                   ...formData,
                                   venue1: {
                                     ...formData.venue1,
-                                    id: e.target.value,
+                                    id: selectedVenue._id,
                                   },
                                 });
                                 setVenue1(true);
+                                setvenue_1_BookingShift(
+                                  selectedVenue.bookingShifts
+                                );
 
                                 const filteredVenues = venue_1.filter(
-                                  (venue) => venue._id !== e.target.value
+                                  (venue) => venue._id !== selectedVenue._id
                                 );
                                 setvenue_2(filteredVenues);
                               }}
@@ -1009,7 +1079,10 @@ const CreateForm = () => {
                               </option>
                               {Array.isArray(venue_1) &&
                                 venue_1.map((venue, index) => (
-                                  <option key={index} value={venue._id}>
+                                  <option
+                                    key={index}
+                                    value={JSON.stringify(venue)}
+                                  >
                                     {venue.name}
                                   </option>
                                 ))}
@@ -1029,18 +1102,46 @@ const CreateForm = () => {
                                   type="radio"
                                   id="firstday1"
                                   name="timeslot1"
+                                  value="1"
                                   disabled={venue_1_BookingShift === "1"}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue1: {
+                                        ...formData.venue1,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                First Half (7:00 AM - 10:00 AM)
+                                First Half
+                                <span>{`(${venue1_Details?.time_1stHalf[0]} - ${venue1_Details?.time_1stHalf[1]})`}</span>
+                                <span>
+                                  {venue1_Details?.bookingPrice_1stHalf}
+                                </span>
                               </div>
                               <div>
                                 <input
                                   type="radio"
                                   id="secday1"
                                   name="timeslot1"
+                                  value="2"
                                   disabled={venue_1_BookingShift === "2"}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue1: {
+                                        ...formData.venue1,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                Second Half (12:00 PM - 5:00 PM)
+                                Second Half
+                                <span>{`(${venue1_Details?.time_2ndHalf[0]} - ${venue1_Details?.time_2ndHalf[1]})`}</span>
+                                <span>
+                                  {venue1_Details?.bookingPrice_2ndHalf}/-
+                                </span>
                               </div>
                               <div>
                                 <input
@@ -1048,7 +1149,11 @@ const CreateForm = () => {
                                   id="fullday1"
                                   name="timeslot1"
                                 />
-                                Full Day (7:00 AM - 9:00 PM)
+                                Full Day
+                                <span>{`(${venue1_Details?.time_fullDay[0]} - ${venue1_Details?.time_fullDay[1]})`}</span>
+                                <span>
+                                  {venue1_Details?.bookingPrice_fullDay}/-
+                                </span>
                               </div>
                             </div>
                           ) : null}
@@ -1057,25 +1162,37 @@ const CreateForm = () => {
                           <div className="mt-4">
                             <label className="block text-sm font-medium text-gray-700">
                               Venue 2 <span className="text-red-500">*</span>
-                              <span
-                                className="float-end hover:underline text-blue-800"
-                                onClick={openNewTab}
-                              >
-                                View Details
-                              </span>
+                              {venue2_Details && (
+                                <span
+                                  className="float-end hover:underline text-blue-800"
+                                  onClick={() =>
+                                    openNewTab(venue2_Details?._id)
+                                  }
+                                >
+                                  View Details
+                                </span>
+                              )}
                             </label>
                             <select
                               onChange={(e) => {
+                                const selectedVenue = JSON.parse(
+                                  e.target.value
+                                );
+                                setVenue2_Details(JSON.parse(e.target.value));
                                 setFormData({
                                   ...formData,
                                   venue2: {
                                     ...formData.venue2,
-                                    id: e.target.value,
+                                    id: selectedVenue._id,
                                   },
                                 });
                                 setVenue2(true);
+                                setvenue_2_BookingShift(
+                                  selectedVenue.bookingShifts
+                                );
+
                                 const filteredVenues = venue_2.filter(
-                                  (venue) => venue._id !== e.target.value
+                                  (venue) => venue._id !== selectedVenue._id
                                 );
                                 setvenue_3(filteredVenues);
                               }}
@@ -1094,7 +1211,10 @@ const CreateForm = () => {
                                 </option>
                               ) : (
                                 venue_2.map((venue, index) => (
-                                  <option key={index} value={venue._id}>
+                                  <option
+                                    key={index}
+                                    value={JSON.stringify(venue)}
+                                  >
                                     {venue.name}
                                   </option>
                                 ))
@@ -1115,24 +1235,68 @@ const CreateForm = () => {
                                   type="radio"
                                   id="firstday2"
                                   name="timeslot2"
+                                  value="1"
+                                  disabled={venue_2_BookingShift === "1"}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue2: {
+                                        ...formData.venue2,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                First Half (7:00 AM - 10:00 AM)
+                                First Half
+                                <span>{`(${venue2_Details?.time_1stHalf[0]} - ${venue2_Details?.time_1stHalf[1]})`}</span>
+                                <span>
+                                  {venue2_Details?.bookingPrice_1stHalf}/-
+                                </span>
                               </div>
                               <div>
                                 <input
                                   type="radio"
                                   id="secday2"
                                   name="timeslot2"
+                                  value="2"
+                                  disabled={venue_2_BookingShift === "2"}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue2: {
+                                        ...formData.venue2,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                Second Half (12:00 PM - 5:00 PM)
+                                Second Half
+                                <span>{`(${venue2_Details?.time_2ndHalf[0]} - ${venue2_Details?.time_2ndHalf[1]})`}</span>
+                                <span>
+                                  {venue2_Details?.bookingPrice_2ndHalf}/-
+                                </span>
                               </div>
                               <div>
                                 <input
                                   type="radio"
                                   id="fullday2"
                                   name="timeslot2"
+                                  value="F"
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue2: {
+                                        ...formData.venue2,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                Full Day (7:00 AM - 9:00 PM)
+                                Full Day
+                                <span>{`(${venue2_Details?.time_fullDay[0]} - ${venue2_Details?.time_fullDay[1]})`}</span>
+                                <span>
+                                  {venue2_Details?.bookingPrice_fullDay}/-
+                                </span>
                               </div>
                             </div>
                           ) : null}
@@ -1141,23 +1305,34 @@ const CreateForm = () => {
                           <div className="mt-4">
                             <label className="block text-sm font-medium text-gray-700">
                               Venue 3
-                              <span
-                                className="float-end hover:underline text-blue-800"
-                                onClick={openNewTab}
-                              >
-                                View Details
-                              </span>
+                              {venue3_Details && (
+                                <span
+                                  className="float-end hover:underline text-blue-800"
+                                  onClick={() =>
+                                    openNewTab(venue3_Details?._id)
+                                  }
+                                >
+                                  View Details
+                                </span>
+                              )}
                             </label>
                             <select
                               onChange={(e) => {
+                                const selectedVenue = JSON.parse(
+                                  e.target.value
+                                );
+                                setVenue3_Details(JSON.parse(e.target.value));
                                 setFormData({
                                   ...formData,
                                   venue3: {
                                     ...formData.venue3,
-                                    id: e.target.value,
+                                    id: selectedVenue._id,
                                   },
                                 });
                                 setVenue3(true);
+                                setvenue_3_BookingShift(
+                                  selectedVenue.bookingShifts
+                                );
                               }}
                               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
                             >
@@ -1174,7 +1349,10 @@ const CreateForm = () => {
                                 </option>
                               ) : (
                                 venue_3.map((venue, index) => (
-                                  <option key={index} value={venue._id}>
+                                  <option
+                                    key={index}
+                                    value={JSON.stringify(venue)}
+                                  >
                                     {venue.name}
                                   </option>
                                 ))
@@ -1195,24 +1373,66 @@ const CreateForm = () => {
                                   type="radio"
                                   id="firstday3"
                                   name="timeslot3"
+                                  value="1"
+                                  disabled={venue_3_BookingShift === "1"}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue3: {
+                                        ...formData.venue3,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                First Half (7:00 AM - 10:00 AM)
+                                First Half
+                                <span>{`(${venue3_Details?.time_1stHalf[0]} - ${venue3_Details?.time_1stHalf[1]})`}</span>
+                                <span>
+                                  {venue3_Details?.bookingPrice_1stHalf}
+                                </span>
                               </div>
                               <div>
                                 <input
                                   type="radio"
                                   id="secday3"
                                   name="timeslot3"
+                                  value="2"
+                                  disabled={venue_3_BookingShift === "2"}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue3: {
+                                        ...formData.venue3,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                Second Half (12:00 PM - 5:00 PM)
+                                Second Half
+                                <span>{`(${venue3_Details?.time_2ndHalf[0]} - ${venue3_Details?.time_2ndHalf[1]})`}</span>
+                                <span>
+                                  {venue3_Details?.bookingPrice_2ndHalf}
+                                </span>
                               </div>
                               <div>
                                 <input
                                   type="radio"
                                   id="fullday3"
                                   name="timeslot3"
+                                  value="F"
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      venue3: {
+                                        ...formData.venue3,
+                                        timeslot: e.target.value,
+                                      },
+                                    });
+                                  }}
                                 />
-                                Full Day (7:00 AM - 9:00 PM)
+                                Full Day
+                                <span>{`(${venue3_Details?.time_fullDay[0]} - ${venue3_Details?.time_fullDay[1]})`}</span>
+                                <span>{venue3_Details?.time_fullDay}</span>
                               </div>
                             </div>
                           ) : null}

@@ -621,7 +621,8 @@ export const updateHallDescription = async (newHallDescription) => {
   }
 };
 
-
+// Accept Event
+export const acceptEvent = async (event) => {};
 
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 

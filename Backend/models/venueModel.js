@@ -67,15 +67,20 @@ const venueSchema = new mongoose.Schema({
     },
   ],
 
-  bookingDates: {
-    type: [Date],
-  },
+  // bookingDates: {
+  //   type: [Date],
+  // },
 
-  bookingShifts: {
-    type: [String],
-  },
+  // bookingShifts: {
+  //   type: [String],
+  // },
 
-  bookingDetails: [{ date: String, timeSlot: String }],
+  bookings: [
+    {
+      date: Date,
+      slot: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model("venue", venueSchema);
