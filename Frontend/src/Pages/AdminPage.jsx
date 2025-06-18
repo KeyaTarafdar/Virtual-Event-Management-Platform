@@ -656,11 +656,11 @@ function AdminPage() {
   const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
-    if (!admin) {
-      findAdmin().then((response) => {
-        setAdmin(response);
-      });
-    }
+    // if (!admin) {
+    findAdmin().then((response) => {
+      setAdmin(response);
+    });
+    // }
 
     if (!company) {
       fetchCompanyDetails().then((response) => {
