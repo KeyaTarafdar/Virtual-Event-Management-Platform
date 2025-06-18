@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import Navabar from "../Components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -100,9 +102,9 @@ const CompanyPage = () => {
     setIsTrackModalVisible(true);
   };
 
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
+  // const closeModal = () => {
+  //   setIsModalVisible(false);
+  // };
 
   const closeUpdateModal = () => {
     setIsUpdateModalVisible(false);
@@ -117,11 +119,11 @@ const CompanyPage = () => {
     setIsTrackModalVisible(false);
   };
 
-  const handleOutsideClick = (e) => {
-    if (e.target.id === "modal-overlay") {
-      closeModal();
-    }
-  };
+  // const handleOutsideClick = (e) => {
+  //   if (e.target.id === "modal-overlay") {
+  //     closeModal();
+  //   }
+  // };
 
   const setFileToBase = (file) => {
     return new Promise((resolve) => {
@@ -132,7 +134,7 @@ const CompanyPage = () => {
       };
     });
   };
-  const [image, setImage] = useState();
+  // const [image, setImage] = useState();
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -375,8 +377,8 @@ const CompanyPage = () => {
             <div
               onClick={() => {
                 setSelectedTab("created");
-                setevents(createdEvents);
-                seteventsCopy(createdEvents);
+                setevents(user?.createdEvents);
+                seteventsCopy(user?.createdEvents);
               }}
               className={` text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${selectedTab === "created"
                 ? "text-indigo-400"
@@ -389,8 +391,8 @@ const CompanyPage = () => {
             <div
               onClick={() => {
                 setSelectedTab("participated");
-                setevents(appliedEvents);
-                seteventsCopy(appliedEvents);
+                setevents(user?.appliedEvents);
+                seteventsCopy(user?.appliedEvents);
               }}
               className={`text-sm xds:text-lg sm:text-lg h-6 xds:h-8 sm:h- px-1 xds:px-2 sm:px-4 flex justify-center items-center font-bold rounded-md cursor-pointer ${selectedTab === "participated"
                 ? "text-indigo-400"
@@ -629,7 +631,7 @@ const CompanyPage = () => {
                           </span>
                         </div>
                         <p
-                          className={`text-sm ml-6 font-bold ${selectedEvent.finalVenueDeatails
+                          className={`text-sm ml-6 font-bold flex gap-3 ${selectedEvent.finalVenueDeatails
                             ? "text-green-500"
                             : selectedEvent.venueRejected
                               ? "text-red-500"
@@ -637,14 +639,17 @@ const CompanyPage = () => {
                             }`}
                         >
                           {selectedEvent.finalVenueDeatails
-                            ? "Venue has been confirmed"
+                            ? (<span>Venue has been confirmed</span>)
                             : selectedEvent.venueRejected
-                              ? "Venue confirmation failed"
-                              : "Venue is not yet confirmed"}
+                              ? (<span>Venue confirmation failed</span>)
+                              : (<span>Venue is not yet confirmed</span>)}
                           {selectedEvent.finalVenueDeatails && (
                             <>
-                              <span>{selectedEvent?.finalVenueDeatails}</span>
-                              <span className="underline text-blue-600 cursor-pointer px-5">
+                              <span>{selectedEvent?.finalVenueDeatails?.name}</span>
+                              <span>{selectedEvent?.finalVenueSlot === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</span>
+                              {/* <span>{selectedEvent?.finalVenueSlot.split('+')[0] === "1" ? '1st Slot' : selectedEvent?.finalVenueSlot === "2" ? '2nd Slot' : "Full Day"}</span>
+                              <span>{selectedEvent?.finalVenueSlot.split('+')[1][0]} to {selectedEvent?.finalVenueSlot.split('+')[1][1]}</span> */}
+                              <span className="underline text-blue-600 cursor-pointer px-5" onClick={() => { navigate('/venuedetails/' + selectedEvent?.finalVenueDeatails?._id) }}>
                                 Check Now
                               </span>
                             </>
