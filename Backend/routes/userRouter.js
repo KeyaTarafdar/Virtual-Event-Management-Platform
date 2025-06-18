@@ -79,6 +79,17 @@ router.post(
   checkUserIsRegisteredInEventOrNot
 );
 
+// //EVENT NAME EDIT
+// router.post("/updateeventname",userIsLoggedIn,);
+// //EVENT SPEAKER NAME EDIT
+// router.post("/updatespeakername",userIsLoggedIn,);
+// //EVENT DESCRIPTION EDIT
+// router.post("/updateeventdescription",userIsLoggedIn,);
+// //EVENT LAST REG DATE EDIT
+// router.post("/updateeventlastregdate",userIsLoggedIn,);
+
+
+
 // GET ALL VENUE
 router.get("/getallvenue", commonIsLoggedIn, fetchAllVenue);
 
