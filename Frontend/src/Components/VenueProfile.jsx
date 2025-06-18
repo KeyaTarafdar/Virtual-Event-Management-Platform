@@ -217,7 +217,7 @@ function VenueProfile() {
                 <div className="ml-5 mr-5 mt-[2%] flex w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${venue?.completePercentage}%` }}
+                    style={{ width: `${venue?.completePercentage-30}%` }}                    
                   ></div>
                 </div>
               </div>
