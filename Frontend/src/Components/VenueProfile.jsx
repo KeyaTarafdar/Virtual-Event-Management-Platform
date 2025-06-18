@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import {
   AiOutlineVideoCameraAdd,
@@ -119,34 +121,12 @@ function VenueProfile() {
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setCompanyDetails((prevDetails) => ({
-        ...prevDetails,
-        logo: imageUrl,
-      }));
+      // const imageUrl = URL.createObjectURL(file);
+      // setCompanyDetails((prevDetails) => ({
+      //   ...prevDetails,
+      //   logo: imageUrl,
+      // }));
     }
-  };
-
-  const [companyDetails, setCompanyDetails] = useState({
-    name: "ITC",
-    address: "8/41, Sahid Nagar",
-    city: "Kolkata",
-    email: "itc@gmail.com",
-    phone: "9876543211",
-    logo: "https://images.pexels.com/photos/1709003/pexels-photo-1709003.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  });
-
-  const handleSave = (field) => {
-    if (field === "email" && !companyDetails.email.includes("@")) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    if (field === "phone" && !/^\d{10}$/.test(companyDetails.phone)) {
-      alert("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    setIsEditing(null);
   };
 
   useEffect(() => {
@@ -553,7 +533,7 @@ function VenueProfile() {
                             type="radio"
                             value="yes"
                             checked={newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(true)}
+                            onChange={() => setnewHallMultiday(true)}
                             className="mr-2"
                           />
                           Yes
@@ -563,7 +543,7 @@ function VenueProfile() {
                             type="radio"
                             value="no"
                             checked={!newHallMultiday}
-                            onChange={(e) => setnewHallMultiday(false)}
+                            onChange={() => setnewHallMultiday(false)}
                             className="mr-2"
                           />
                           No
