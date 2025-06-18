@@ -1155,7 +1155,7 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="yes"
-                            checked={newHallProjector}
+                            checked={newHallProjector === true}
                             onChange={(e) => setnewHallProjector(true)}
                             className="mr-2"
                           />
@@ -1165,7 +1165,7 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="no"
-                            checked={!newHallProjector}
+                            checked={newHallProjector === false}
                             onChange={(e) => setnewHallProjector(false)}
                             className="mr-2"
                           />
@@ -1232,7 +1232,7 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="yes"
-                            checked={newHallBroadband}
+                            checked={newHallBroadband === true}
                             onChange={(e) => setnewHallBroadband(true)}
                             className="mr-2"
                           />
@@ -1242,7 +1242,7 @@ function VenueProfile() {
                           <input
                             type="radio"
                             value="no"
-                            checked={!newHallBroadband}
+                            checked={newHallBroadband === false}
                             onChange={(e) => setnewHallBroadband(false)}
                             className="mr-2"
                           />
