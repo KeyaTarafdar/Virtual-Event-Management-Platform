@@ -1565,6 +1565,10 @@ function VenueProfile() {
                               ).then((response) => {
                                 alert(response.message);
                                 if (response.success) {
+                                  sessionStorage.setItem(
+                                    "venue",
+                                    JSON.stringify(response?.data || "")
+                                  );
                                   setVenue(response.data);
                                 }
                               });
@@ -1578,7 +1582,8 @@ function VenueProfile() {
                               rejectEvent(request.id._id).then((response) => {
                                 alert(response.message);
                                 if (response.success) {
-                                  setVenue(response.data);                                }
+                                  setVenue(response.data);
+                                }
                               });
                             }}
                           >

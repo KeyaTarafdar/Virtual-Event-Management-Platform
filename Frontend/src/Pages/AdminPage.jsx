@@ -180,7 +180,7 @@ function AdminPage() {
                     <div className="flex flex-col md:w-4/5 sm:border-r-4 sm:border-blue-600 mr-4">
                       <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 pb-2 sm:pb-3 font-serif">
                         <span className="font-medium">Venue Name:</span>{" "}
-                        {venue.name}
+                        {venue.name} 
                       </h2>
                       <p className="text-sm sm:text-base text-gray-600">
                         <span className="font-bold text-blue-600 font-serif">
@@ -651,6 +651,7 @@ function AdminPage() {
 
   useEffect(() => {
     findAdmin().then((response) => {
+      console.log('response', response)
       setAdmin(response);
     });
 
