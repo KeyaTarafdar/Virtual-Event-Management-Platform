@@ -222,14 +222,21 @@ module.exports.updatePasswordFirstTime = async (req, res) => {
 module.exports.fetchVenueUser = async (req, res) => {
   try {
     let venue = req.venue;
+
     await venue.populate([
       {
         path: "bookingRequests.id",
         model: "event",
         populate: { path: "ownerId" },
       },
-      { path: "bookings.eventId" },
     ]);
+
+    if (venue.bookings && venue.bookings.length > 0) {
+      await venue.populate({
+        path: "bookings.eventId",
+        model: "event",
+      });
+    }
 
     return successResponse_ok(res, "Venue fetched", venue);
   } catch (err) {
