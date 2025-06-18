@@ -133,9 +133,18 @@ module.exports.getUser = async (req, res) => {
   try {
     let user = req.user;
 
-    await user.populate({
-      path: "createdEvents appliedEvents",
-    });
+    await user.populate([
+      {
+        path: "createdEvents",
+        populate: {
+          path: "finalVenueDeatails",
+          match: { _id: { $ne: null } },
+        },
+      },
+      {
+        path: "appliedEvents",
+      },
+    ]);
     return successResponse_ok(res, "User fetched", user);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
