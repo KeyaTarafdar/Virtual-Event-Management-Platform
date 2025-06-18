@@ -627,13 +627,13 @@ const CompanyPage = () => {
                             selectedEvent.finalVenueDeatails
                               ? "bg-blue-600"
                               : "bg-gray-400"
-                          } mr-2`}
-                        ></div>
-                        <span className="text-xs xds:text-lg font-bold   text-sm xds:text-lg font-bold">
-                          Venue Confirmation
-                        </span>
-                      </div>
-                       <p
+                              } mr-2`}
+                          ></div>
+                          <span className="text-sm xds:text-lg font-bold">
+                            Venue Confirmation
+                          </span>
+                        </div>
+                        <p
                           className={`text-sm ml-6 font-bold gap-3 ${selectedEvent.finalVenueDeatails
                             ? "text-green-500"
                             : selectedEvent.venueRejected
@@ -672,7 +672,7 @@ const CompanyPage = () => {
 
                       {/* Line to Slot Confirmation */}
                       <div
-                        className={` w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-7rem]  ${
+                        className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-7rem]  ${
                           selectedEvent.slotConfirmedDate
                             ? "bg-blue-600"
                             : "bg-gray-400"
@@ -683,61 +683,93 @@ const CompanyPage = () => {
                         }}
                       ></div>
 
-                      {/* Payment Confirmation */}
-                      <div className="flex items-center">
-                        <div
-                          className={`w-4 h-4 rounded-full ${
-                            selectedEvent.isVenueConfirmed
+{/* Payment Confirmation */}
+                        <div className="flex items-center">
+                          <div
+                            className={`w-4 h-4 rounded-full ${selectedEvent.isVenueConfirmed
                               ? "bg-blue-600"
                               : "bg-gray-400"
-                          } mr-2`}
-                        ></div>
-                        <span className="text-xs xds:text-lg font-bold">
-                          Payment Comfirmation
-                        </span>
-                      </div>
-                      {!selectedEvent.isVenueConfirmed ? (
-                        <div className="gap-4">
-                          <p className="text-yellow-500 text-sm ml-6 font-bold">
-                            Payment is not done yet
-                          </p>
-                          <span
-                            className="ml-6 underline text-sm font-bold text-blue-600 cursor-pointer"
-                            onClick={handleVenuePayment}
-                          >
-                            Pay Now ({selectedEvent?.bill}/-)
+                              } mr-2`}
+                          ></div>
+                          <span className="text-xs xds:text-lg font-bold">
+                            Payment Comfirmation
                           </span>
-                          <p className="text-red-500 text-xs ml-6">
-                            Do the payment within 12 hours. Else the your venue
-                            will be cancled!
-                          </p>
                         </div>
-                      ) : !isSlotConfirmed && selectedEvent.createdDate ? (
-                        <p className="text-red-500 text-sm ml-6 font-bold">
-                          Slot Confirmation failed
-                        </p>
-                      ) : (
-                        <p className="text-green-500 text-sm ml-6 font-bold">
-                          Payment Done!
-                        </p>
-                      )}
-                      <div className="flex items-center ml-6 mt-2">
-                        <FontAwesomeIcon
-                          icon={faCalendarAlt}
-                          className="mr-2 text-gray-500"
-                        />
-                        :
-                        <span className="text-gray-500 text-sm ml-2">
-                          {selectedEvent.slotConfirmedDate || "N/A"}
-                        </span>
-                      </div>
-                    </>
-                  )}
+                        {!selectedEvent.isVenueConfirmed ? (
+                          <div className="gap-4">
+                            <p className="text-yellow-500 text-sm ml-6 font-bold">
+                              Payment is not done yet
+                            </p>
+                            <span
+                              className="ml-6 underline text-sm font-bold text-blue-600 cursor-pointer"
+                              onClick={handleVenuePayment}
+                            >
+                              Pay Now ({selectedEvent?.bill}/-)
+                            </span>
+                            <p className="text-red-500 text-xs ml-6">
+                              Do the payment within 12 hours. Else the your venue
+                              will be cancled!
+                            </p>
+                          </div>
+                        ) : !isSlotConfirmed && selectedEvent.createdDate ? (
+                          <p className="text-red-500 text-sm ml-6 font-bold">
+                            Slot Confirmation failed
+                          </p>
+                        ) : (
+                          <p className="text-green-500 text-sm ml-6 font-bold">
+                            Payment Done!
+                          </p>
+                        )}
+                        <div className="flex items-center ml-6 mt-2">
+                          <FontAwesomeIcon
+                            icon={faCalendarAlt}
+                            className="mr-2 text-gray-500"
+                          />
+                          :
+                          <span className="text-gray-500 text-sm ml-2">
+                            {selectedEvent.slotConfirmedDate || "N/A"}
+                          </span>
+                        </div>
+                      </>
+                    )}
 
                   {/* Line to Completion */}
                   <div
-                    className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-6rem] ${
-                      checkEventCompletion(
+                    className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-6rem] ${checkEventCompletion(
+                      selectedEvent.date,
+                      selectedEvent.slotConfirmedDate,
+                      selectedEvent.createdDate
+                    )
+                      ? "bg-blue-600"
+                      : "bg-gray-400"
+                      }`}
+                    style={{
+                      marginLeft: "0.35rem",
+                      marginRight: "1.5rem",
+                    }}
+                  ></div>
+
+
+                  {/* Line to Completion */}
+                  <div
+                    className={`w-1 h-[7rem] mt-[-6.5rem] lg:mt-[-6rem] ${checkEventCompletion(
+                      selectedEvent.date,
+                      selectedEvent.slotConfirmedDate,
+                      selectedEvent.createdDate
+                    )
+                      ? "bg-blue-600"
+                      : "bg-gray-400"
+                      }`}
+                    style={{
+                      marginLeft: "0.35rem",
+                      marginRight: "1.5rem",
+                    }}
+                  ></div>
+
+                  {/* Event Completion */}
+                  <div className="flex items-center">
+                    <div
+                      className={`w-4 h-4 rounded-full ${checkEventCompletion(
                         selectedEvent.date,
                         selectedEvent.slotConfirmedDate,
                         selectedEvent.createdDate

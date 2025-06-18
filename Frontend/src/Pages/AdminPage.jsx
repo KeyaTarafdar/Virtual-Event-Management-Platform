@@ -16,8 +16,6 @@ import {
 } from "../utils/utils";
 import {
   faCalendarCheck,
-  faGlobe,
-  faUsers,
   faTimes,
   faEllipsisV,
   faEdit,
@@ -719,7 +717,7 @@ function AdminPage() {
                 alt="admin image"
               ></img>
               <label className="absolute top-[8.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
-                <FontAwesomeIcon icon={faEdit} className="text-white " />
+                <FontAwesomeIcon icon={faEdit} className="text-white" />
                 <input
                   type="file"
                   accept="image/*"
