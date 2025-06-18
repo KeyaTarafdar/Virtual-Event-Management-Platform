@@ -736,9 +736,17 @@ module.exports.acceptEvent = async (req, res) => {
       amount = venue.bookingPrice_fullDay;
     }
     const oldRequestedVenues = event.requestedVenues;
+    const slot =
+      timeslot === "1"
+        ? venue.time_1stHalf
+        : timeslot === "2"
+        ? venue.time_2ndHalf
+        : timeslot === "F"
+        ? venue.time_fullDay
+        : null;
     if (event) {
       event.finalVenueDeatails = venue._id;
-      event.finalVenueSlot = timeslot;
+      event.finalVenueSlot = `${timeslot}+${slot}`;
       event.bill = amount;
       await event.save();
     }
