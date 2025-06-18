@@ -16,8 +16,6 @@ import {
 } from "../utils/utils";
 import {
   faCalendarCheck,
-  faGlobe,
-  faUsers,
   faTimes,
   faEllipsisV,
   faEdit,
@@ -718,7 +716,7 @@ function AdminPage() {
                 src={admin?.image?.url || null}
                 alt="admin image"
               ></img>
-              <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
+              <label className="absolute top-[8.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
                 <FontAwesomeIcon icon={faEdit} className="text-white" />
                 <input
                   type="file"
@@ -786,7 +784,7 @@ function AdminPage() {
             </button>
           </div>
           {/* Main content */}
-          <div className="w-[100%] ml-[13rem] overflow-y-auto scrollbar-hide">
+          <div className="w-[100%] lg:ml-[18rem] overflow-y-auto scrollbar-hide mt-[4rem] lg:mt-0">
             {renderComponent()}
           </div>
         </div>
