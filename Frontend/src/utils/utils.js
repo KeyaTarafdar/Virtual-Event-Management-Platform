@@ -292,6 +292,62 @@ export const checkUserIsRegisteredInEventOrNot = async (eventId) => {
   }
 };
 
+//Event Editing details-----------------------------------------------------------------------------
+// Update Event Name
+export const updateEventName = async (newEventName) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/users/updateeventname",
+      { newEventName },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Speaker Name
+export const updateSpeakerName = async (newSpeakerName) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/users/updatespeakername",
+      { newSpeakerName },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Description
+export const updateEventDescription = async (newEventDescription) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/users/updateeventdescription",
+      { newEventDescription },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update last reg date
+export const updateLastRegDate = async (newLastRegDate) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/users/updateeventlastregdate",
+      { newLastRegDate },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 
 // Pay Venue
