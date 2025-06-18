@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 
-const events = [
-  { date: "2025-01-25T00:00:00.000+00:00", time: "19:00" },
-  { date: "2025-01-26T00:00:00.000+00:00", time: "11:00" },
-  { date: "2025-01-27T00:00:00.000+00:00", time: "16:30" },
-  { date: "2025-01-28T00:00:00.000+00:00", time: "11:00" },
-];
-
 const CustomCalendar = ({ venue }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [hoveredEvent, setHoveredEvent] = useState(null);
+  const [bookingDates, setBookingDates] = useState([]);
+
   const today = new Date();
 
   const startOfMonth = new Date(
@@ -36,90 +31,83 @@ const CustomCalendar = ({ venue }) => {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const blankDays = Array(startOfMonth.getDay()).fill(null);
 
-  const formatDate = (date) => {
-    const parsedDate = new Date(date);
-    return `${parsedDate.getFullYear()}-${String(
-      parsedDate.getMonth() + 1
-    ).padStart(2, "0")}-${String(parsedDate.getDate()).padStart(2, "0")}`;
-  };
-
+  // Returns the first match for that day (used for hover + coloring)
   const getEventForDate = (day) => {
-    const formattedDate = formatDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-    );
-    return bookingDates?.find((event) => event?.date.startsWith(formattedDate));
-  };
+    const calendarDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    ).toDateString();
 
-  const formatTime = (time) => {
-    const [hours, minutes] = time.split(":");
-    const period = +hours >= 12 ? "PM" : "AM";
-    const formattedHours = +hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
+    return bookingDates.find(
+      (event) => new Date(event.date).toDateString() === calendarDate
+    );
   };
 
   const isToday = (day) => {
-    const currentDay = new Date(
+    const thisDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
       day
     );
-    return currentDay.toDateString() === today.toDateString();
+    return thisDate.toDateString() === today.toDateString();
   };
 
-  const [bookingDates, setbookingDates] = useState([]);
   useEffect(() => {
-    const arr = venue.bookings.filter((booking) => booking?.paymentDone);
-    setbookingDates(arr);
-  }, []);
+    const filtered = venue.bookings.filter((booking) => booking?.paymentDone);
+    setBookingDates(filtered);
+  }, [venue]);
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-8">
       <div className="calendar-container w-full max-w-md sm:max-w-lg lg:max-w-2xl">
-        <div className="calendar-header">
-          <button className="nav-btn" onClick={prevMonth}>
+        <div className="calendar-header flex justify-between items-center mb-4">
+          <button className="nav-btn text-xl font-bold" onClick={prevMonth}>
             &lt;
           </button>
-          <span className="month-display">
+          <span className="month-display text-lg font-semibold">
             {currentDate.toLocaleString("default", { month: "long" })}{" "}
             {currentDate.getFullYear()}
           </span>
-          <button className="nav-btn" onClick={nextMonth}>
+          <button className="nav-btn text-xl font-bold" onClick={nextMonth}>
             &gt;
           </button>
         </div>
 
-        <div className="calendar-grid">
+        <div className="calendar-grid grid grid-cols-7 gap-2 text-center">
           {daysOfWeek.map((day, index) => (
-            <div key={index} className="day-header">
+            <div key={index} className="font-medium">
               {day}
             </div>
           ))}
+
           {blankDays.map((_, index) => (
-            <div key={index} className="day-cell blank"></div>
+            <div key={index} className="h-12"></div>
           ))}
+
           {Array.from({ length: daysInMonth }).map((_, index) => {
             const day = index + 1;
             const event = getEventForDate(day);
+            const isHovered = hoveredEvent && hoveredEvent === event;
+
+            let bgColor = "bg-white";
+            if (event) bgColor = "bg-green-500 text-white";
+            if (isToday(day)) bgColor = "bg-blue-500 text-white";
+            if (isToday(day) && event) bgColor = "bg-purple-600 text-white";
+
             return (
               <div
                 key={day}
-                className={`day-cell ${isToday(day) ? "current-day" : ""} ${
-                  event ? "event-day" : ""
-                }`}
+                className={`relative h-12 flex items-center justify-center rounded cursor-pointer border ${bgColor}`}
                 onMouseEnter={() => setHoveredEvent(event)}
                 onMouseLeave={() => setHoveredEvent(null)}
               >
                 {day}
-                {hoveredEvent &&
-                  hoveredEvent.date.startsWith(
-                    formatDate(
-                      new Date(
-                        currentDate.getFullYear(),
-                        currentDate.getMonth(),
-                        day
-                      )
-                    )
-                  ) && <div className="tooltip">{bookingDates?.slot}</div>}
+                {isHovered && (
+                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 z-10 bg-black text-white text-xs rounded px-2 py-1 shadow-lg">
+                    Slot: {event.slot}
+                  </div>
+                )}
               </div>
             );
           })}
