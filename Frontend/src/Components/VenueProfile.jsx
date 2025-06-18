@@ -25,6 +25,7 @@ import {
   updateHallDescription,
   updateOpeningTime,
   updateClosingTime,
+  acceptEvent,
 } from "../utils/utils";
 import BookingCard from "../Components/BookingCard";
 import { useUser } from "../context/userContext/UserContext";
@@ -217,7 +218,7 @@ function VenueProfile() {
                 <div className="ml-5 mr-5 mt-[2%] flex w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${venue?.completePercentage-30}%` }}                    
+                    style={{ width: `${venue?.completePercentage - 30}%` }}
                   ></div>
                 </div>
               </div>
@@ -1561,7 +1562,14 @@ function VenueProfile() {
                           Choose Status
                         </h2>
                         <div className=" lg:mt-0 lg:ml-4 flex  space-x-2">
-                          <button className="w-[8rem] bg-green-500 text-white px-4 py-2 rounded-lg border-green-800 border-2  hover:bg-green-600">
+                          <button
+                            className="w-[8rem] bg-green-500 text-white px-4 py-2 rounded-lg border-green-800 border-2  hover:bg-green-600"
+                            onClick={() => {
+                              acceptEvent(request.id._id, request.timeslot).then(
+                                (response) => {}
+                              );
+                            }}
+                          >
                             Approve
                           </button>
                           <button

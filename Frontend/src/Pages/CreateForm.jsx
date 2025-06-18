@@ -254,17 +254,23 @@ const CreateForm = () => {
                     setDateError("");
                     setFormData({ ...formData, eventDate: e.target.value });
 
-                    // Filter venue based to date
                     const filteredVenues = allVenuesCopy.filter((venue) => {
-                      console.log(venue?.completePercentage);
-                      return venue?.bookingDates.every((bookingDate, index) => {
+                      const selectedDate = new Date(e.target.value)
+                        .toISOString()
+                        .split("T")[0];
+
+                      const isFullyBooked = venue.bookings.some((booking) => {
+                        const bookingDate = new Date(booking.date)
+                          .toISOString()
+                          .split("T")[0];
                         return (
-                          (bookingDate !== e.target.value ||
-                            venue.bookingShifts[index] !== "F") &&
-                          venue?.completePercentage >= 130
+                          bookingDate === selectedDate && booking.slot === "F"
                         );
                       });
+
+                      return !isFullyBooked && venue.completePercentage >= 130;
                     });
+
                     setallVenues(filteredVenues);
 
                     // Extract only cities
@@ -518,18 +524,32 @@ const CreateForm = () => {
                       setFormData({ ...formData, city: e.target.value });
                       setvenue_1(
                         allVenues
-                          .filter(
-                            (venue) =>
-                              venue.city === e.target.value &&
-                              ((venue.bookingDates.includes(
-                                formData.eventDate
-                              ) &&
-                                venue.bookingShifts !== "F") ||
-                                !venue.bookingDates.includes(
-                                  formData.eventDate
-                                )) &&
-                              venue?.completePercentage >= 130
-                          )
+                          .filter((venue) => {
+                            if (
+                              venue.city !== e.target.value ||
+                              venue.completePercentage < 130
+                            ) {
+                              return false;
+                            }
+
+                            const selectedDate = new Date(formData.eventDate)
+                              .toISOString()
+                              .split("T")[0];
+
+                            const isFullyBooked = venue.bookings.some(
+                              (booking) => {
+                                const bookingDate = new Date(booking.date)
+                                  .toISOString()
+                                  .split("T")[0];
+                                return (
+                                  bookingDate === selectedDate &&
+                                  booking.slot === "F"
+                                );
+                              }
+                            );
+
+                            return !isFullyBooked;
+                          })
                           .map((venue) => venue)
                       );
 
@@ -574,7 +594,8 @@ const CreateForm = () => {
                         <select
                           onChange={(e) => {
                             const selectedVenue = JSON.parse(e.target.value);
-                            setVenue1_Details(JSON.parse(e.target.value));
+                            setVenue1_Details(selectedVenue);
+
                             setFormData({
                               ...formData,
                               venue1: {
@@ -582,9 +603,25 @@ const CreateForm = () => {
                                 id: selectedVenue._id,
                               },
                             });
+
                             setVenue1(true);
+
+                            // Find the slot for the selected event date (if any)
+                            const selectedDate = new Date(formData.eventDate)
+                              .toISOString()
+                              .split("T")[0];
+
+                            const matchedBooking = selectedVenue.bookings?.find(
+                              (booking) => {
+                                const bookingDate = new Date(booking.date)
+                                  .toISOString()
+                                  .split("T")[0];
+                                return bookingDate === selectedDate;
+                              }
+                            );
+
                             setvenue_1_BookingShift(
-                              selectedVenue.bookingShifts
+                              matchedBooking ? matchedBooking.slot : null
                             );
 
                             const filteredVenues = venue_1.filter(
@@ -699,7 +736,8 @@ const CreateForm = () => {
                         <select
                           onChange={(e) => {
                             const selectedVenue = JSON.parse(e.target.value);
-                            setVenue2_Details(JSON.parse(e.target.value));
+                            setVenue2_Details(selectedVenue);
+
                             setFormData({
                               ...formData,
                               venue2: {
@@ -707,9 +745,25 @@ const CreateForm = () => {
                                 id: selectedVenue._id,
                               },
                             });
+
                             setVenue2(true);
+
+                            // Find the slot for the selected event date (if any)
+                            const selectedDate = new Date(formData.eventDate)
+                              .toISOString()
+                              .split("T")[0];
+
+                            const matchedBooking = selectedVenue.bookings?.find(
+                              (booking) => {
+                                const bookingDate = new Date(booking.date)
+                                  .toISOString()
+                                  .split("T")[0];
+                                return bookingDate === selectedDate;
+                              }
+                            );
+
                             setvenue_2_BookingShift(
-                              selectedVenue.bookingShifts
+                              matchedBooking ? matchedBooking.slot : null
                             );
 
                             const filteredVenues = venue_2.filter(
@@ -832,7 +886,8 @@ const CreateForm = () => {
                         <select
                           onChange={(e) => {
                             const selectedVenue = JSON.parse(e.target.value);
-                            setVenue3_Details(JSON.parse(e.target.value));
+                            setVenue3_Details(selectedVenue);
+
                             setFormData({
                               ...formData,
                               venue3: {
@@ -840,9 +895,25 @@ const CreateForm = () => {
                                 id: selectedVenue._id,
                               },
                             });
+
                             setVenue3(true);
+
+                            // Find the slot for the selected event date (if any)
+                            const selectedDate = new Date(formData.eventDate)
+                              .toISOString()
+                              .split("T")[0];
+
+                            const matchedBooking = selectedVenue.bookings?.find(
+                              (booking) => {
+                                const bookingDate = new Date(booking.date)
+                                  .toISOString()
+                                  .split("T")[0];
+                                return bookingDate === selectedDate;
+                              }
+                            );
+
                             setvenue_3_BookingShift(
-                              selectedVenue.bookingShifts
+                              matchedBooking ? matchedBooking.slot : null
                             );
                           }}
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
@@ -1055,6 +1126,7 @@ const CreateForm = () => {
                                 const selectedVenue = JSON.parse(
                                   e.target.value
                                 );
+
                                 setFormData({
                                   ...formData,
                                   venue1: {
@@ -1062,9 +1134,26 @@ const CreateForm = () => {
                                     id: selectedVenue._id,
                                   },
                                 });
+
                                 setVenue1(true);
+
+                                // Get the slot booked (if any) for the selected date
+                                const selectedDate = new Date(
+                                  formData.eventDate
+                                )
+                                  .toISOString()
+                                  .split("T")[0];
+
+                                const matchedBooking =
+                                  selectedVenue.bookings?.find((booking) => {
+                                    const bookingDate = new Date(booking.date)
+                                      .toISOString()
+                                      .split("T")[0];
+                                    return bookingDate === selectedDate;
+                                  });
+
                                 setvenue_1_BookingShift(
-                                  selectedVenue.bookingShifts
+                                  matchedBooking ? matchedBooking.slot : null
                                 );
 
                                 const filteredVenues = venue_1.filter(
@@ -1178,7 +1267,8 @@ const CreateForm = () => {
                                 const selectedVenue = JSON.parse(
                                   e.target.value
                                 );
-                                setVenue2_Details(JSON.parse(e.target.value));
+                                setVenue2_Details(selectedVenue);
+
                                 setFormData({
                                   ...formData,
                                   venue2: {
@@ -1186,9 +1276,26 @@ const CreateForm = () => {
                                     id: selectedVenue._id,
                                   },
                                 });
+
                                 setVenue2(true);
+
+                                // Extract the booking slot for the selected event date
+                                const selectedDate = new Date(
+                                  formData.eventDate
+                                )
+                                  .toISOString()
+                                  .split("T")[0];
+
+                                const matchedBooking =
+                                  selectedVenue.bookings?.find((booking) => {
+                                    const bookingDate = new Date(booking.date)
+                                      .toISOString()
+                                      .split("T")[0];
+                                    return bookingDate === selectedDate;
+                                  });
+
                                 setvenue_2_BookingShift(
-                                  selectedVenue.bookingShifts
+                                  matchedBooking ? matchedBooking.slot : null
                                 );
 
                                 const filteredVenues = venue_2.filter(
@@ -1321,7 +1428,8 @@ const CreateForm = () => {
                                 const selectedVenue = JSON.parse(
                                   e.target.value
                                 );
-                                setVenue3_Details(JSON.parse(e.target.value));
+                                setVenue3_Details(selectedVenue);
+
                                 setFormData({
                                   ...formData,
                                   venue3: {
@@ -1329,9 +1437,26 @@ const CreateForm = () => {
                                     id: selectedVenue._id,
                                   },
                                 });
+
                                 setVenue3(true);
+
+                                // Check if there's a booking on the selected event date
+                                const selectedDate = new Date(
+                                  formData.eventDate
+                                )
+                                  .toISOString()
+                                  .split("T")[0];
+
+                                const matchedBooking =
+                                  selectedVenue.bookings?.find((booking) => {
+                                    const bookingDate = new Date(booking.date)
+                                      .toISOString()
+                                      .split("T")[0];
+                                    return bookingDate === selectedDate;
+                                  });
+
                                 setvenue_3_BookingShift(
-                                  selectedVenue.bookingShifts
+                                  matchedBooking ? matchedBooking.slot : null
                                 );
                               }}
                               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"

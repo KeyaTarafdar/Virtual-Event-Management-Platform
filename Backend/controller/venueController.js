@@ -14,6 +14,7 @@ const {
   successResponse_ok,
   errorResponse_alreadyExists,
 } = require("../responseObject");
+const { default: mongoose } = require("mongoose");
 
 // Register Venue
 module.exports.signUp = async (req, res) => {
@@ -719,10 +720,19 @@ module.exports.acceptEvent = async (req, res) => {
     const { eventId, timeslot } = req.body;
     const event = await eventModel.findOne({ _id: eventId });
     let venue = req.venue;
+    let amount;
+    if (timeslot === "1") {
+      amount = venue.bookingPrice_1stHalf;
+    } else if (timeslot === "2") {
+      amount = venue.bookingPrice_2ndHalf;
+    } else if (timeslot === "F") {
+      amount = venue.bookingPrice_fullDay;
+    }
     const oldRequestedVenues = event.requestedVenues;
     if (event) {
       event.finalVenueDeatails = venue._id;
-      event.requestedVenues = [];
+      event.finalVenueSlot = timeslot;
+      event.bill = amount;
       await event.save();
     }
     const existingVenue = await venueModel.findById(venue._id);
@@ -742,7 +752,7 @@ module.exports.acceptEvent = async (req, res) => {
         updatedBookings[bookingIndex].slot = "F";
       }
     } else {
-      updatedBookings.push({ date: event.date, slot: timeslot });
+      updatedBookings.push({ eventId, date: event.date, slot: timeslot });
     }
 
     await venueModel.findByIdAndUpdate(
@@ -752,21 +762,29 @@ module.exports.acceptEvent = async (req, res) => {
     );
 
     await Promise.all(
-      oldRequestedVenues.map(async (id) => {
-        await venueModel.updateOne(
-          { _id: id },
+      oldRequestedVenues.map(async (request) => {
+        const venue = await venueModel.findOne({ _id: request.id });
+        const updatedBookingRequests = venue?.bookingRequests.filter(
+          (booking) => {
+            return booking.id.toString() !== eventId.toString();
+          }
+        );
+        await venueModel.findOneAndUpdate(
+          { _id: request.id },
           {
-            $pull: {
-              bookingRequests: { id: new mongoose.Types.ObjectId(eventId) },
+            $set: {
+              bookingRequests: updatedBookingRequests,
             },
           }
         );
       })
     );
 
+    event.requestedVenues = [];
+    await event.save();
     const updatedVenue = await venueModel.findById(venue._id);
 
-    return successResponse_ok(res, "Event Accepted", venue);
+    return successResponse_ok(res, "Event Accepted", updatedVenue);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }

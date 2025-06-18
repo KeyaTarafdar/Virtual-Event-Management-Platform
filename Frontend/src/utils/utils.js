@@ -292,6 +292,24 @@ export const checkUserIsRegisteredInEventOrNot = async (eventId) => {
   }
 };
 
+
+
+// Pay Venue
+export const payVenue = async (eventId) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/users/paymenttovenue",
+      { eventId },
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // VENUE FUNCTIONALITIES -----------------------------------------------------------------------------------------------------
 
 // Venues Login
@@ -622,7 +640,18 @@ export const updateHallDescription = async (newHallDescription) => {
 };
 
 // Accept Event
-export const acceptEvent = async (event) => {};
+export const acceptEvent = async (eventId, timeslot) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/acceptevent",
+      { eventId, timeslot },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 // ADMIN FUNCTIONS -----------------------------------------------------------------------------------------------------
 

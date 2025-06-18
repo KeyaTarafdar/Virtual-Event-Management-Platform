@@ -23,6 +23,7 @@ const {
   verifyRazorpayPayment,
   fetchAllVenueBasedOnCity,
   fetchSingleVenue,
+  payVenue,
 } = require("../controller/userController");
 
 router.get("/", (req, res) => {
@@ -92,5 +93,8 @@ router.post("/create-order", userIsLoggedIn, createRazorpayOrder);
 
 //GET Razorpay Verify Payment
 router.post("/verify-payment", userIsLoggedIn, verifyRazorpayPayment);
+
+// Venue Payment
+router.post("/paymenttovenue", userIsLoggedIn, payVenue);
 
 module.exports = router;
