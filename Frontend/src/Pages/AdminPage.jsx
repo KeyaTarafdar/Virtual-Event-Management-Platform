@@ -650,16 +650,13 @@ function AdminPage() {
     }
   };
 
-  const [adminuser, setadminuser] = useState(null);
-  const [venueRequests, setvenueRequests] = useState([]);
   const [allVenues, setallVenues] = useState([]);
   const [allEvents, setallEvents] = useState([]);
 
   useEffect(() => {
-    if (!adminuser) {
+    if (!admin) {
       findAdmin().then((response) => {
-        setadminuser(response);
-        setvenueRequests(response.appliedVenues);
+        setAdmin(response);
       });
     }
 
@@ -723,13 +720,7 @@ function AdminPage() {
             <div className="w-full flex justify-center pt-3">
               <img
                 className="rounded-full h-32 w-32 border-[.4rem] border-indigo-400"
-                src={
-                  adminuser
-                    ? adminuser.image
-                      ? adminuser.image.url
-                      : null
-                    : null
-                }
+                src={admin?.image?.url || null}
                 alt="admin image"
               ></img>
               <label className="absolute top-[6.5rem] w-8 h-8 bg-gray-600 rounded-full flex justify-center items-center cursor-pointer">
@@ -744,9 +735,7 @@ function AdminPage() {
             </div>
 
             <div className="h-20 text-center pt-5 font-bold font-serif text-lg">
-              {/* <div className="h-8 pt-5 text-2xl font-extrabold flex items-center justify-center font-serif"> */}
               {company ? company.companyName : null}
-              {/* </div> */}
             </div>
 
             <div className="border-b-4 border-yellow-400 rounded-2xl mb-2"></div>
@@ -793,11 +782,9 @@ function AdminPage() {
                 Venue Details
               </li>
             </ul>
-            {/* <div className="mt-[2rem] w-[100%] flex flex-col text-xs items-center"> */}
             <div className="mt-10 text-xs text-center border-t pt-2">
               &copy;{company?.companyName}2024.
             </div>
-            {/* </div> */}
           </div>
           {/* Toggle button for small screens */}
           <div className="lg:hidden fixed top-[4.5rem] left-4 z-50">
