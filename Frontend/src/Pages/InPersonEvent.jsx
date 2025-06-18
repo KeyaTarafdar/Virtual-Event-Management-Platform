@@ -21,20 +21,22 @@ function InPersonEvent() {
 
   useEffect(() => {
     fetchIn_PersonEvents().then((events) => {
+      console.log("events.data", events.data);
       if (events.success)
         setin_personEvents(
-          events.data.filter((event) => {
-            const today = new Date();
-            const currentDate = today.toISOString().split("T")[0];
-            const eventDate = new Date(event.date).toISOString().split("T")[0];
-            const registrationLastDate = new Date(event.lastDateOfRegistration)
-              .toISOString()
-              .split("T")[0];
+          events.data
+          // events.data.filter((event) => {
+          //   const today = new Date();
+          //   const currentDate = today.toISOString().split("T")[0];
+          //   const eventDate = new Date(event.date).toISOString().split("T")[0];
+          //   const registrationLastDate = new Date(event.lastDateOfRegistration)
+          //     .toISOString()
+          //     .split("T")[0];
 
-            return (
-              registrationLastDate >= currentDate && eventDate > currentDate
-            );
-          })
+          //   return (
+          //     registrationLastDate >= currentDate && eventDate > currentDate
+          //   );
+          // })
         );
     });
   }, []);
@@ -128,7 +130,7 @@ function InPersonEvent() {
                 item.eventType === "virtual" ||
                 ((item.eventType === "in_person" ||
                   item.eventType === "hybrid") &&
-                  item.isVanueConfirmed) ? (
+                  item.isVenueConfirmed) ? (
                   <VirtualCard
                     key={item._id}
                     eventType={item.eventType}
