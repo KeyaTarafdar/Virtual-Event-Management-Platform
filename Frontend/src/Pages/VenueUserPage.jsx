@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { uploadVenueProfilePicture } from "../utils/utils";
 import { HiDotsVertical, HiX } from "react-icons/hi";
+import { useUser } from "../context/userContext/UserContext";
 
 function VenueUserPage() {
   const [activeMenu, setActiveMenu] = useState("");
@@ -16,13 +17,12 @@ function VenueUserPage() {
   const renderComponent = () => {
     switch (activeMenu) {
       case "Calendar":
-        return <CustomCalendar />;
+        return <CustomCalendar venue={venue} />;
       case "Profile":
         return <VenueProfile />;
       default:
         return (
-          venue &&
-          (
+          venue && (
             <div
               style={{
                 backgroundImage:
@@ -34,9 +34,11 @@ function VenueUserPage() {
             >
               <div className="w-[90%] sm:w-[50%] text-center ">
                 <div className="text-5xl sm:text-8xl font-serif">WELCOME</div>
-                {venue?.completePercentage < 100 && <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
-                  Please complete your profile 100%!
-                </div>}
+                {venue?.completePercentage < 100 && (
+                  <div className="mt-4 sm:ml-[4rem] w-full sm:w-[80%] mx-auto rounded-lg text-lg sm:text-2xl shadow-2xl border-4 border-blue-300 font-serif font-bold bg-gray-200 text-red-600 animate-blink p-4">
+                    Please complete your profile 100%!
+                  </div>
+                )}
               </div>
             </div>
           )
@@ -44,11 +46,11 @@ function VenueUserPage() {
     }
   };
 
-  const [venue, setvenue] = useState(null);
+  const { venue, setVenue } = useUser();
 
   useEffect(() => {
     findVenue().then((response) => {
-      setvenue(response);
+      setVenue(response);
     });
   }, []);
 
@@ -81,7 +83,7 @@ function VenueUserPage() {
       uploadVenueProfilePicture(imageData).then((response) => {
         alert(response.message);
         findVenue().then((response) => {
-          setvenue(response);
+          setVenue(response);
         });
       });
     } else {
@@ -93,8 +95,8 @@ function VenueUserPage() {
   return (
     <>
       <Navbar menuItems={[]} />
-      <div className="flex m-0 p-0 relative">
-        <div className="sm:block lg:hidden relative z-50 ml-4 mt-2 ">
+      <div className="flex flex-col min-h-screen relative">
+        <div className="sm:block lg:hidden absolute z-50 ml-4 mt-[1rem] h-12 ">
           {!sidebarOpen ? (
             <button
               onClick={() => setSidebarOpen(true)}
@@ -113,6 +115,8 @@ function VenueUserPage() {
             </button>
           )}
         </div>
+
+      <div className="flex flex-1 relative overflow-hidden">
         {/* SIDE BAR */}
         <div
           className={`
@@ -131,7 +135,7 @@ function VenueUserPage() {
                     : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
                 }
                 alt="Venue Profile"
-                className="rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
+                className="mt-8 rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
               />
               <label
                 className="
@@ -152,7 +156,7 @@ function VenueUserPage() {
             </div>
 
             <div className="mt-2 text-base sm:text-xl font-serif font-extrabold">
-              {venue ? venue.name.split(" ")[0] : null}
+              {venue ? venue.name : null}
             </div>
             <div className="h-8 flex items-center justify-center text-xs sm:text-sm">
               {venue && (
@@ -167,8 +171,9 @@ function VenueUserPage() {
           <div className="w-[90%] h-1 border-b-4 border-yellow-400 m-2 rounded-2xl md:mt-10 mb-2"></div>
           <ul className="space-y-4 flex flex-col items-center p-2">
             <li
-              className={`cursor-pointer p-2 rounded ${activeMenu === "Calendar" ? "bg-gray-600" : ""
-                }`}
+              className={`cursor-pointer p-2 rounded ${
+                activeMenu === "Calendar" ? "bg-gray-600" : ""
+              }`}
               onClick={() => {
                 setActiveMenu("Calendar");
                 setSidebarOpen(false);
@@ -177,8 +182,9 @@ function VenueUserPage() {
               Event Calender
             </li>
             <li
-              className={`cursor-pointer  p-2 rounded ${activeMenu === "Profile" ? "bg-gray-600" : ""
-                }`}
+              className={`cursor-pointer  p-2 rounded ${
+                activeMenu === "Profile" ? "bg-gray-600" : ""
+              }`}
               onClick={() => {
                 setActiveMenu("Profile");
                 setSidebarOpen(false);
@@ -192,18 +198,18 @@ function VenueUserPage() {
             &copy;Eventek2024.
           </div>
         </div>
-        {/* MAIN  CONTENT */}
-        <div
-          className={`
-            flex-1 w-full  lg:ml-[15%] mt-[3.5rem] lg:mt-0
-            overflow-y-auto transition-all duration-300
-            ${sidebarOpen &&
-            "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
-            }
-          `}
-        >
-          {renderComponent()}
-        </div>
+          {/* Main Content */}
+          <div
+            className={`
+              flex-1 w-full overflow-y-auto transition-all duration-300 
+              pt-[4.5rem] px-4
+              ${sidebarOpen ? "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto" : ""}
+              lg:ml-[18rem]  // offset when sidebar is visible in desktop
+            `}
+          >
+            {renderComponent()}
+          </div>
+      </div>
       </div>
     </>
   );
