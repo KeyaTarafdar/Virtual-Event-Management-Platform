@@ -173,11 +173,11 @@ function AdminPage() {
           <>
             {admin?.appliedVenues.length > 0 ? (
               admin?.appliedVenues.map((venue, index) => (
-                <div key={index} className="p-2 sm:p-4 flex justify-center w-full min-h-screen flex-wrap gap-x-4 overflow-x-hidden">
+                <div key={index} className="p-2 sm:p-4 flex justify-center w-full flex-wrap gap-x-4 overflow-x-hidden">
                   <div
-                    className="w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-80 sm:h-64 lg:h-56 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
+                    className="w-full sm:w-[97%] sm:ml-2 mt-3 rounded-lg h-[50%] sm:h-80 lg:h-64 shadow-md p-3 sm:p-4 px-8 flex flex-col md:flex-row justify-between items-start bg-blue-100 border-2 border-blue-600"
                   >
-                    <div className="flex flex-col md:w-3/4 sm:border-r-4 sm:border-blue-600 mr-4">
+                    <div className="flex flex-col md:w-4/5 sm:border-r-4 sm:border-blue-600 mr-4">
                       <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 pb-2 sm:pb-3 font-serif">
                         <span className="font-medium">Venue Name:</span>{" "}
                         {venue.name} 
@@ -220,7 +220,7 @@ function AdminPage() {
                       </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row md:flex-col gap-3 sm:gap-4 md:gap-5 md:mr-3 mt-4 md:mt-0 text-white md:w-1/4 w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row md:flex-col gap-3 sm:gap-4 md:gap-5 md:mr-3 mt-4 md:mt-0 text-white md:w-1/5 w-full sm:w-auto">
                       <button
                         className="border-2 rounded-lg bg-green-500 font-bold font-serif h-10 w-full sm:w-32 hover:bg-green-600 hover:border-green-600 transition duration-300 ease-in-out"
                         onClick={() => {

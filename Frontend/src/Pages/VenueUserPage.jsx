@@ -95,8 +95,8 @@ function VenueUserPage() {
   return (
     <>
       <Navbar menuItems={[]} />
-      <div className="flex m-0 p-0 relative">
-        <div className="sm:block lg:hidden relative z-50 ml-4 mt-2 ">
+      <div className="flex flex-col min-h-screen relative">
+        <div className="sm:block lg:hidden absolute z-50 ml-4 mt-[1rem] h-12 ">
           {!sidebarOpen ? (
             <button
               onClick={() => setSidebarOpen(true)}
@@ -115,6 +115,8 @@ function VenueUserPage() {
             </button>
           )}
         </div>
+
+      <div className="flex flex-1 relative overflow-hidden">
         {/* SIDE BAR */}
         <div
           className={`
@@ -133,7 +135,7 @@ function VenueUserPage() {
                     : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
                 }
                 alt="Venue Profile"
-                className="rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
+                className="mt-8 rounded-full w-24 h-24 sm:w-32 sm:h-32 shadow-lg border-[.3rem] border-indigo-400 bg-gray-900"
               />
               <label
                 className="
@@ -196,19 +198,18 @@ function VenueUserPage() {
             &copy;Eventek2024.
           </div>
         </div>
-        {/* MAIN  CONTENT */}
-        <div
-          className={`
-            flex-1 w-full  lg:ml-[15%] mt-[3.5rem] lg:mt-0
-            overflow-y-auto transition-all duration-300
-            ${
-              sidebarOpen &&
-              "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto "
-            }
-          `}
-        >
-          {renderComponent()}
-        </div>
+          {/* Main Content */}
+          <div
+            className={`
+              flex-1 w-full overflow-y-auto transition-all duration-300 
+              pt-[4.5rem] px-4
+              ${sidebarOpen ? "opacity-50 sm:opacity-100 pointer-events-none sm:pointer-events-auto" : ""}
+              lg:ml-[18rem]  // offset when sidebar is visible in desktop
+            `}
+          >
+            {renderComponent()}
+          </div>
+      </div>
       </div>
     </>
   );

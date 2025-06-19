@@ -642,7 +642,7 @@ const CreateForm = () => {
                           <p className="block text-sm font-medium text-gray-700">
                             Select Preferred Time Slot for Venue 1
                           </p>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="firstday1"
@@ -659,11 +659,13 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            First Half{" "}
-                            <span>{`(${venue1_Details?.time_1stHalf[0]} - ${venue1_Details?.time_1stHalf[1]})`}</span>
-                            <span>{venue1_Details?.bookingPrice_1stHalf}</span>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-bold">First Half</span>
+                              <span>{`(${venue1_Details?.time_1stHalf[0]} - ${venue1_Details?.time_1stHalf[1]})`}</span>
+                              <span>{venue1_Details?.bookingPrice_1stHalf}/-</span>
+                           </div>
                           </div>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="secday1"
@@ -680,13 +682,15 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Second Half
-                            <span>{`(${venue1_Details?.time_2ndHalf[0]} - ${venue1_Details?.time_2ndHalf[1]})`}</span>
-                            <span>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-bold">Seconnd Half</span>
+                              <span>{`(${venue1_Details?.time_2ndHalf[0]} - ${venue1_Details?.time_2ndHalf[1]})`}</span>
+                              <span>
                               {venue1_Details?.bookingPrice_2ndHalf}/-
-                            </span>
+                              </span>
+                            </div>  
                           </div>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="fullday1"
@@ -702,11 +706,13 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Full Day
-                            <span>{`(${venue1_Details?.time_fullDay[0]} - ${venue1_Details?.time_fullDay[1]})`}</span>
-                            <span>
-                              {venue1_Details?.bookingPrice_fullDay}/-
-                            </span>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-bold">Full Day</span>
+                              <span>{`(${venue1_Details?.time_fullDay[0]} - ${venue1_Details?.time_fullDay[1]})`} </span>
+                              <span>
+                                {venue1_Details?.bookingPrice_fullDay}/-
+                              </span>
+                            </div> 
                           </div>
                         </div>
                       ) : null}
@@ -790,7 +796,7 @@ const CreateForm = () => {
                           <p className="block text-sm font-medium text-gray-700">
                             Select Preferred Time Slot for Venue 2
                           </p>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="firstday2"
@@ -807,13 +813,13 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            First Half
-                            {`${venue2_Details?.time_1stHalf[0]} - ${venue2_Details?.time_1stHalf[1]}`}
-                            <span>
-                              {venue2_Details?.bookingPrice_1stHalf}/-
-                            </span>
+                           <div className="flex items-center space-x-4">
+                              <span className="font-bold">First Half</span>
+                              <span>{`(${venue2_Details?.time_1stHalf[0]} - ${venue2_Details?.time_1stHalf[1]})`}</span>
+                              <span>{venue2_Details?.bookingPrice_1stHalf}/-</span>
+                           </div>
                           </div>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="secday2"
@@ -830,13 +836,13 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Second Half
-                            {`${venue2_Details?.time_2ndHalf[0]} - ${venue2_Details?.time_2ndHalf[1]}`}
-                            <span>
-                              {venue2_Details?.bookingPrice_2ndHalf}/-
-                            </span>
+                           <div className="flex items-center space-x-4">
+                              <span className="font-bold">Seconnd Half</span>
+                              <span>{`(${venue2_Details?.time_2ndHalf[0]} - ${venue2_Details?.time_2ndHalf[1]})`}</span>
+                              <span>{venue2_Details?.bookingPrice_2ndHalf}/-</span>
+                            </div> 
                           </div>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="fullday2"
@@ -852,11 +858,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Full Day
-                            {`${venue2_Details?.time_fullDay[0]} - ${venue2_Details?.time_fullDay[1]}`}
-                            <span>
-                              {venue2_Details?.bookingPrice_fullDay}/-
-                            </span>
+                             <div className="flex items-center space-x-4">
+                                <span className="font-bold">Full Day</span>
+                                <span>{`(${venue2_Details?.time_fullDay[0]} - ${venue2_Details?.time_fullDay[1]})`} </span>
+                                <span>{venue2_Details?.bookingPrice_fullDay}/-</span>
+                            </div>
                           </div>
                         </div>
                       ) : null}
@@ -934,7 +940,7 @@ const CreateForm = () => {
                           <p className="block text-sm font-medium text-gray-700">
                             Select Preferred Time Slot for Venue 3
                           </p>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="firstday3"
@@ -951,11 +957,13 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            First Half
-                            {`${venue3_Details?.time_1stHalf[0]} - ${venue3_Details?.time_1stHalf[1]}`}
-                            <span>{venue3_Details?.bookingPrice_1stHalf}</span>
+                           <div className="flex items-center space-x-4">
+                              <span className="font-bold">First Half</span>
+                              <span>{`(${venue3_Details?.time_1stHalf[0]} - ${venue3_Details?.time_1stHalf[1]})`}</span>
+                              <span>{venue3_Details?.bookingPrice_1stHalf}/-</span>
+                           </div>
                           </div>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="secday3"
@@ -972,11 +980,13 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Second Half
-                            {`${venue3_Details?.time_2ndHalf[0]} - ${venue3_Details?.time_2ndHalf[1]}`}
-                            <span>{venue3_Details?.bookingPrice_2ndHalf}</span>
+                             <div className="flex items-center space-x-4">
+                              <span className="font-bold">Seconnd Half</span>
+                              <span>{`(${venue3_Details?.time_2ndHalf[0]} - ${venue3_Details?.time_2ndHalf[1]})`}</span>
+                              <span>{venue3_Details?.bookingPrice_2ndHalf}/-</span>
+                            </div> 
                           </div>
-                          <div>
+                          <div className="flex">
                             <input
                               type="radio"
                               id="fullday3"
@@ -992,9 +1002,11 @@ const CreateForm = () => {
                                 });
                               }}
                             />
-                            Full Day
-                            {`${venue3_Details?.time_fullDay[0]} - ${venue3_Details?.time_fullDay[1]}`}
-                            <span>{venue3_Details?.time_fullDay}</span>
+                           <div className="flex items-center space-x-4">
+                                <span className="font-bold">Full Day</span>
+                                <span>{`(${venue3_Details?.time_fullDay[0]} - ${venue3_Details?.time_fullDay[1]})`} </span>
+                                <span>{venue3_Details?.bookingPrice_fullDay}/-</span>
+                            </div>
                           </div>{" "}
                         </div>
                       ) : null}

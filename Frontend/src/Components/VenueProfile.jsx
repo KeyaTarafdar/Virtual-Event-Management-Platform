@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import {
   AiOutlineVideoCameraAdd,
   AiOutlineEdit,
-  AiOutlineCheck,
+  AiOutlineCheck,AiOutlineMenu, AiOutlineClose
 } from "react-icons/ai";
 import {
   findVenue,
@@ -39,6 +39,7 @@ function VenueProfile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
   const { venue, setVenue } = useUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [newHallName, setnewHallName] = useState("");
   const [newHallCity, setnewHallCity] = useState("");
@@ -97,6 +98,14 @@ function VenueProfile() {
     setReason("");
   };
 
+    const menuItems = [
+    "BasicDetails",
+    "Gallery",
+    "Booking Requests",
+    "Upcoming Bookings",
+    "Past Bookings",
+  ];
+
   const [galleryImages, setGalleryImages] = useState([
     {
       url: "https://images.pexels.com/photos/1709003/pexels-photo-1709003.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -144,10 +153,10 @@ function VenueProfile() {
     switch (activeMenu) {
       case "BasicDetails":
         return (
-          <div className="flex w-[100%]">
+          <div className="flex w-full flex-col lg:flex-row justify-center items-center lg:items-start lg:justify-around">
             {/* Venue Image */}
-            <div className="image-section w-2/6 text-center">
-              <div className="relative inline-block">
+            <div className="image-section w-full sm:w-2/5 lg:w-2/6 flex flex-col items-center text-center px-4 py-6">
+              <div className="relative">
                 <img
                   src={
                     venue && venue.profilepicture
@@ -155,12 +164,12 @@ function VenueProfile() {
                       : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD2pmX-vrTVeKcf4JXDwuxSSVJf66zPpmc5w&s"
                   }
                   alt="Company Logo"
-                  className="w-62 h-62 object-cover mx-auto"
+                  className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 rounded-full object-cover shadow-md mx-auto drop-shadow-[0_0_12px_rgba(59,130,246,0.8)]"
                 />
               </div>
               <button
                 onClick={() => document.getElementById("logoUpload").click()}
-                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all"
+                className="mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all text-sm sm:text-base"
               >
                 Edit Image
               </button>
@@ -194,22 +203,26 @@ function VenueProfile() {
                     ))}
                 </div>
               </div>
-              <div className="flex h-10 mt-3 pl-5">
-                <div>Completed</div>
-                <div className="ml-5 mr-5 mt-[2%] flex w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${venue?.completePercentage - 30}%` }}
-                  ></div>
+              <div className="flex flex-col w-full mt-4 px-4">
+                <div className="text-md font-semibold mb-1">-: Completed :-</div>
+                  <div className="w-[95%] bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-blue-500 h-2 rounded-full w-[95%]"
+                      style={{
+                        width: `${Math.min(100, Math.max(0, venue?.completePercentage - 30))}%`,
+                      }}                 
+                    >
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
             <div className="w-px bg-black m-6 "></div>
+            <div className="lg:hidden bg-yellow-500 rounded-lg w-[90%] mb-8 h-1 ml-8 mr-8"></div>
 
             {/* Basic Details */}
-            <div className="bg-blue-100 w-4/6 mb-8 border-2 border-blue-500 p-8 rounded-lg shadow-xl">
-              <div className="m-auto w-[35%] text-center">
+            <div className="overflow-x-auto bg-blue-100 w-full lg:w-4/6 mb-8 border-2 border-blue-500 p-8 rounded-lg shadow-xl">
+              <div className="m-auto w-[95%] text-center">
                 <h2 className="text-2xl p-1 font-bold font-serif text-yellow-600 mb-4">
                   Basic Details
                 </h2>
@@ -1497,13 +1510,13 @@ function VenueProfile() {
       case "Booking Requests":
         return (
           <>
-            <div className="p-4">
-              <div className="space-y-8 ">
+            <div className="p-4 w-full">
+              <div className="space-y-8 w-full">
                 {Array.isArray(venue.bookingRequests) &&
                   venue.bookingRequests.map((request, index) => (
                     <div
                       key={index}
-                      className="flex flex-col lg:flex-row items-start lg:items-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-300 p-4 border-2 border-blue-500 rounded-lg shadow-2xl hover:shadow-lg transition-all"
+                      className="w-[95%] flex flex-col lg:flex-row items-start lg:items-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-300 p-4 border-2 border-blue-500 rounded-lg shadow-2xl hover:shadow-lg transition-all"
                     >
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-blue-800">
@@ -1538,8 +1551,8 @@ function VenueProfile() {
                         </p>
                       </div>
 
-                      <div className="border-l-4 border-yellow-600  ml-4 h-64 ">
-                        <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-12">
+                      <div className="border-t-4 lg:border-t-0 border-l-0 lg:border-l-4 border-yellow-600 w-[95%] lg:w-[25%] lg:ml-4 mt-4 lg:mt-0">
+                        <h2 className="text-lg pl-8 font-bold font-serif text-blue-900 text-center mb-8 lg:mb-12 mt-4 lg:mt-0">
                           Choose Status
                         </h2>
                         <div className=" lg:mt-0 lg:ml-4 flex  space-x-2">
@@ -1619,7 +1632,7 @@ function VenueProfile() {
         return (
           <>
             <div className="upcoming-bookings mr-5">
-              <div className="bookings-container grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="bookings-container grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
                 {bookings.map((booking) => (
                   <div key={booking.id} className="booking-card">
                     <BookingCard
@@ -1661,100 +1674,117 @@ function VenueProfile() {
     }
   };
 
+    const onMenuClick = (menu) => {
+    setActiveMenu(menu);
+    setIsMenuOpen(false);
+  };
+
   return (
-    <>
-      <div className="h-full w-[100%] flex">
-        <div className=" w-[95%]">
-          <div className="flex gap-12 items-center justify-center cursor-pointer ml-5 mt-6">
-            {/* Basic Details */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "BasicDetails"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("BasicDetails")}
-            >
-              Basic Details
-              {activeMenu === "BasicDetails" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
+      <>
+        <div className="min-h-screen w-full flex">
+          <div className="w-full sm:w-[95%] relative">
+            {/* Hamburger button for < lg */}
+            <div className="bg-blue-100 rounded-lg lg:hidden flex justify-between items-center p-4 border-b border-gray-300">
+              <span className="text-2xl font-bold text-blue-800">Menu</span>
+              <button
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+                aria-label="Toggle menu"
+                className="text-3xl text-blue-700"
+              >
+                {isMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+              </button>
             </div>
-            {/* Gallery */}
+
             <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Gallery" ? "text-blue-700" : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Gallery")}
+              className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50
+              ${
+                isMenuOpen
+                  ? "translate-x-0"
+                  : "-translate-x-full"
+              } lg:hidden`}
             >
-              Gallery
-              {activeMenu === "Gallery" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
+              <nav className="flex flex-col p-6 gap-6 mt-16">
+                {menuItems.map((menu) => (
+                  <div
+                    key={menu}
+                    className={`cursor-pointer relative font-bold font-serif text-lg ${
+                      activeMenu === menu ? "text-blue-700" : "text-gray-600"
+                    }`}
+                    onClick={() => onMenuClick(menu)}
+                  >
+                    {menu.replace(/([A-Z])/g, " $1").trim()}
+                    {activeMenu === menu && (
+                      <span className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 transition-all duration-300"></span>
+                    )}
+                  </div>
+                ))}
+              </nav>
             </div>
-            {/* Booking Requests */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Booking Requests"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Booking Requests")}
-            >
-              Booking Requests
-              {activeMenu === "Booking Requests" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
+
+            {isMenuOpen && (
+              <div
+                onClick={() => setIsMenuOpen(false)}
+                className="fixed inset-0 bg-black bg-opacity-30 z-40 lg:hidden"
+              />
+            )}
+
+            <div className="hidden lg:flex gap-6 lg:gap-12 items-center justify-center cursor-pointer mb-8 flex-wrap">
+              {menuItems.map((menu) => (
+                <div
+                  key={menu}
+                  className={`cursor-pointer relative font-bold font-serif text-lg ${
+                    activeMenu === menu ? "text-blue-700" : "text-gray-600"
+                  }`}
+                  onClick={() => setActiveMenu(menu)}
+                >
+                  {menu.replace(/([A-Z])/g, " $1").trim()}
+                  {activeMenu === menu && (
+                    <span className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 transition-all duration-300"></span>
+                  )}
+                </div>
+              ))}
             </div>
-            {/* Upcoming Bookings */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Upcoming Bookings"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Upcoming Bookings")}
-            >
-              Upcoming Bookings
-              {activeMenu === "Upcoming Bookings" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
+
+            <div className="flex-grow flex justify-center items-center mt-8">
+              {renderComponent()}
             </div>
-            {/* Past Bookings */}
-            <div
-              className={`cursor-pointer relative font-bold font-serif text-lg ${
-                activeMenu === "Past Bookings"
-                  ? "text-blue-700"
-                  : "text-gray-600"
-              }`}
-              onClick={() => setActiveMenu("Past Bookings")}
-            >
-              Past Bookings
-              {activeMenu === "Past Bookings" && (
-                <span
-                  className="absolute bottom-0 left-0 h-[2px] w-full bg-blue-600 
-                       transition-all duration-300"
-                ></span>
-              )}
-            </div>
+
+
+            {/* Modal */}
+            {isModalOpen && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                  <h2 className="text-xl font-bold mb-4 text-gray-800">
+                    Enter Rejection Reason
+                  </h2>
+                  <textarea
+                    className="w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
+                    rows="4"
+                    placeholder="Enter your reason here..."
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                  />
+                  <div className="flex justify-end mt-4 gap-2">
+                    <button
+                      className="border-2 rounded-lg bg-gray-300 font-bold px-4 py-2 hover:bg-gray-400 transition duration-300 ease-in-out"
+                      onClick={handleCloseModal}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="border-2 rounded-lg bg-red-500 font-bold px-4 py-2 hover:bg-red-600 transition duration-300 ease-in-out"
+                      onClick={handleSubmitReason}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="pl-10 pt-10">{renderComponent()}</div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
 }
 export default VenueProfile;
 
