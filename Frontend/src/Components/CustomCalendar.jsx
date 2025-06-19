@@ -59,7 +59,7 @@ const CustomCalendar = ({ venue }) => {
   }, [venue]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-8 absolute left-[-15rem] top-[-3rem]">
       <div className="calendar-container w-full max-w-md sm:max-w-lg lg:max-w-2xl">
         <div className="calendar-header flex justify-between items-center mb-4">
           <button className="nav-btn text-xl font-bold" onClick={prevMonth}>
