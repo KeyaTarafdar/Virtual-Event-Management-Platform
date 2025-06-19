@@ -41,8 +41,18 @@ const eventSchema = new mongoose.Schema({
     },
   ],
 
+  rejectedVenueRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "venue",
+    },
+  ],
+  allvenueRejected: Boolean,
+
   finalVenueDeatails: { type: mongoose.Schema.Types.ObjectId, ref: "venue" },
+  finalVenueSlot: String,
   isVenueConfirmed: { type: Boolean, default: false },
+  isPaymentDone: { type: Boolean, default: false },
 
   tillNowTotalRegistration: { type: Number, default: 0 },
   lastDateOfRegistration: Date,

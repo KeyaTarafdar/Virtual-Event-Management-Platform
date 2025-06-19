@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { useNavigate } from "react-router-dom";
 import { findUser } from "../utils/utils";
 
-export default function Header() {
+export default function Header({ isLoggedIn, scrollToServices }) {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     findUser().then((response) => {
-      setUser(response.username ? response.username.split(" ")[0] : null);
+      setUser(response?.username ? response.username.split(" ")[0] : null);
     });
   }, []);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         const firstName = parsedUser?.username?.split(" ")[0];
         setUser(firstName || null);
       } catch (err) {
-        console.error("Invalid user in localStorage", err);
+        console.error("Invalid user in sessionStorage", err);
         setUser(null);
       }
     }
@@ -39,6 +39,14 @@ export default function Header() {
 
   const handleLogInClick = () => {
     navigate("/login");
+  };
+
+  const handleShowEventsClick = () => {
+    if (isLoggedIn) {
+      scrollToServices();
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -86,7 +94,7 @@ export default function Header() {
             virtual, or hybrid mode, with flawless execution and attention to
             detail for upto 500 people.
           </div>
-          <div className=" flex justify-center gap-4 lg:gap-0 flex-col xds:flex-row  w-full lg:w-[85%] mt-6 lg:mt-8 space-y-4 lg:space-y-0 lg:space-x-4 items-center lg:items-start">
+          <div className="flex justify-center gap-4 lg:gap-0 flex-col sm:flex-row w-full lg:w-[85%] mt-6 lg:mt-8 space-y-4 lg:space-y-0 lg:space-x-4 items-center lg:items-start">
             <div
               className="flex items-center justify-center w-[12rem] lg:w-[13rem] h-[3rem]"
               style={{ color: "#ffffff" }}
@@ -103,14 +111,14 @@ export default function Header() {
               style={{ color: "#ffffff" }}
             >
               <button
-                onClick={handleLogInClick}
+                onClick={handleShowEventsClick}
                 className="flex btn1 justify-center items-center h-full w-full p-4 rounded-full -mt-4 lg:mt-0"
               >
                 Show Events
               </button>
             </div>
             <div
-              className="flex items-center justify-center w-[12rem] lg:w-[18rem] h-[3rem]"
+              className="flex items-center justify-center w-[80%] md:w-[40%] lg:w-[18rem] h-[3rem]"
               style={{ color: "#ffffff" }}
             >
               <button

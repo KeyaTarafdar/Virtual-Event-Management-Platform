@@ -1,7 +1,30 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AdminPage, CompanyPage, Home, Signup, Login, Forgetpassword, Resetpassword, VirtualEvent, InPersonEvent, HybridEvent, CreateForm, Registrationform, EventPage, Venue, VenueRegisteringPage, VenueUserPage, Venue_Details } from './Pages'
-import { Event_card, CustomCalendar, Venue_card, ScrollToTop } from './Components'
+import {
+  AdminPage,
+  CompanyPage,
+  Home,
+  Signup,
+  Login,
+  Forgetpassword,
+  Resetpassword,
+  VirtualEvent,
+  InPersonEvent,
+  HybridEvent,
+  CreateForm,
+  Registrationform,
+  EventPage,
+  Venue,
+  VenueRegisteringPage,
+  VenueUserPage,
+  Venue_Details,
+} from "./Pages";
+import {
+  Event_card,
+  CustomCalendar,
+  Venue_card,
+  ScrollToTop,
+} from "./Components";
 
 function App() {
   return (
@@ -15,6 +38,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/forgetpassword" element={<Forgetpassword />} />
             <Route path="/resetpassword/:venueId" element={<Resetpassword />} />
+            {/* <Route path="/rough" element={<Rough/>}/> */}
             <Route path="/virtualevent" element={<VirtualEvent />} />
             <Route path="/inpersonevent" element={<InPersonEvent />} />
             <Route path="/hybridevent" element={<HybridEvent />} />
@@ -35,7 +59,7 @@ function App() {
             <Route path="/calendar" element={<CustomCalendar />} />
             <Route path="/venuecard" element={<Venue_card />} />
             <Route path="/venue" element={<Venue />} />
-            <Route path="/venuedetails" element={<Venue_Details />} />
+            <Route path="/venuedetails/:venueId" element={<Venue_Details />} />
             <Route path="/adminpanel" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>

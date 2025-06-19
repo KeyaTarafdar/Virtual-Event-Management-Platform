@@ -133,9 +133,19 @@ module.exports.getUser = async (req, res) => {
   try {
     let user = req.user;
 
-    await user.populate({
-      path: "createdEvents appliedEvents",
-    });
+    await user.populate([
+      {
+        path: "createdEvents",
+        populate: {
+          path: "finalVenueDeatails",
+          match: { _id: { $ne: null } },
+        },
+      },
+      {
+        path: "appliedEvents",
+      },
+    ]);
+
     return successResponse_ok(res, "User fetched", user);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
@@ -261,9 +271,7 @@ module.exports.createEvent = async (req, res) => {
       speaker: speakerName,
       eventType,
       city,
-      venue_1: venue1,
-      venue_2: venue2,
-      venue_3: venue3,
+      requestedVenues: [venue1, venue2, venue3],
       platform,
       isPublic,
       isPaid,
@@ -511,6 +519,17 @@ module.exports.fetchAllVenue = async (req, res) => {
   }
 };
 
+// Fetch Single Venue
+module.exports.fetchSingleVenue = async (req, res) => {
+  try {
+    const { venueId } = req.body;
+    const venue = await venueModel.findOne({ _id: venueId });
+    return successResponse_ok(res, "Venues fetched", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
 // Comment on a particular event
 module.exports.commentOnAnEvent = async (req, res) => {
   try {
@@ -616,6 +635,7 @@ exports.createRazorpayOrder = async (req, res) => {
       order: order,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -666,5 +686,31 @@ exports.fetchAllVenueBasedOnCity = async (req, res) => {
     return successResponse_ok(res, "Venue fetched", venues);
   } catch (err) {
     res.status(500).send(err.message);
+  }
+};
+
+// Payment
+module.exports.payVenue = async (req, res) => {
+  try {
+    const { eventId } = req.body;
+    const event = await eventModel.findOneAndUpdate(
+      { _id: eventId },
+      { $set: { isVenueConfirmed: true } },
+      { new: true }
+    );
+    await venueModel.updateOne(
+      {
+        _id: event.finalVenueDeatails,
+        "bookings.eventId": eventId, // find the booking inside bookings array
+      },
+      {
+        $set: {
+          "bookings.$.paymentDone": true, // update that booking
+        },
+      }
+    );
+    return successResponse_ok(res, "Payment Done", event);
+  } catch (error) {
+    return errorResponse_catchError(res, err.message);
   }
 };

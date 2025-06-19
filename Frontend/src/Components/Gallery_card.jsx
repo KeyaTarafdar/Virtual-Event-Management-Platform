@@ -91,7 +91,7 @@ export default function Gallery_Card() {
   return (
     <div className="w-full" id="gallery">
       <div className="px-4 bg-slate-900 items-center sm:m-auto w-full flex-wrap">
-        <div className="h-auto w-100 flex flex-wrap flex-col items-center text-center px-10 pt-8">
+        <div className="h-auto w-100 flex flex-wrap flex-col items-center text-center pt-8">
           {/* Gallery header */}
           <div className="w-full h-auto flex flex-wrap flex-col items-center">
             <p className="text-indigo-400 font-bold text-3xl md:text-4xl text-center">

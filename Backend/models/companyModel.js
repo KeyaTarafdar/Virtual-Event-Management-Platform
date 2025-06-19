@@ -8,6 +8,7 @@ const companySchema = mongoose.Schema({
   fbLink: String,
   instaLink: String,
   linkedinLink: String,
+  address: String,
 });
 
 module.exports = mongoose.model("company", companySchema);

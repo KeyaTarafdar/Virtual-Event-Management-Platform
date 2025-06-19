@@ -14,6 +14,8 @@ const {
   successResponse_ok,
   errorResponse_alreadyExists,
 } = require("../responseObject");
+const { default: mongoose } = require("mongoose");
+const userModel = require("../models/userModel");
 
 // Register Venue
 module.exports.signUp = async (req, res) => {
@@ -221,14 +223,21 @@ module.exports.updatePasswordFirstTime = async (req, res) => {
 module.exports.fetchVenueUser = async (req, res) => {
   try {
     let venue = req.venue;
+
     await venue.populate([
       {
         path: "bookingRequests.id",
         model: "event",
         populate: { path: "ownerId" },
       },
-      { path: "bookedEvents" },
     ]);
+
+    if (venue.bookings && venue.bookings.length > 0) {
+      await venue.populate({
+        path: "bookings.eventId",
+        model: "event",
+      });
+    }
 
     return successResponse_ok(res, "Venue fetched", venue);
   } catch (err) {
@@ -242,12 +251,36 @@ module.exports.updateHallName = async (req, res) => {
     let { newHallName } = req.body;
     let venue = req.venue;
 
-    venue = await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
       { $set: { name: newHallName } },
       { new: true }
     );
     return successResponse_ok(res, "Hallname updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Name
+module.exports.updateHallDescription = async (req, res) => {
+  try {
+    let { newHallDescription } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          description: newHallDescription,
+          completePercentage: oldVenue.description
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall description updated", venue);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
@@ -259,7 +292,7 @@ module.exports.updateHallCity = async (req, res) => {
     let { newHallCity } = req.body;
     let venue = req.venue;
 
-    venue = await venueModel.updateOne(
+    venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
       { $set: { city: newHallCity } },
       { new: true }
@@ -279,7 +312,8 @@ module.exports.updateHallEmail = async (req, res) => {
     venueModel
       .findOneAndUpdate(
         { email: venue.email },
-        { $set: { email: newHallEmail } }
+        { $set: { email: newHallEmail } },
+        { new: true }
       )
       .then((response) => {
         res.cookie("token", "", {
@@ -289,7 +323,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        let updatedVenue = { ...venue, email: newHallEmail };
+        let updatedVenue = { ...response, email: newHallEmail };
         let token = generateToken(updatedVenue);
 
         res.cookie("token", token, {
@@ -299,7 +333,7 @@ module.exports.updateHallEmail = async (req, res) => {
           path: "/",
         });
 
-        return successResponse_ok(res, "Hall Email updated", updatedVenue);
+        return successResponse_ok(res, "Hall Email updated", updatedVenue._doc);
       })
       .catch((err) => {
         res.send(err.message);
@@ -363,15 +397,63 @@ module.exports.updateHallCapacity = async (req, res) => {
 // Update Hall Multiday
 module.exports.updateHallMultiday = async (req, res) => {
   try {
-    let { newHallCapacity } = req.body;
+    let { newHallMultiday } = req.body;
     let venue = req.venue;
 
     venue = await venueModel.findOneAndUpdate(
       { email: venue.email },
-      { $set: { canOrganizeMultidayEvent: newHallCapacity } },
+      { $set: { canOrganizeMultidayEvent: newHallMultiday } },
       { new: true }
     );
     return successResponse_ok(res, "Hall Multiday Fecility updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Projector Facility
+module.exports.updateHallProjector = async (req, res) => {
+  try {
+    let { newHallProjector } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          projector: newHallProjector,
+          completePercentage: oldVenue.projector
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall Projector Facility updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Broadband Facility
+module.exports.updateHallBroadband = async (req, res) => {
+  try {
+    let { newHallBroadband } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          broadband: newHallBroadband,
+          completePercentage: oldVenue.broadband
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall Broadband Facility updated", venue);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
@@ -415,15 +497,70 @@ module.exports.updateHallTime = async (req, res) => {
 // Update Hall type
 module.exports.updateHallType = async (req, res) => {
   try {
-    let { newHallType } = req.body;
-    let venue = req.venue;
+    let { newHalltype } = req.body;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { hallType: newHallType } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          hallType: newHalltype,
+          completePercentage: oldVenue.hallType
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall type updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Opening Time
+module.exports.updateHallOpeningTime = async (req, res) => {
+  try {
+    let { newOpeningTime } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          openingtime: newOpeningTime,
+          completePercentage: oldVenue.openingtime
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall opening time updated", venue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Update Hall Closing Time
+module.exports.updateHallClosingTime = async (req, res) => {
+  try {
+    let { newClosingTime } = req.body;
+    let oldVenue = req.venue;
+
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          closingtime: newClosingTime,
+          completePercentage: oldVenue.closingtime
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
+      { new: true }
+    );
+    return successResponse_ok(res, "Hall closing time updated", venue);
   } catch (err) {
     return errorResponse_catchError(res, err.message);
   }
@@ -433,11 +570,18 @@ module.exports.updateHallType = async (req, res) => {
 module.exports.updateHall_1stHalfTime = async (req, res) => {
   try {
     let { newHall_1stHalfTime } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { time_1stHalf: newHall_1stHalfTime } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          time_1stHalf: newHall_1stHalfTime,
+          completePercentage: oldVenue.time_1stHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall 1st half time updated", venue);
@@ -450,11 +594,18 @@ module.exports.updateHall_1stHalfTime = async (req, res) => {
 module.exports.updateHall_2ndHalfTime = async (req, res) => {
   try {
     let { newHall_2ndHalfTime } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { time_2ndHalf: newHall_2ndHalfTime } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          time_2ndHalf: newHall_2ndHalfTime,
+          completePercentage: oldVenue.time_2ndHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall 2nd half time updated", venue);
@@ -467,11 +618,18 @@ module.exports.updateHall_2ndHalfTime = async (req, res) => {
 module.exports.updateHall_fullDayTime = async (req, res) => {
   try {
     let { newHall_fullDayTime } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { time_fullDay: newHall_fullDayTime } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          time_fullDay: newHall_fullDayTime,
+          completePercentage: oldVenue.time_fullDay
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(res, "Hall full day time updated", venue);
@@ -484,11 +642,18 @@ module.exports.updateHall_fullDayTime = async (req, res) => {
 module.exports.updateHall_1stHalfPrice = async (req, res) => {
   try {
     let { newHall_1stHalfprice } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { bookingPrice_1stHalf: newHall_1stHalfprice } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          bookingPrice_1stHalf: newHall_1stHalfprice,
+          completePercentage: oldVenue.bookingPrice_1stHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(
@@ -505,11 +670,18 @@ module.exports.updateHall_1stHalfPrice = async (req, res) => {
 module.exports.updateHall_2ndHalfPrice = async (req, res) => {
   try {
     let { newHall_2ndHalfprice } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
-    venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { bookingPrice_2ndHalf: newHall_2ndHalfprice } },
+    let venue = await venueModel.findOneAndUpdate(
+      { email: oldVenue.email },
+      {
+        $set: {
+          bookingPrice_2ndHalf: newHall_2ndHalfprice,
+          completePercentage: oldVenue.bookingPrice_2ndHalf
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(
@@ -526,11 +698,18 @@ module.exports.updateHall_2ndHalfPrice = async (req, res) => {
 module.exports.updateHall_fullDayPrice = async (req, res) => {
   try {
     let { newHall_fullDayprice } = req.body;
-    let venue = req.venue;
+    let oldVenue = req.venue;
 
     venue = await venueModel.findOneAndUpdate(
-      { email: venue.email },
-      { $set: { bookingPrice_fullDay: newHall_fullDayprice } },
+      { email: oldVenue.email },
+      {
+        $set: {
+          bookingPrice_fullDay: newHall_fullDayprice,
+          completePercentage: oldVenue.bookingPrice_fullDay
+            ? oldVenue.completePercentage
+            : oldVenue.completePercentage + 10,
+        },
+      },
       { new: true }
     );
     return successResponse_ok(
@@ -549,16 +728,171 @@ module.exports.acceptEvent = async (req, res) => {
     const { eventId, timeslot } = req.body;
     const event = await eventModel.findOne({ _id: eventId });
     let venue = req.venue;
+    let amount;
+    if (timeslot === "1") {
+      amount = venue.bookingPrice_1stHalf;
+    } else if (timeslot === "2") {
+      amount = venue.bookingPrice_2ndHalf;
+    } else if (timeslot === "F") {
+      amount = venue.bookingPrice_fullDay;
+    }
+    const oldRequestedVenues = event.requestedVenues;
+    const slot =
+      timeslot === "1"
+        ? venue.time_1stHalf
+        : timeslot === "2"
+          ? venue.time_2ndHalf
+          : timeslot === "F"
+            ? venue.time_fullDay
+            : null;
     if (event) {
-      event.venues = [{ id: venue.id, timeslot }];
-      event.isVenueConfirmed = true;
+      event.finalVenueDeatails = venue._id;
+      event.finalVenueSlot = `${timeslot}+${slot}`;
+      event.bill = amount;
       await event.save();
     }
+    const existingVenue = await venueModel.findById(venue._id);
+    const eventDate = new Date(event.date).toISOString().split("T")[0];
 
-    await venueModel.findOneAndUpdate({ _id: venue._id }, {});
+    let updatedBookings = [...existingVenue.bookings];
+    let bookingIndex = updatedBookings.findIndex(
+      (b) => new Date(b.date).toISOString().split("T")[0] === eventDate
+    );
 
-    const { _id } = req.vneue;
+    if (bookingIndex !== -1) {
+      let existingSlot = updatedBookings[bookingIndex].slot;
+      if (
+        (existingSlot === "1" && timeslot === "2") ||
+        (existingSlot === "2" && timeslot === "1")
+      ) {
+        updatedBookings[bookingIndex].slot = "F";
+      }
+    } else {
+      updatedBookings.push({ eventId, date: event.date, slot: timeslot });
+    }
+
+    await venueModel.findByIdAndUpdate(
+      venue._id,
+      { bookings: updatedBookings },
+      { new: true }
+    );
+
+    await Promise.all(
+      oldRequestedVenues.map(async (request) => {
+        const venue = await venueModel.findOne({ _id: request.id });
+        const updatedBookingRequests = venue?.bookingRequests.filter(
+          (booking) => {
+            return booking.id.toString() !== eventId.toString();
+          }
+        );
+        await venueModel.findOneAndUpdate(
+          { _id: request.id },
+          {
+            $set: {
+              bookingRequests: updatedBookingRequests,
+            },
+          }
+        );
+      })
+    );
+
+    event.requestedVenues = [];
+    await event.save();
+    const updatedVenue = await venueModel.findById(venue._id);
+    if (updatedVenue.bookings && updatedVenue.bookings.length > 0) {
+      await updatedVenue.populate({
+        path: "bookings.eventId bookingRequests.id",
+        model: "event",
+      });
+    }
+
+    return successResponse_ok(res, "Event Accepted", updatedVenue);
   } catch (err) {
-    res.status(500).send(err.message);
+    return errorResponse_catchError(res, err.message);
+  }
+};
+
+// Reject event request
+module.exports.rejectEvent = async (req, res) => {
+  try {
+    const { eventId } = req.body;
+    let venue = req.venue;
+    let event = await eventModel.findOneAndUpdate(
+      { _id: eventId },
+      { $addToSet: { rejectedVenueRequests: eventId } }
+    );
+    event = await eventModel.findById(eventId);
+    event.requestedVenues = event.requestedVenues.filter(
+      (venueReq) => venueReq.id.toString() !== venue._id
+    );
+    await event.save();
+
+    venue = await venueModel.findById(venue._id);
+    const updatedBookingRequests = venue.bookingRequests.filter((request) => {
+      return request.id.toString() !== eventId.toString();
+    });
+    const updatedVenue = await venueModel.findOneAndUpdate(
+      { _id: venue._id },
+      { $set: { bookingRequests: updatedBookingRequests } },
+      { new: true }
+    );
+
+    const user = await userModel.findOne({ _id: event.ownerId })
+    console.log('user', user)
+   
+    const testAccount = await nodemailer.createTestAccount();
+    
+        const transporter = nodemailer.createTransport({
+          host: "smtp.ethereal.email",
+          port: 587,
+          auth: {
+            user: process.env.user,
+            pass: process.env.pass,
+          },
+        });
+    
+     await transporter.sendMail({
+      from: venue.email,
+      to: user.email,
+      subject: "Venue Request Rejected",
+      html: `<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9f9; color: #333;">
+         <div style="margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
+             <div style="background-color: #f6440e; color: #ffffff; padding: 15px; border-radius: 8px 8px 0 0; text-align: center;">
+                 <h2 style="margin: 0;">Venue Request Rejected</h2>
+             </div>
+             <div style="padding: 20px;">
+                 <p>Dear ${user.username},</p>
+                 <p>We regret to inform you that your requested venue ${venue.name} has been <strong>rejected</strong> for the event ${event.eventName} after careful review. Unfortunately, it did not meet all the necessary criteria for approval.</p>
+                 <p>Thank you for your interest in our platform. We appreciate the effort you put into your application and hope to see you again in the future.</p>
+             </div>
+             <div style="margin-top: 20px; font-size: 14px; color: #777; text-align: center; padding: 10px 0; border-top: 1px solid #ddd;">
+                 <p>Warm regards,<br>The Eventek Team</p>
+                 <p><i>Your success is our priority.</i></p>
+             </div>
+         </div>
+     </body>`,
+    });
+
+    if (event.rejectedVenueRequests === 3) {
+      updatedVenue.allvenueRejected = true;
+      await updatedVenue.save();
+      
+      const venue1 = await event.rejectedVenueRequests[0].populate();
+      const venue2 = await event.rejectedVenueRequests[1].populate();
+      const venue3 = await event.rejectedVenueRequests[2].populate();
+       
+      event.rejectedVenueRequests = [];
+      await event.save();
+    }
+    await updatedVenue.populate([
+      {
+        path: "bookingRequests.id",
+        model: "event",
+        populate: { path: "ownerId" },
+      },
+    ]);
+    return successResponse_ok(res, "Event Rejected", updatedVenue);
+  } catch (err) {
+    return errorResponse_catchError(res, err.message);
   }
 };

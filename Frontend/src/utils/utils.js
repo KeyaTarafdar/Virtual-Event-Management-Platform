@@ -8,7 +8,7 @@ export const fetchCompanyDetails = async () => {
   try {
     let { data } = await axios.get("http://localhost:8000/fetchcompanydetails");
     if (data.success) {
-      localStorage.setItem("company", JSON.stringify(data.data));
+      sessionStorage.setItem("company", JSON.stringify(data.data));
       return data.data;
     } else {
       return {};
@@ -25,9 +25,11 @@ export const logoutUser = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      if (data.message.includes("User")) localStorage.removeItem("user");
-      else if (data.message.includes("Admin")) localStorage.removeItem("admin");
-      else if (data.message.includes("Venue")) localStorage.removeItem("venue");
+      if (data.message.includes("User")) sessionStorage.removeItem("user");
+      else if (data.message.includes("Admin"))
+        sessionStorage.removeItem("admin");
+      else if (data.message.includes("Venue"))
+        sessionStorage.removeItem("venue");
     } else {
       alert(data.message);
     }
@@ -137,7 +139,7 @@ export const findUser = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("user", JSON.stringify(data.data));
+      sessionStorage.setItem("user", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -155,7 +157,6 @@ export const createEvent = async (formData) => {
       { ...formData },
       { withCredentials: true }
     );
-
     return data;
   } catch (err) {
     console.log(err.message);
@@ -169,7 +170,20 @@ export const fetchAllVenues = async () => {
       "http://localhost:8000/users/getallvenue",
       { withCredentials: true }
     );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
+// Find Single Venue
+export const findSingleVenue = async (venueId) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/users/fetchsinglevenue",
+      { venueId },
+      { withCredentials: true }
+    );
     return data;
   } catch (err) {
     console.log(err.message);
@@ -278,6 +292,22 @@ export const checkUserIsRegisteredInEventOrNot = async (eventId) => {
   }
 };
 
+// Pay Venue
+export const payVenue = async (eventId) => {
+  try {
+    let { data } = await axios.post(
+      "http://localhost:8000/users/paymenttovenue",
+      { eventId },
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // VENUE FUNCTIONALITIES -----------------------------------------------------------------------------------------------------
 
 // Venues Login
@@ -302,7 +332,7 @@ export const findVenue = async () => {
       { withCredentials: true }
     );
     if (data.success) {
-      localStorage.setItem("venue", JSON.stringify(data.data));
+      sessionStorage.setItem("venue", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -315,14 +345,14 @@ export const findVenue = async () => {
 // Upload venue Profile Picture
 export const uploadVenueProfilePicture = async (imageData) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/uploadvenueprofilepicture",
       { image: imageData },
       {
         withCredentials: true,
       }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -358,12 +388,12 @@ export const updateVenueName = async (newHallName) => {
 // Update Venue City
 export const updateVenueCity = async (newHallCity) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallcity",
       { newHallCity },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -372,12 +402,12 @@ export const updateVenueCity = async (newHallCity) => {
 // Update Venue Email
 export const updateVenueEmail = async (newHallEmail) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallemail",
       { newHallEmail },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -386,12 +416,12 @@ export const updateVenueEmail = async (newHallEmail) => {
 // Update Venue Phone
 export const updateVenuePhone = async (newHallPhone) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallphone",
       { newHallPhone },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -400,12 +430,12 @@ export const updateVenuePhone = async (newHallPhone) => {
 // Update Venue Address
 export const updateVenueAddress = async (newHallAddress) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehalladdress",
       { newHallAddress },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -414,12 +444,12 @@ export const updateVenueAddress = async (newHallAddress) => {
 // Update Venue MaxCapacity
 export const updateVenueCapacity = async (newHallCapacity) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallcapacity",
       { newHallCapacity },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -428,12 +458,208 @@ export const updateVenueCapacity = async (newHallCapacity) => {
 // Update Venue Multiday
 export const updateVenueMultidayEvent = async (newHallMultiday) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://localhost:8000/venue/updatehallmultiday",
       { newHallMultiday },
       { withCredentials: true }
     );
-    return response.data;
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue halltype
+export const updateVenueHalltype = async (newHalltype) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehalltype",
+      { newHalltype },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue 1sthalf
+export const updateHallTime_1st = async (newHalltime1st) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_1st",
+      { newHall_1stHalfTime: newHalltime1st },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue 2ndhalf
+export const updateHallTime_2nd = async (newHalltime2nd) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_2nd",
+      { newHall_2ndHalfTime: newHalltime2nd },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue time fullday
+export const updateHallTime_fullday = async (newHalltimefullday) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallTime_fullday",
+      { newHall_fullDayTime: newHalltimefullday },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update opening time
+export const updateOpeningTime = async (newHallOpeningTime) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallopeningtime",
+      { newOpeningTime: newHallOpeningTime },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//update closing Time
+export const updateClosingTime = async (newHallClosingTime) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallclosingtime",
+      { newClosingTime: newHallClosingTime },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue hallprice_1
+export const updateHallPrice_1st = async (newHall_1stHalfprice) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_1st",
+      { newHall_1stHalfprice },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue hallPrice_2
+export const updateHallPrice_2nd = async (newHallprice2) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_2nd",
+      { newHall_2ndHalfprice: newHallprice2 },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Venue hallPrice_fullday
+export const updateHallPrice_fullday = async (newHallpricefull) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallPrice_fullday",
+      { newHall_fullDayprice: newHallpricefull },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Venue Projector
+export const updateVenueProjector = async (newHallProjector) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallprojector",
+      { newHallProjector },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Venue Broadband
+export const updateVenueBroadband = async (newHallBroadband) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehallbroadband",
+      { newHallBroadband },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//Update Venue Desc
+export const updateHallDescription = async (newHallDescription) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/updatehalldescription",
+      { newHallDescription },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Accept Event
+export const acceptEvent = async (eventId, timeslot) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/acceptevent",
+      { eventId, timeslot },
+      { withCredentials: true }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Reject Event
+export const rejectEvent = async (eventId) => {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:8000/venue/rejectevent",
+      { eventId },
+      { withCredentials: true }
+    );
+    return data;
   } catch (err) {
     console.log(err.message);
   }
@@ -462,7 +688,7 @@ export const findAdmin = async () => {
       withCredentials: true,
     });
     if (data.success) {
-      localStorage.setItem("admin", JSON.stringify(data.data));
+      sessionStorage.setItem("admin", JSON.stringify(data.data));
       return data.data;
     } else {
       return null;
@@ -520,7 +746,7 @@ export const rejectVenue = async (venueId, reason) => {
 export const fetchAllEvents = async () => {
   try {
     let { data } = await axios.get(
-      "http://localhost:8000/admins/fetchallvenue",
+      "http://localhost:8000/admins/fetchallevents",
       {
         withCredentials: true,
       }
@@ -530,3 +756,83 @@ export const fetchAllEvents = async () => {
     console.log(err.message);
   }
 };
+
+//company name
+export const updateCompanyInfo = async (company) => {
+  try {
+    console.log("company", company);
+    let { data } = await axios.post(
+      "http://localhost:8000/admins/updatecompanyinfo",
+      {
+        ...company,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+//company address
+// export const setCompanyAdress = async (address) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanyaddress",
+//       {address}
+//       ,{
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
+
+// //company email
+// export const setCompanyEmail = async (email) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanyemail",
+//       {email},{
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
+
+// //company contact
+// export const setCompanyContact = async (contact) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanycontact",{contact},
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
+
+// //company description
+// export const setCompanyDesc = async (description) => {
+//   try {
+//     let { data } = await axios.post(
+//       "http://localhost:8000/admins/updatecompanydescription",{description},
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     return data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };

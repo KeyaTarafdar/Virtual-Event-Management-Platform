@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { findUser, fetchSingleEvent, eventRegistration } from "../utils/utils";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -56,14 +56,13 @@ const Registrationform = () => {
               },
               { withCredentials: true }
             );
-            console.log("verifyResponse", verifyResponse);
             if (verifyResponse.data.success) {
               setLoading(true);
               eventRegistration(eventId).then((response) => {
                 setLoading(false);
                 alert(response.message);
                 if (response.success) {
-                  localStorage.setItem("user", JSON.stringify(response.data));
+                  sessionStorage.setItem("user", JSON.stringify(response.data));
                   setUser(response.data);
                   navigate(`/eventpage/${eventId}`);
                 }
@@ -127,7 +126,7 @@ const Registrationform = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="w-full lg:w-full">
             <h2 className="font-serif text-3xl sm:text-3xl font-bold text-indigo-600 mb-6 sm:mb-8">
-              Register Yourself !!
+              Register Yourself
             </h2>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
@@ -219,7 +218,7 @@ const Registrationform = () => {
               </div>
 
               {/*Payment */}
-              {formdata.Pay && !paymentDone && (
+              {/* {formdata.Pay && !paymentDone && (
                 <div className="w-[90%] flex justify-center items-center flex-col">
                   <div
                     className="mt-2 ml-8 bg-red-500 text-white p-2 rounded-md hover:bg-red-600 cursor-pointer"
@@ -228,7 +227,6 @@ const Registrationform = () => {
                     Pay Now &emsp; {formdata.paidAmount}/-
                   </div>
 
-                  {/* Modal */}
                   {modalOpen && (
                     <div
                       style={{
@@ -302,7 +300,7 @@ const Registrationform = () => {
                     Payment Done
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Register Button */}
               <div className="mt-8 text-center">

@@ -66,7 +66,7 @@ const Login = () => {
           4000
         );
         if (userResponse.success) {
-          localStorage.setItem("user", userResponse.data);
+          sessionStorage.setItem("user", userResponse.data);
           setLoading(false);
           navigate("/");
           return;
@@ -77,7 +77,7 @@ const Login = () => {
         );
         console.log("venueResponse", venueResponse);
         if (venueResponse.success) {
-          localStorage.setItem("venue", JSON.stringify(venueResponse.data));
+          sessionStorage.setItem("venue", JSON.stringify(venueResponse.data));
           setVenue(venueResponse.data);
           setLoading(false);
           navigate("/venueuser");
@@ -89,7 +89,7 @@ const Login = () => {
         );
         console.log("adminResponse", adminResponse.data);
         if (adminResponse.success) {
-          localStorage.setItem("admin", JSON.stringify(adminResponse.data));
+          sessionStorage.setItem("admin", JSON.stringify(adminResponse.data));
           setAdmin(adminResponse.data);
           setLoading(false);
           navigate("/adminpanel");

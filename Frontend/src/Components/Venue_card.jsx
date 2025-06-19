@@ -1,11 +1,10 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Venue_card = ({ name, location, navigateTo = "/venuedetails" }) => {
+const Venue_card = ({ id, name, location }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="pb-1 bg-gradient-to-br from-blue-400 to-blue-900 overflow-hidden rounded-lg shadow-lg">
+    <div className="pb-1  bg-gradient-to-br from-blue-400 to-blue-900 overflow-hidden rounded-lg shadow-lg">
       <div className="p-3">
         <h2 className="text-2xl font-medium text-center font-serif text-white">
           {name}
@@ -17,7 +16,9 @@ const Venue_card = ({ name, location, navigateTo = "/venuedetails" }) => {
       <div className="pt-2 pb-2 flex justify-center">
         <button
           className="btn2 px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 flex items-center gap-2"
-          onClick={() => navigate(navigateTo)}
+          onClick={() => {
+            navigate(`/venuedetails/${id}`);
+          }}
         >
           Show
           <svg

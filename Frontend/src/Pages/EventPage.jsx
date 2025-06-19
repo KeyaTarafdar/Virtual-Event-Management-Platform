@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   findUser,
@@ -34,9 +33,7 @@ function EventPage() {
     },
     {
       label: "Date & Time",
-      value: `${new Date(event.date).toLocaleDateString("en-GB")}, ${
-        event.time
-      }`,
+      value: `${new Date(event.date).toLocaleDateString("en-GB")}, ${event.time}`,
     },
     { label: "Speaker", value: event.speaker },
     {
@@ -71,9 +68,21 @@ function EventPage() {
     }
   };
 
+  const [buttonCursor, setbuttonCursor] = useState("cursor-pointer");
+
   useEffect(() => {
     fetchSingleEvent(eventId).then((response) => {
       setevent(response.data);
+      const today = new Date();
+      const currentDate = today.toISOString().split("T")[0];
+      const registrationLastDate = new Date(
+        response.data.lastDateOfRegistration
+      )
+        .toISOString()
+        .split("T")[0];
+      if (registrationLastDate < currentDate) {
+        setbuttonCursor("cursor-not-allowed");
+      }
     });
   }, []);
 
@@ -112,33 +121,40 @@ function EventPage() {
   return (
     <>
       <div className="flex flex-col items-center pt-10">
-        <Navbar menuItems={headerMenuItems} />
+        {/* Full-width Navbar */}
+        <div className="w-full">
+          <Navbar menuItems={headerMenuItems} />
+        </div>
 
         {/* Event Header with Image */}
-        <div className="flex justify-between w-full max-w-4xl items-center">
+        <div className="flex flex-col lg:flex-row justify-between w-full max-w-4xl items-center lg:items-start px-4 sm:px-6">
           {event.posterImage ? (
             <img
               src={event.posterImage ? event.posterImage.url : null}
               alt={event.eventName}
-              className="w-96 h-48 object-cover rounded-lg"
+              className="w-full sm:w-96 h-48 object-cover rounded-lg"
             />
           ) : (
             <ImageLoader />
           )}
-          <div className="ml-8">
+          <div className="mt-6 lg:mt-0 lg:ml-8 w-full lg:w-1/2">
             {eventTags.map((item, index) => (
-              <p key={index} className="text-lg font-medium">
-                {item.label} : <span className="font-light">{item.value}</span>
+              <p
+                key={index}
+                className="text-base sm:text-lg font-medium mb-1"
+              >
+                {item.label} :{" "}
+                <span className="font-light break-words">{item.value}</span>
               </p>
             ))}
 
             {registered ? (
-              <button className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500">
+              <button className="mt-6 w-full sm:w-auto bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500">
                 Registered
               </button>
             ) : (
               <button
-                className="mt-6 bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
+                className="mt-6 w-full sm:w-auto bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-500"
                 onClick={() => {
                   if (user) {
                     navigate(`/registrationform/${eventId}`);
@@ -154,23 +170,28 @@ function EventPage() {
         </div>
 
         {/* Description Section */}
-        <div className="w-full max-w-4xl mt-8">
+        <div className="w-full max-w-4xl mt-8 px-4 sm:px-6">
           {descriptionTags.map((item, index) =>
             (event.eventType === "virtual" && item.label === "Venue") ||
-            (event.eventType === "in_person" &&
-              item.label === "Platform") ? null : (
-              <p key={index} className="text-lg font-medium">
-                {item.label} : <span className="font-light">{item.value}</span>
+            (event.eventType === "in_person" && item.label === "Platform") ? null : (
+              <p
+                key={index}
+                className="text-base sm:text-lg font-medium mb-1"
+              >
+                {item.label} :{" "}
+                <span className="font-light break-words">{item.value}</span>
               </p>
             )
           )}
         </div>
 
         {/* Comment Section */}
-        <CommentSection />
+        <div className=" w-full max-w-4xl mt-8 px-4 sm:px-6">
+          <CommentSection />
+        </div>
 
-        {/* Footer Section */}
-        <div className="m-0 p-0 w-full" id="contact">
+        {/* Full-width Footer */}
+        <div className="w-full mt-10" id="contact">
           <Footer menuItems1={footerMenuItems} />
         </div>
       </div>

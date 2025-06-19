@@ -60,7 +60,7 @@ const FreqtQuestion = ({ ques, ans }) => {
 const FrequentlyAskedQuestion = ({ Questions }) => {
   return (
     <>
-      <div className="container mx-auto mt-5 px-4 py-20 w-[70%]" id="freq">
+      <div className="container mx-auto mt-5 px-4 py-20 w-full sm:w-[70%] " id="freq">
         <h1 className="2xl:text-5xl xl:text-5xl lg:text-4xl md:text-4xl sm:text-3xl text-2xl font-bold mb-20 text-center">
           Frequently Asked Questions
         </h1>

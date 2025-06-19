@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { changePasswordRequest } from "../utils/utils";
 import Resetpassword from "./Resetpassword";
 
@@ -37,10 +37,10 @@ const Forgetpassword = () => {
     const isValid = validateForm();
     if (isValid) {
       changePasswordRequest(formData.email).then((response) => {
-        if (response.success) {
+        if (response) {
           setReset(true);
         } else {
-          alert(response.message);
+          alert("Account does't exists!");
         }
       });
     } else {
@@ -90,8 +90,9 @@ const Forgetpassword = () => {
                 value={formData.email}
                 onChange={handleChange}
                 id="email"
-                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${errors.email ? "border-red-500" : "border-gray-300"
-                  } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+                className={`block py-2 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
                 placeholder=" "
               />
               <label

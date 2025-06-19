@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "../Components/Navbar";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
@@ -26,6 +26,7 @@ import {
 } from "react-icons/ai";
 import { fetchLastCreatedEvent, fetchCompanyDetails } from "../utils/utils";
 import { useCompany } from "../context/companyContext/CompanyContext";
+import { useUser } from "../context/userContext/UserContext";
 
 const headerMenuItems = [
   { label: "Services", href: "services" },
@@ -39,7 +40,7 @@ const footerMenuItems = [
   { href: "services", label: "Services", icon: AiOutlineSolution },
   { href: "features", label: "Features", icon: AiOutlineAppstore },
   { href: "collaborators", label: "Collaborators", icon: AiOutlineTeam },
-  { href: "analytic", label: "Analytics", icon: AiFillEdit },
+  { href: "analytics", label: "Analytics", icon: AiFillEdit },
   { href: "freq", label: "Help", icon: AiOutlineQuestionCircle },
 ];
 
@@ -53,6 +54,14 @@ export default function Home() {
 
   const [fetchingCompleted, setfetchingCompleted] = useState(false);
   const [lastEvent, setlastEvent] = useState({});
+  const servicesRef = useRef(null);
+
+  const scrollToServices = () => {
+    servicesRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const user = useUser();
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     fetchLastCreatedEvent().then((response) => {
@@ -61,9 +70,7 @@ export default function Home() {
 
     if (!company) {
       fetchCompanyDetails().then((response) => {
-        if (response.success) {
-          setCompany(response.data);
-        }
+        setCompany(response);
       });
     }
     setfetchingCompleted(true);
@@ -84,12 +91,13 @@ export default function Home() {
       {/* Navbar ------------------------------------------------------------- */}
       <Navbar menuItems={headerMenuItems} />
 
-      {/* Hero panel ------------------------------------------------------------- */}
-      <Header />
+      {/* Hero panel --------------------------------------------------------- */}
+      <Header isLoggedIn={isLoggedIn} scrollToServices={scrollToServices} />
 
-      {/* Event types --------------------------------------------------------- */}
+      {/* Event types -------------------------------------------------------- */}
       <div
         id="services"
+        ref={servicesRef}
         className="bg-slate-900 h-auto px-8 rounded-[2rem] text-center mt-8 lg:mt-0 ml-12 mr-12"
         style={{
           boxShadow:
@@ -106,7 +114,7 @@ export default function Home() {
             Manage, promote, and track your event— all in one platform
           </div>
           <div className="px-10 text-md sm:text-lg">
-            Maximize your events potential with our powerful, all-in-one
+            Maximize your event's potential with our powerful, all-in-one
             management solution. With{" "}
             <i>
               <strong
@@ -119,7 +127,7 @@ export default function Home() {
                 {company?.companyName}{" "}
               </strong>
             </i>
-            , you can effortlessly plan, execute, and evaluate your events
+            , you can effortlessly plan, execute, and evaluate your event's
             success. <br></br>
             <br></br>Simplify your workflow, amplify your impact, and leave a
             lasting impression on your attendees.
@@ -151,7 +159,7 @@ export default function Home() {
           id="highlight"
           className=" px-6 sm:px-8 md:px-10 lg:px-12 xl:px-14 pb-16"
         >
-          <div className="mt-16 mb-1 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-2">
+          <div className="mt-[20rem] sm:mt-16 mb-1 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-2">
             {/* Image Slider Column */}
             <div id="imuu" className="flex justify-center rounded-lg">
               <Slider />
@@ -169,13 +177,13 @@ export default function Home() {
               </p>
 
               <div className="md:absolute 2xl:ml-[-17rem] xl:ml-[-10rem] lg:ml-[-10rem] md:ml-[-8rem] 2xl:mt-[25%] xl:mt-[20%] lg:mt-[21%] md:mt-[30%] sm:m-auto">
-                <div className=" 2xl:w-[450px] xl:w-[400px] lg:w-[380px] md:w-[360px] sm:w-[370px] 2xl:h-14 xl:h-11 sm:h-12 bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-700 rounded-3xl mt-5 text-white text-2xl flex justify-center items-center">
+                <div className="py-2 2xl:w-[450px] xl:w-[400px] lg:w-[380px] md:w-[360px] sm:w-[370px] 2xl:h-14 xl:h-11 sm:h-12 bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-700 rounded-3xl mt-5 text-white text-2xl flex justify-center items-center">
                   Easy management and tracking
                 </div>
-                <div className="2xl:w-[350px]  xl:w-[300px] lg:w-[280px] md:w-[280px] sm:w-[100%] 2xl:h-14 xl:h-11 sm:h-12 bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-700 rounded-3xl mt-5 text-white text-2xl flex justify-center items-center">
+                <div className="py-2 2xl:w-[350px]  xl:w-[300px] lg:w-[280px] md:w-[280px] sm:w-[100%] 2xl:h-14 xl:h-11 sm:h-12 bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-700 rounded-3xl mt-5 text-white text-2xl flex justify-center items-center">
                   Various Event Modes
                 </div>
-                <div className="2xl:w-[250px]  xl:w-[240px] lg:w-[230px] md:w-[220px] sm:w-[100%] 2xl:h-14 xl:h-11 sm:h-12 bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-700 rounded-3xl mt-5 text-white text-2xl flex justify-center items-center">
+                <div className="py-2 2xl:w-[250px]  xl:w-[240px] lg:w-[230px] md:w-[220px] sm:w-[100%] 2xl:h-14 xl:h-11 sm:h-12 bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-700 rounded-3xl mt-5 text-white text-2xl flex justify-center items-center">
                   Event promotions
                 </div>
               </div>
@@ -242,7 +250,7 @@ export default function Home() {
       </div>
 
       {/* Get Started-------------------------------------------------------------------------------- */}
-      <div className="flex flex-col items-center pt-20 w-[50%] sm:w-[40%] md:w-[45%] lg:w-[44%] xl:w-[36%] 2xl:w-[40%] text-center m-auto">
+      <div className="flex flex-col items-center pt-20 w-[70%] sm:w-[40%] md:w-[45%] lg:w-[44%] xl:w-[36%] 2xl:w-[40%] text-center m-auto">
         <div className="2xl:text-6xl xl:text-5xl lg:text-4xl md:text-3xl sm:text-2xl text-2xl font-sans font-bold">
           Elevate your Events, elevate Our brand
         </div>

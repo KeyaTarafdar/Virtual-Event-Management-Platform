@@ -8,7 +8,6 @@ const {
 module.exports = async (req, res, next) => {
   try {
     let token = req.cookies.token;
-
     if (token) {
       let decode = jwt.verify(token, process.env.JWT_KEY);
       let user = await userModel
